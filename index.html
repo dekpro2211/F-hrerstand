@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101413">
+<title>Führerstand DS 301</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+
+/* Layout: Streckenblick oben, darunter das Führerpult als Raster aus Instrumententafeln */
+:root{
+  --bg:#101413; --desk:#1a2120; --panel:#212a28; --panel-2:#171d1c; --line:#33413e;
+  --fg:#e6ebe8; --muted:#8e9f99;
+  --signal:#f2c230; --stop:#ff4b3e; --go:#45d37b; --blue:#4fa3ff; --white:#f3f5ff;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Share Tech Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.4;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 28px}
+.app{max-width:1180px;margin:0 auto;display:grid;gap:12px}
+header.bar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 16px}
+h1{font-family:var(--f-display);font-weight:700;font-size:1.6rem;letter-spacing:.02em;margin:0;text-wrap:balance;line-height:1.05}
+.sub{color:var(--muted);font-size:.85rem;margin-top:2px}
+.tools{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--f-display);font-size:.95rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px 11px;cursor:pointer}
+.chip:hover{border-color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--signal);color:var(--signal)}
+.chip:focus-visible,.btn:focus-visible,.seg button:focus-visible,.lever-track:focus-visible,.step:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.view{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9;max-width:100%}
+.view canvas{width:100%;height:100%;display:block;touch-action:none}
+.desk{display:grid;gap:10px;grid-template-columns:repeat(12,minmax(0,1fr));background:var(--desk);border:1px solid var(--line);border-radius:12px;padding:10px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;min-width:0;display:grid;gap:8px;align-content:start}
+.p-tacho{grid-column:span 3}.p-pzb{grid-column:span 4}.p-lever{grid-column:span 2}.p-info{grid-column:span 3}
+@media (max-width:900px){.p-tacho{order:1}.p-lever{order:2}.p-pzb{order:3}.p-info{order:4}.p-tacho{grid-column:span 7}.p-lever{grid-column:span 5}.p-pzb{grid-column:span 12}.p-info{grid-column:span 12}}
+.lbl{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.09em;font-size:.78rem;color:var(--muted)}
+#tacho{width:100%;max-width:240px;aspect-ratio:1;justify-self:center;display:block}
+.digi{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:6px 8px;font-size:.95rem;min-height:2.2em;color:#cfe8d8;font-variant-numeric:tabular-nums}
+.digi.alarm{color:#ffd2cc;border-color:var(--stop)}
+/* PZB */
+.lamps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.lm{display:grid;place-items:center;aspect-ratio:1;border-radius:50%;border:2px solid #0c0f0e;font-family:var(--f-display);font-weight:700;font-size:.82rem;line-height:1;text-align:center;color:#3c4744;background:#141917;max-width:54px;width:100%;justify-self:center;transition:background .08s}
+.lm.b.on{background:var(--blue);color:#06213f;box-shadow:0 0 14px var(--blue)}
+.lm.y.on{background:var(--signal);color:#3a2b00;box-shadow:0 0 14px var(--signal)}
+.lm.r.on{background:var(--stop);color:#3d0500;box-shadow:0 0 14px var(--stop)}
+.lm.w.on{background:var(--white);color:#20232e;box-shadow:0 0 14px var(--white)}
+.lm small{font-size:.62rem;display:block}
+.btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.btn{appearance:none;border:0;background:transparent;color:var(--fg);display:grid;justify-items:center;gap:4px;cursor:pointer;font-family:var(--f-display);font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.8rem;padding:0;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.cap{width:min(64px,100%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4a5452,#1b201f 70%);border:3px solid #0b0e0d;box-shadow:0 3px 0 #070908,inset 0 0 0 3px var(--ring,#56625f);transition:transform .05s}
+.btn:active .cap,.btn.down .cap{transform:translateY(2px);box-shadow:0 1px 0 #070908,inset 0 0 0 3px var(--ring,#56625f)}
+.btn.wach{--ring:var(--signal)}.btn.frei{--ring:var(--blue)}.btn.bef{--ring:var(--white)}.btn.sifa{--ring:#d68a2d}
+.row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{appearance:none;border:0;background:var(--panel-2);color:var(--muted);font-family:var(--f-display);font-weight:700;font-size:1rem;padding:5px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--signal);color:#2a2000}
+.seg button:disabled{cursor:not-allowed;opacity:.6}
+.sifa-lm{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:var(--muted)}
+.sifa-lm i{width:16px;height:16px;border-radius:50%;background:#141917;border:2px solid #0c0f0e;display:block}
+.sifa-lm.on i{background:#ffd27a;box-shadow:0 0 10px #ffd27a}
+/* Fahr-Brems-Schalter */
+.lever{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:stretch}
+.lever-scale{display:flex;flex-direction:column;justify-content:space-between;font-family:var(--f-mono);font-size:.7rem;color:var(--muted);padding-block:2px;text-align:right}
+.lever-track{position:relative;height:230px;border-radius:8px;background:linear-gradient(var(--panel-2),var(--panel-2)) padding-box;border:1px solid var(--line);cursor:grab;touch-action:none;outline:none}
+.lever-track::before{content:"";position:absolute;left:50%;top:8px;bottom:8px;width:6px;transform:translateX(-50%);border-radius:3px;background:linear-gradient(#2f7a4e 0 47%,#3a4542 47% 53%,#9a5a22 53% 94%,#a12a22 94%)}
+.handle{position:absolute;left:8%;right:8%;height:26px;border-radius:6px;background:linear-gradient(#e9ecea,#aab2af);border:2px solid #0b0e0d;transform:translateY(-50%);display:grid;place-items:center;font-family:var(--f-mono);color:#141917;font-size:.9rem;font-weight:700;box-shadow:0 3px 6px #0008;pointer-events:none}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.step{appearance:none;background:var(--panel-2);color:var(--fg);border:1px solid var(--line);border-radius:6px;font-family:var(--f-display);font-weight:700;font-size:1.05rem;padding:6px 0;cursor:pointer;touch-action:manipulation}
+.step.sb{grid-column:span 2;background:#3a1512;border-color:#6a221c;color:#ffb3aa;font-size:.85rem;letter-spacing:.08em}
+/* Info */
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;font-size:.92rem}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-variant-numeric:tabular-nums;min-width:0}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:.85rem;max-height:9.5em;overflow:auto}
+.log li{border-left:3px solid var(--line);padding-left:7px;color:#c9d3cf}
+.log li.err{border-color:var(--stop);color:#ffc9c2}
+.log li.pzb{border-color:var(--signal)}
+.log li.fdl{border-color:var(--blue)}
+.log time{font-family:var(--f-mono);color:var(--muted);margin-right:6px}
+.err-count{font-family:var(--f-mono)}
+details.help{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+details.help summary{cursor:pointer;font-family:var(--f-display);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.help-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 24px;margin-top:10px;font-size:.9rem}
+.help-grid h3{font-family:var(--f-display);font-size:1.05rem;margin:0 0 4px;letter-spacing:.03em}
+.help-grid ul{margin:0;padding-left:18px;display:grid;gap:3px;color:#cdd6d2}
+kbd{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
+.note{color:var(--muted);font-size:.82rem;max-width:70ch}
+.overlay[hidden]{display:none}
+.overlay{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:20px max(16px,env(safe-area-inset-left,0px));z-index:20}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;max-width:520px;width:100%;display:grid;gap:10px;max-height:85vh;overflow:auto}
+.card h2{font-family:var(--f-display);font-size:1.5rem;margin:0}
+.card ol{margin:0;padding-left:20px;display:grid;gap:4px;color:#ffc9c2}
+@media (max-width:600px){.view{aspect-ratio:4/3}}
+@media (prefers-reduced-motion:reduce){.lm,.cap{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="bar">
+    <div>
+      <h1>Führerstand DS 301</h1>
+      <div class="sub">RB 3807 · Lindenau – Bergheim – Waldheim – Tannau · Übungsstrecke</div>
+    </div>
+    <div class="tools">
+      <button class="chip" id="tLern" aria-pressed="true">Lernhilfe</button>
+      <button class="chip" id="tTon" aria-pressed="true">Ton</button>
+      <button class="chip" id="tPause" aria-pressed="false">Pause</button>
+      <button class="chip" id="tReset">Neustart</button>
+    </div>
+  </header>
+
+  <section class="view" aria-label="Blick auf die Strecke"><canvas id="view"></canvas></section>
+
+  <section class="desk" aria-label="Führerpult">
+    <div class="panel p-tacho">
+      <span class="lbl">Geschwindigkeit</span>
+      <canvas id="tacho" width="240" height="240" aria-label="Tachometer"></canvas>
+      <div class="digi" id="digi">–</div>
+    </div>
+
+    <div class="panel p-pzb">
+      <div class="row"><span class="lbl">PZB 90 · Leuchtmelder</span>
+        <div class="sifa-lm" id="sifaLm"><i></i>Sifa</div></div>
+      <div class="lamps">
+        <div class="lm b" id="lm55">55</div>
+        <div class="lm b" id="lm70">70</div>
+        <div class="lm b" id="lm85">85</div>
+        <div class="lm y" id="lm1000">1000<small>Hz</small></div>
+        <div class="lm r" id="lm500">500<small>Hz</small></div>
+        <div class="lm w" id="lmBef">Bef<small>40</small></div>
+      </div>
+      <div class="btns">
+        <button class="btn wach" id="bWach" aria-label="PZB Wachsam (Taste Q)"><span class="cap"></span>Wachsam</button>
+        <button class="btn frei" id="bFrei" aria-label="PZB Frei (Taste E)"><span class="cap"></span>Frei</button>
+        <button class="btn bef" id="bBef" aria-label="PZB Befehl 40 halten (Taste B)"><span class="cap"></span>Befehl</button>
+        <button class="btn sifa" id="bSifa" aria-label="Sifa betätigen (Leertaste)"><span class="cap"></span>Sifa</button>
+      </div>
+      <div class="row">
+        <span class="lbl">Zugart</span>
+        <div class="seg" id="zugart" role="group" aria-label="Zugart">
+          <button data-z="O" aria-pressed="false">O</button><button data-z="M" aria-pressed="true">M</button><button data-z="U" aria-pressed="false">U</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel p-lever">
+      <span class="lbl">Fahr-/Bremshebel</span>
+      <div class="lever">
+        <div class="lever-scale" aria-hidden="true"><span>F8</span><span>F4</span><span>0</span><span>B4</span><span>SB</span></div>
+        <div class="lever-track" id="lever" tabindex="0" role="slider" aria-label="Fahr-Brems-Schalter" aria-valuemin="-8" aria-valuemax="8" aria-valuenow="-3"><div class="handle" id="handle">B3</div></div>
+      </div>
+      <div class="steps">
+        <button class="step" id="lUp" aria-label="Hebel eine Stufe Richtung Fahren">▲</button>
+        <button class="step" id="lDn" aria-label="Hebel eine Stufe Richtung Bremsen">▼</button>
+        <button class="step sb" id="lSB">Schnellbremsung</button>
+      </div>
+    </div>
+
+    <div class="panel p-info">
+      <span class="lbl">Fahrplan &amp; Meldungen</span>
+      <dl class="kv">
+        <dt>Halt</dt><dd id="iHalt">–</dd>
+        <dt>Signal</dt><dd id="iSig">–</dd>
+        <dt>Zulässig</dt><dd id="iZul">–</dd>
+        <dt>Fehler</dt><dd id="iErr" class="err-count">0</dd>
+      </dl>
+      <ul class="log" id="log" aria-live="polite"></ul>
+    </div>
+  </section>
+
+  <details class="help">
+    <summary>Bedienung und Regeln</summary>
+    <div class="help-grid">
+      <div>
+        <h3>Bedienung</h3>
+        <ul>
+          <li>Hebel: ziehen oder <kbd>▲</kbd>/<kbd>▼</kbd> bzw. <kbd>W</kbd>/<kbd>S</kbd>. Oben Fahrstufen F1–F8, unten Bremsstufen B1–B7 und SB (Schnellbremsung).</li>
+          <li><kbd>Q</kbd> Wachsam · <kbd>E</kbd> Frei · <kbd>B</kbd> Befehl (halten) · <kbd>Leertaste</kbd> Sifa · <kbd>P</kbd> Pause</li>
+          <li>Zugart nur im Stillstand wählbar. RB 3807 fährt als Zugart M.</li>
+          <li>Die Signal-Lupe oben rechts zeigt das nächste Signal vergrößert.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Signale (DS 301)</h3>
+        <ul>
+          <li><b>Ks 1</b> Fahrt · <b>Ks 1 blinkend</b> Fahrt, Zs 3v beachten · <b>Ks 2</b> Halt erwarten · <b>Hp 0</b> Halt</li>
+          <li><b>Hp 1</b> Fahrt · <b>Hp 2</b> Langsamfahrt (40 km/h im Weichenbereich) · <b>Vr 0/1/2</b> Halt / Fahrt / Langsamfahrt erwarten</li>
+          <li><b>Zs 3</b> Höchstgeschwindigkeit im anschließenden Weichenbereich, <b>Zs 3v</b> kündigt sie an</li>
+          <li><b>Zs 1</b> am Hp 0 ohne schriftlichen Befehl vorbeifahren · <b>Zs 7</b> vorbeifahren, dann auf Sicht (≤ 40) bis zum nächsten Hauptsignal · <b>Zs 8</b> Fahrt auf dem Gegengleis, am Hp 0 vorbeifahren</li>
+          <li><b>Lf 6</b> kündigt <b>Lf 7</b> an · <b>Lf 7</b> gilt ab dem Signal (Erhöhung erst, wenn der Zugschluss vorbei ist)</li>
+          <li><b>Sh 0</b> Halt! Fahrverbot · <b>Sh 1</b> Fahrverbot aufgehoben · <b>Ra 10</b> nicht darüber hinaus rangieren · <b>Ne 5</b> Haltetafel · <b>Ne 2</b> Vorsignaltafel</li>
+        </ul>
+      </div>
+      <div>
+        <h3>PZB 90 und Sifa</h3>
+        <ul>
+          <li>1000 Hz am Vorsignal: binnen 4 s Wachsam drücken. Danach Bremskurve (M: 125 → 70 km/h in 29 s), Überwachung 1250 m.</li>
+          <li>500 Hz 250 m vor dem Hauptsignal: M 50 → 35 km/h. 2000 Hz am Hp 0: sofort Zwangsbremsung.</li>
+          <li>Unter 10 km/h länger als 15 s: restriktiv (45 km/h, bei 500 Hz 25 km/h). Frei befreit nach 700 m, wenn kein 500 Hz wirkt.</li>
+          <li>Ersatzsignal: Befehl gedrückt halten und mit höchstens 40 km/h am Signal vorbei.</li>
+          <li>Sifa: spätestens alle 30 s betätigen, sonst Leuchtmelder, Summer und Zwangsbremsung. Nach Zwangsbremsung im Stillstand Frei drücken.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Lern- und Übungssimulator mit vereinfachter Fahrdynamik. Die PZB-Werte folgen Ril 483 in vereinfachter Form. Ersetzt weder Signalbuch noch Ausbildung.</p>
+  </details>
+
+  <div class="overlay" id="end" hidden>
+    <div class="card" role="dialog" aria-labelledby="endT">
+      <h2 id="endT">Fahrt beendet</h2>
+      <div id="endBody"></div>
+      <button class="chip" id="endRestart">Neue Fahrt</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+// ---------------- Strecke ----------------
+const TRAIN_LEN = 150, VEH_VMAX = 140;
+const ZUGART = {
+  O:{vmax:165,v1000:85,t1000:23,v500a:65,v500e:45,lamp:'85'},
+  M:{vmax:125,v1000:70,t1000:29,v500a:50,v500e:35,lamp:'70'},
+  U:{vmax:105,v1000:55,t1000:38,v500a:40,v500e:25,lamp:'55'}
+};
+const STATIONS = [
+  {name:'Lindenau', from:-240, to:20, stop:0, first:true},
+  {name:'Bergheim', from:7680, to:7925, stop:7900},
+  {name:'Waldheim', from:12780, to:13025, stop:13000},
+  {name:'Tannau',   from:18980, to:19225, stop:19200}
+];
+const MAIN = [
+  {id:'A', sys:'ks', pos:80,    zs3:6, block:true, label:'Ausfahrsignal A'},
+  {id:'B', sys:'ks', pos:3100,  block:true, label:'Blocksignal B'},
+  {id:'C', sys:'ks', pos:6300,  block:true, label:'Blocksignal C'},
+  {id:'D', sys:'ks', pos:7300,  zs3:6, block:true, label:'Einfahrsignal D'},
+  {id:'E', sys:'ks', pos:8100,  zs3:6, cond:'berg', label:'Ausfahrsignal E'},
+  {id:'F', sys:'hv', pos:10200, ersatz:'zs1', label:'Blocksignal F'},
+  {id:'G', sys:'hv', pos:12500, hp2:true, label:'Einfahrsignal G'},
+  {id:'H', sys:'hv', pos:13250, ersatz:'zs7', label:'Ausfahrsignal H'},
+  {id:'I', sys:'hv', pos:14900, label:'Blocksignal I'},
+  {id:'J', sys:'ks', pos:16600, ersatz:'zs8', label:'Abzweigsignal J'},
+  {id:'K', sys:'ks', pos:18500, zs3:4, label:'Einfahrsignal K'}
+];
+const DIST = [
+  {for:'F', sys:'hv', pos:9200},
+  {for:'G', sys:'hv', pos:11500},
+  {for:'H', sys:'hv', pos:12500, mast:'G'},
+  {for:'I', sys:'hv', pos:13900},
+  {for:'J', sys:'ks', pos:15600},
+  {for:'K', sys:'ks', pos:17500}
+];
+const LF = [
+  {k:'lf6', pos:3800, v:9}, {k:'lf7', pos:4800, v:9}, {k:'lf7', pos:5600, v:12},
+  {k:'lf6', pos:8500, v:10}, {k:'lf7', pos:9500, v:10}
+];
+const LS_POS = 19400, RA10_POS = 19900, END_POS = 20060;
+const idx = id => MAIN.findIndex(m => m.id === id);
+MAIN.forEach((m,i) => {
+  m.dist = DIST.findIndex(d => d.for === m.id && !d.mast);
+  m.mastVr = DIST.findIndex(d => d.mast === m.id);
+  const n = MAIN[i+1];
+  m.zs3vBox = !!(n && n.zs3 && m.sys === 'ks' && DIST.findIndex(d => d.for === n.id) < 0);
+});
+DIST.forEach(d => { d.target = idx(d.for); });
+
+// Objekte für Darstellung
+const OBJS = [];
+MAIN.forEach((m,i) => OBJS.push({k:'main', ref:i, pos:m.pos, x:2.6, h:m.sys==='ks'?5.4:5.6}));
+DIST.forEach((d,i) => { if(!d.mast) OBJS.push({k:'dist', ref:i, pos:d.pos, x:2.6, h:4.2}); });
+LF.forEach(l => OBJS.push({k:l.k, v:l.v, pos:l.pos, x:2.4, h:3.0}));
+STATIONS.forEach(s => {
+  OBJS.push({k:'ne5', pos:s.stop, x:2.35, h:2.7});
+  OBJS.push({k:'sign', pos:s.from+45, x:4.6, h:3.1, name:s.name});
+});
+OBJS.push({k:'ls', pos:LS_POS, x:1.95, h:0.55});
+OBJS.push({k:'ra10', pos:RA10_POS, x:2.2, h:1.9});
+
+// ---------------- Zustand ----------------
+let S;
+function newState(){
+  return {
+    t:0, front:0, v:0, lever:-3, brake:0.39, zwang:null, finished:false, paused:false,
+    lineV:120, pendingLine:null, restr:[], mode:'zug',
+    lead:{front:2700, v:16, on:true},
+    st: STATIONS.map(s => ({done:false})),
+    sig: MAIN.map(() => ({aspect:'HP0', ersatzOn:false, zs3On:false, zs3v:0})),
+    dsig: DIST.map(() => ({aspect:'VR0', zs3v:0})),
+    zone:{berg:0, wald:0, tann:0, F:0},
+    lsSh1:false, ra10Err:false,
+    pzb:{zug:'M', m1000:null, m500:null, restr:false, slowT:0, befehl:false, lim:125},
+    sifa:{t:0}, errors:[], zbCount:0, over:{t:0, flag:false}, mags:[]
+  };
+}
+
+// ---------------- Meldungen ----------------
+const logEl = document.getElementById('log');
+function fmtT(t){ const m = Math.floor(t/60), s = Math.floor(t%60); return m + ':' + String(s).padStart(2,'0'); }
+function log(text, cls){
+  const li = document.createElement('li'); if(cls) li.className = cls;
+  const tm = document.createElement('time'); tm.textContent = fmtT(S.t);
+  li.append(tm, document.createTextNode(text));
+  logEl.prepend(li);
+  while(logEl.children.length > 30) logEl.lastChild.remove();
+}
+function error(text){ S.errors.push({t:S.t, text}); log(text, 'err'); audio.beep(220, .35, 'sawtooth', .05); }
+
+// ---------------- Signallogik ----------------
+function occupied(i){
+  const L = S.lead; if(!L.on) return false;
+  const a = MAIN[i].pos, b = (MAIN[i+1] ? MAIN[i+1].pos : 1e9) + 200;
+  return L.front > a && (L.front - TRAIN_LEN) < b;
+}
+function computeAspects(){
+  const hp0 = MAIN.map((m,i) => {
+    if(m.ersatz) return true;
+    if(m.cond === 'berg' && S.zone.berg < 20) return true;
+    if(m.block && occupied(i)) return true;
+    return false;
+  });
+  MAIN.forEach((m,i) => {
+    const r = S.sig[i]; const n = MAIN[i+1];
+    r.zs3On = false; r.zs3v = 0;
+    if(hp0[i]) { r.aspect = 'HP0'; return; }
+    if(m.sys === 'ks'){
+      r.zs3On = !!m.zs3;
+      if(n && DIST.findIndex(d => d.for === n.id) < 0){
+        if(hp0[i+1]) r.aspect = 'KS2';
+        else if(n.zs3){ r.aspect = 'KS1B'; r.zs3v = n.zs3; }
+        else r.aspect = 'KS1';
+      } else r.aspect = 'KS1';
+    } else r.aspect = m.hp2 ? 'HP2' : 'HP1';
+  });
+  DIST.forEach((d,j) => {
+    const r = S.dsig[j], ti = d.target, m = MAIN[ti]; r.zs3v = 0;
+    if(d.sys === 'ks'){
+      if(hp0[ti]) r.aspect = 'KS2';
+      else if(m.zs3){ r.aspect = 'KS1B'; r.zs3v = m.zs3; }
+      else r.aspect = 'KS1';
+    } else r.aspect = hp0[ti] ? 'VR0' : (m.hp2 ? 'VR2' : 'VR1');
+  });
+  // PZB-Gleismagnete
+  const mags = [];
+  DIST.forEach((d,j) => { const a = S.dsig[j].aspect; if(a === 'KS2' || a === 'VR0') mags.push({pos:d.pos, f:1000}); });
+  MAIN.forEach((m,i) => {
+    const a = S.sig[i].aspect;
+    if(m.sys === 'ks' && a === 'KS2') mags.push({pos:m.pos, f:1000});
+    if(a === 'HP0'){ mags.push({pos:m.pos-250, f:500}); mags.push({pos:m.pos, f:2000}); }
+  });
+  S.mags = mags;
+}
+const ASPECT_TXT = {
+  KS1:'Ks 1 – Fahrt', KS1B:'Ks 1 blinkend – Fahrt, Zs 3v beachten', KS2:'Ks 2 – Halt erwarten',
+  HP0:'Hp 0 – Halt', HP1:'Hp 1 – Fahrt', HP2:'Hp 2 – Langsamfahrt',
+  VR0:'Vr 0 – Halt erwarten', VR1:'Vr 1 – Fahrt erwarten', VR2:'Vr 2 – Langsamfahrt erwarten'
+};
+const ERSATZ_TXT = {zs1:'Zs 1 – Ersatzsignal', zs7:'Zs 7 – Vorsichtsignal', zs8:'Zs 8 – Gegengleis-Ersatzsignal'};
+function mainText(i){
+  const m = MAIN[i], r = S.sig[i];
+  let t = ASPECT_TXT[r.aspect];
+  if(m.ersatz && r.ersatzOn) t += ' + ' + ERSATZ_TXT[m.ersatz];
+  if(r.zs3On) t += ' · Zs 3: ' + m.zs3*10;
+  if(r.zs3v) t += ' · Zs 3v: ' + r.zs3v*10;
+  if(m.mastVr >= 0) t += ' · am Mast ' + ASPECT_TXT[S.dsig[m.mastVr].aspect].split(' – ')[0];
+  return t;
+}
+function distText(j){ const r = S.dsig[j]; return ASPECT_TXT[r.aspect] + (r.zs3v ? ' · Zs 3v: ' + r.zs3v*10 : ''); }
+
+// ---------------- Geschwindigkeiten ----------------
+function vAllowed(){
+  let v = Math.min(S.lineV, VEH_VMAX, ZUGART[S.pzb.zug].vmax), src = 'Strecke';
+  for(const r of S.restr){ if(r.v < v){ v = r.v; src = r.src; } }
+  if(S.mode === 'rangier' && 25 < v){ v = 25; src = 'Rangierfahrt'; }
+  return {v, src};
+}
+
+// ---------------- PZB 90 ----------------
+function zwang(reason){
+  if(S.zwang) return;
+  S.zwang = {reason}; S.zbCount++;
+  error('Zwangsbremsung: ' + reason);
+  audio.stop('hupe'); audio.beep(320, .9, 'square', .06);
+}
+function pzbMagnet(f){
+  const P = S.pzb, Z = ZUGART[P.zug], vk = S.v*3.6;
+  if(f === 1000){
+    P.m1000 = {s0:S.front, t:0, ack:false, ackT:0};
+    log('1000 Hz – Wachsamkeitstaste betätigen', 'pzb');
+    audio.start('hupe', 440, 'square', .045);
+  } else if(f === 500){
+    const lim = P.restr ? 25 : Z.v500a;
+    P.m500 = {s0:S.front};
+    log('500 Hz – Prüfgeschwindigkeit ' + lim + ' km/h', 'pzb');
+    if(vk > lim) zwang('500 Hz, ' + lim + ' km/h überschritten');
+  } else if(f === 2000){
+    if(P.befehl && vk <= 40) log('2000 Hz mit Befehl 40 überfahren', 'pzb');
+    else zwang('2000 Hz – Halt zeigendes Signal');
+  }
+}
+function pzbUpdate(dt){
+  const P = S.pzb, Z = ZUGART[P.zug], vk = S.v*3.6;
+  if(P.m1000){
+    P.m1000.t += dt;
+    if(!P.m1000.ack){
+      P.m1000.ackT += dt;
+      if(P.m1000.ackT > 4){ P.m1000.ack = true; zwang('Wachsamkeitstaste nicht binnen 4 s betätigt'); }
+    }
+    if(S.front - P.m1000.s0 > 1250) P.m1000 = null;
+  }
+  if(P.m500 && S.front - P.m500.s0 > 250) P.m500 = null;
+  if(!P.m1000 && !P.m500){ if(P.restr) log('PZB-Überwachung beendet', 'pzb'); P.restr = false; P.slowT = 0; }
+  else if(vk < 10 && !P.restr){
+    P.slowT += dt;
+    if(P.slowT > 15){ P.restr = true; log('PZB restriktiv: 45 km/h, bei 500 Hz 25 km/h', 'pzb'); }
+  } else if(vk >= 10) P.slowT = 0;
+  let lim = Z.vmax;
+  if(P.m1000){
+    lim = Math.min(lim, P.restr ? 45 : Math.max(Z.v1000, Z.vmax - (Z.vmax - Z.v1000)*P.m1000.t/Z.t1000));
+  }
+  if(P.m500){
+    const d = S.front - P.m500.s0;
+    lim = Math.min(lim, P.restr ? 25 : (d < 153 ? Z.v500a - (Z.v500a - Z.v500e)*d/153 : Z.v500e));
+  }
+  if(P.befehl) lim = Math.min(lim, 40);
+  P.lim = lim;
+  if(!S.zwang && vk > lim + 0.5) zwang('PZB-Überwachung, ' + Math.round(lim) + ' km/h überschritten');
+}
+function pressWachsam(){
+  const P = S.pzb;
+  if(P.m1000 && !P.m1000.ack){ P.m1000.ack = true; audio.stop('hupe'); log('Wachsam betätigt', 'pzb'); }
+}
+function pressFrei(){
+  const P = S.pzb;
+  if(S.zwang){
+    if(S.v < 0.05){ S.zwang = null; S.sifa.t = 0; log('Zwangsbremsung im Stillstand aufgehoben', 'pzb'); }
+    else log('Frei wirkt erst im Stillstand', 'pzb');
+    return;
+  }
+  if(P.m1000 || P.restr){
+    const d1000 = P.m1000 ? S.front - P.m1000.s0 : 9999;
+    if(!P.m500 && d1000 > 700){ P.m1000 = null; P.restr = false; P.slowT = 0; log('PZB befreit', 'pzb'); }
+    else log('Befreiung nicht möglich: ' + (P.m500 ? '500 Hz wirkt' : '1000-Hz-Leuchtmelder an'), 'pzb');
+  }
+}
+function pressSifa(){ S.sifa.t = 0; audio.stop('sifa'); }
+
+// ---------------- Simulation ----------------
+function brakeTarget(){
+  if(S.zwang) return 1.25;
+  if(S.lever === -8) return 1.25;
+  if(S.lever < 0) return (-S.lever)/7*0.9;
+  return 0;
+}
+function step(dt){
+  S.t += dt;
+  // vorausfahrender Zug
+  const L = S.lead;
+  if(L.on){ L.v = Math.min(27.8, L.v + 0.8*dt); L.front += L.v*dt; if(L.front > 6900){ L.on = false; } }
+  computeAspects();
+  // Fahrdynamik
+  const bt = brakeTarget();
+  S.brake += (bt - S.brake) * Math.min(1, dt / (bt > S.brake ? 1.0 : 2.2));
+  let trac = 0;
+  if(S.lever > 0 && !S.zwang && S.v*3.6 < VEH_VMAX && S.brake < 0.08) trac = (S.lever/8) * Math.min(0.9, 12/Math.max(S.v, 0.1));
+  const res = S.v > 0 ? 0.008 + 0.00005*S.v*S.v : 0;
+  const wasMoving = S.v > 0;
+  S.v = Math.max(0, S.v + (trac - S.brake - res)*dt);
+  if(S.v < 0.02 && trac === 0) S.v = 0;
+  const prev = S.front;
+  S.front += S.v*dt;
+  const fr = S.front, rear = fr - TRAIN_LEN, vk = S.v*3.6;
+  const crossed = p => prev < p && p <= fr;
+
+  // Magnete
+  for(const m of S.mags) if(crossed(m.pos)) pzbMagnet(m.f);
+  // Hauptsignale
+  MAIN.forEach((m,i) => { if(crossed(m.pos)) onMainPass(i); });
+  DIST.forEach((d,j) => { if(!d.mast && crossed(d.pos) && lern) log('Vorsignal ' + d.for + ': ' + distText(j)); });
+  // Lf
+  for(const l of LF){
+    if(!crossed(l.pos)) continue;
+    if(l.k === 'lf6') log('Lf 6: ' + l.v*10 + ' km/h ab dem nächsten Lf 7');
+    else {
+      const nv = l.v*10;
+      if(nv < S.lineV){ S.lineV = nv; S.pendingLine = null; log('Lf 7: ' + nv + ' km/h ab hier'); }
+      else { S.pendingLine = {v:nv, at:l.pos}; log('Lf 7: ' + nv + ' km/h, sobald der Zugschluss vorbei ist'); }
+    }
+  }
+  if(S.pendingLine && rear >= S.pendingLine.at){ S.lineV = S.pendingLine.v; S.pendingLine = null; log('Streckengeschwindigkeit ' + S.lineV + ' km/h'); }
+  S.restr = S.restr.filter(r => {
+    const done = (r.endRear !== undefined && rear >= r.endRear) || (r.endFront !== undefined && fr >= r.endFront);
+    if(done) log(r.src + ' aufgehoben');
+    return !done;
+  });
+  // Ls / Ra 10
+  if(crossed(LS_POS)){
+    if(!S.lsSh1) error('Sh 0 am Lichtsperrsignal überfahren');
+    else log('Lichtsperrsignal Sh 1 passiert');
+  }
+  if(fr > RA10_POS && !S.ra10Err){ S.ra10Err = true; error('Ra 10 überfahren – nicht über die Rangierhalttafel hinaus rangieren'); }
+  if(fr > END_POS){ S.v = 0; finish('Prellbock angefahren'); return; }
+  if(L.on && fr >= L.front - TRAIN_LEN){ S.v = 0; finish('Auffahrunfall auf den vorausfahrenden Zug'); return; }
+
+  // Halte und Fdl-Zonen
+  if(S.v === 0){
+    const z = S.zone;
+    if(fr >= 7600 && fr <= 8100) z.berg += dt;
+    if(fr >= 12700 && fr <= 13250) z.wald += dt;
+    if(fr >= 18900 && fr <= LS_POS) z.tann += dt;
+    const F = MAIN[idx('F')];
+    if(fr >= F.pos - 400 && fr <= F.pos) z.F += dt;
+  }
+  if(wasMoving && S.v === 0) onStop();
+  STATIONS.forEach((s,i) => {
+    if(s.first || S.st[i].done) return;
+    if(fr > s.to + 20){ S.st[i].done = true; error('Planhalt in ' + s.name + ' ausgelassen'); }
+  });
+  fdlEvents();
+
+  // Überwachung
+  pzbUpdate(dt);
+  if(S.v > 0.3 && !S.zwang){
+    S.sifa.t += dt;
+    if(S.sifa.t >= 32.5) audio.start('sifa', 900, 'square', .04, true);
+    if(S.sifa.t >= 35){ zwang('Sifa nicht betätigt'); S.sifa.t = 0; audio.stop('sifa'); }
+  } else if(S.v <= 0.3){ audio.stop('sifa'); }
+  if(S.pzb.befehl && vk > 40 && !S.zwang) zwang('Befehl 40 überschritten');
+  const va = vAllowed().v;
+  if(vk > va + 2){
+    S.over.t += dt;
+    if(S.over.t > 2 && !S.over.flag){ S.over.flag = true; error('Zulässige Geschwindigkeit ' + va + ' km/h (' + vAllowed().src + ') überschritten'); }
+  } else if(vk <= va){ S.over.t = 0; S.over.flag = false; }
+
+  if(S.mode === 'rangier' && S.v === 0 && fr >= 19830 && fr <= RA10_POS) finish();
+  if(S.mode === 'rangier' && S.v === 0 && S.ra10Err) finish('Über die Rangierhalttafel Ra 10 hinaus gefahren');
+}
+function onMainPass(i){
+  const m = MAIN[i], r = S.sig[i];
+  if(r.aspect === 'HP0'){
+    if(m.ersatz && r.ersatzOn){
+      if(m.ersatz === 'zs7'){ const n = MAIN[i+1]; S.restr.push({v:40, endFront:n ? n.pos : 1e9, src:'Fahrt auf Sicht (Zs 7)'}); log('Signal ' + m.id + ' mit Zs 7 passiert – auf Sicht bis Signal ' + (n ? n.id : '')); }
+      else { S.restr.push({v:40, endRear:m.pos + 300, src:(m.ersatz === 'zs1' ? 'Zs 1' : 'Zs 8') + ' Weichenbereich'}); log('Signal ' + m.id + ' mit ' + ERSATZ_TXT[m.ersatz].split(' – ')[0] + ' passiert'); }
+    } else error('Signal ' + m.id + ': Halt zeigendes Signal überfahren (Hp 0)');
+    return;
+  }
+  if(r.zs3On) S.restr.push({v:m.zs3*10, endRear:m.pos + 300, src:'Zs 3 am Signal ' + m.id});
+  if(r.aspect === 'HP2') S.restr.push({v:40, endRear:m.pos + 300, src:'Hp 2 am Signal ' + m.id});
+  if(lern) log('Signal ' + m.id + ': ' + mainText(i));
+}
+function onStop(){
+  const fr = S.front;
+  STATIONS.forEach((s,i) => {
+    if(s.first || S.st[i].done) return;
+    if(fr >= s.stop - 60 && fr <= s.stop + 30){
+      S.st[i].done = true;
+      const d = Math.round(s.stop - fr);
+      if(d < -3) error('Haltetafel in ' + s.name + ' um ' + (-d) + ' m überfahren');
+      else log('Halt in ' + s.name + ': ' + (d <= 0 ? 'an der Haltetafel' : d + ' m vor der Haltetafel'), 'fdl');
+    }
+  });
+}
+const flags = {};
+function once(key, fn){ if(!flags[key]){ flags[key] = true; fn(); } }
+function fdlEvents(){
+  const z = S.zone;
+  const iF = idx('F'), iH = idx('H'), iJ = idx('J');
+  if(z.berg >= 20) once('berg', () => log('Fdl Bergheim: Ausfahrt frei, Signal E', 'fdl'));
+  if(z.F >= 4 && !S.sig[iF].ersatzOn){ S.sig[iF].ersatzOn = true; log('Fdl: Signal F gestört – Ersatzsignal Zs 1 gegeben. Befehl halten, ≤ 40 km/h.', 'fdl'); }
+  if(z.wald >= 20 && !S.sig[iH].ersatzOn){ S.sig[iH].ersatzOn = true; log('Fdl Waldheim: Ausfahrsignal H gestört – Vorsichtsignal Zs 7. Auf Sicht bis Signal I.', 'fdl'); }
+  if(S.front >= MAIN[iJ].pos - 1500 && !S.sig[iJ].ersatzOn){ S.sig[iJ].ersatzOn = true; log('Fdl: Bauarbeiten, Fahrt über das Gegengleis – Signal J zeigt Zs 8.', 'fdl'); }
+  if(z.tann >= 10 && S.mode === 'zug'){ S.mode = 'rangier'; log('Zugfahrt beendet. Rangierfahrt ins Abstellgleis: höchstens 25 km/h, vor der Ra 10 halten.', 'fdl'); }
+  if(z.tann >= 18 && !S.lsSh1){ S.lsSh1 = true; log('Stellwerk: Lichtsperrsignal zeigt Sh 1', 'fdl'); }
+}
+function finish(reason){
+  if(S.finished) return;
+  S.finished = true; audio.stopAll();
+  const body = document.getElementById('endBody');
+  body.textContent = '';
+  const p = document.createElement('p');
+  const ok = !reason && S.errors.length === 0;
+  document.getElementById('endT').textContent = reason ? 'Fahrt abgebrochen' : (ok ? 'Fehlerfrei angekommen' : 'Fahrt beendet');
+  p.textContent = (reason ? reason + '. ' : 'Abgestellt vor der Ra 10 in Tannau. ') + 'Fahrzeit ' + fmtT(S.t) + ' · ' + S.errors.length + ' Fehler · ' + S.zbCount + ' Zwangsbremsungen.';
+  body.append(p);
+  if(S.errors.length){
+    const ol = document.createElement('ol');
+    S.errors.forEach(e => { const li = document.createElement('li'); li.textContent = fmtT(e.t) + ' ' + e.text; ol.append(li); });
+    body.append(ol);
+  }
+  document.getElementById('end').hidden = false;
+}
+
+// ---------------- Audio ----------------
+const audio = {
+  ctx:null, on:true, n:{},
+  init(){
+    if(!this.ctx){ try{ this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ this.ctx = null; } }
+    if(this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(()=>{});
+  },
+  start(id, f, type, vol, pulse){
+    if(!this.ctx || !this.on || this.n[id]) return;
+    const o = this.ctx.createOscillator(), g = this.ctx.createGain();
+    o.type = type; o.frequency.value = f; g.gain.value = vol;
+    o.connect(g); g.connect(this.ctx.destination); o.start();
+    let iv = null;
+    if(pulse){ let on = true; iv = setInterval(() => { on = !on; g.gain.value = on ? vol : 0; }, 250); }
+    else if(id === 'hupe'){ let hi = false; iv = setInterval(() => { hi = !hi; o.frequency.value = hi ? 560 : 440; }, 300); }
+    this.n[id] = {o, iv};
+  },
+  stop(id){ const x = this.n[id]; if(!x) return; try{ x.o.stop(); }catch(e){} if(x.iv) clearInterval(x.iv); delete this.n[id]; },
+  stopAll(){ Object.keys(this.n).forEach(k => this.stop(k)); },
+  beep(f, d, type, vol){
+    if(!this.ctx || !this.on) return;
+    const o = this.ctx.createOscillator(), g = this.ctx.createGain(), t = this.ctx.currentTime;
+    o.type = type || 'sine'; o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f*0.6, t + d);
+    g.gain.setValueAtTime(vol || .05, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(this.ctx.destination); o.start(t); o.stop(t + d + .02);
+  }
+};
+
+// ---------------- Zeichnen: Signalbilder ----------------
+const C = {red:'#ff3b2f', green:'#3dff86', yel:'#ffc21a', white:'#f4f6ff', screen:'#0d0f0f', rim:'#3a3f3e'};
+function rr(ctx, x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function box(ctx, x, y, w, h, s){ rr(ctx, x, y, w, h, Math.min(w,h)*0.18); ctx.fillStyle = C.screen; ctx.fill(); if(s > 6){ ctx.lineWidth = 0.035; ctx.strokeStyle = C.rim; ctx.stroke(); } }
+function lamp(ctx, x, y, r, color, on, s){
+  if(on){
+    const rad = Math.max(r, 1.5/s);
+    ctx.save(); ctx.shadowColor = color; ctx.shadowBlur = Math.max(6, Math.min(30, r*s*1.4));
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, rad, 0, Math.PI*2); ctx.fill(); ctx.restore();
+  } else if(s > 5){
+    ctx.fillStyle = '#1c2120'; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+  }
+}
+function txt(ctx, str, x, y, size, color, glow){
+  ctx.save(); ctx.scale(0.01, 0.01);
+  ctx.font = '700 ' + Math.round(size*100) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = color;
+  if(glow){ ctx.shadowColor = color; ctx.shadowBlur = 10; }
+  ctx.fillText(str, x*100, y*100); ctx.restore();
+}
+function ne2(ctx, y){
+  ctx.fillStyle = '#f2f2ee'; ctx.fillRect(-0.24, y, 0.48, 0.62);
+  ctx.fillStyle = '#111';
+  for(const dy of [0.08, 0.34]){ ctx.beginPath(); ctx.moveTo(-0.16, y+dy+0.2); ctx.lineTo(0.16, y+dy+0.2); ctx.lineTo(0, y+dy); ctx.closePath(); ctx.fill(); }
+}
+function drawVr(ctx, a, s){
+  box(ctx, -0.42, -0.42, 0.84, 0.84, s);
+  lamp(ctx, -0.2, 0.2, 0.1, a === 'VR1' ? C.green : C.yel, true && a !== undefined, s);
+  lamp(ctx, 0.2, -0.2, 0.1, a === 'VR0' ? C.yel : C.green, true, s);
+}
+function glyph(ctx, o, s, t){
+  const blink = (t % 1) < 0.55;
+  ctx.save(); ctx.scale(s, s);
+  if(o.k === 'main'){
+    const m = MAIN[o.ref], r = S.sig[o.ref], a = r.aspect;
+    const eo = m.ersatz && r.ersatzOn;
+    if(m.sys === 'ks'){
+      if(m.zs3){ box(ctx, -0.3, -1.12, 0.6, 0.5, s); if(r.zs3On) txt(ctx, String(m.zs3), 0, -0.86, 0.42, C.white, true); }
+      box(ctx, -0.36, -0.55, 0.72, 1.18, s);
+      lamp(ctx, 0, -0.3, 0.1, C.green, a === 'KS1' || (a === 'KS1B' && blink), s);
+      lamp(ctx, -0.17, 0.02, 0.1, C.red, a === 'HP0', s);
+      lamp(ctx, 0.17, 0.02, 0.1, C.yel, a === 'KS2', s);
+      ersatzLamps(ctx, m, eo, blink, s, 0.26);
+      if(m.zs3vBox){ box(ctx, -0.3, 0.68, 0.6, 0.5, s); if(r.zs3v) txt(ctx, String(r.zs3v), 0, 0.94, 0.42, C.yel, true); }
+    } else {
+      box(ctx, -0.32, -0.82, 0.64, 1.72, s);
+      lamp(ctx, 0, -0.58, 0.1, C.green, a === 'HP1' || a === 'HP2', s);
+      lamp(ctx, -0.14, -0.24, 0.1, C.red, a === 'HP0', s);
+      lamp(ctx, 0.14, -0.24, 0.1, C.red, false, s);
+      lamp(ctx, 0, 0.1, 0.1, C.yel, a === 'HP2', s);
+      ersatzLamps(ctx, m, eo, blink, s, 0.42);
+      if(m.mastVr >= 0){ ctx.translate(0, 1.85); drawVr(ctx, S.dsig[m.mastVr].aspect, s); }
+    }
+  } else if(o.k === 'dist'){
+    const d = DIST[o.ref], r = S.dsig[o.ref], a = r.aspect;
+    if(d.sys === 'ks'){
+      box(ctx, -0.34, -0.34, 0.68, 0.68, s);
+      lamp(ctx, 0.13, -0.13, 0.1, C.green, a === 'KS1' || (a === 'KS1B' && blink), s);
+      lamp(ctx, -0.13, 0.13, 0.1, C.yel, a === 'KS2', s);
+      if(MAIN[d.target].zs3){ box(ctx, -0.28, 0.44, 0.56, 0.46, s); if(r.zs3v) txt(ctx, String(r.zs3v), 0, 0.68, 0.38, C.yel, true); }
+      if(s > 4) ne2(ctx, MAIN[d.target].zs3 ? 1.05 : 0.6);
+    } else {
+      drawVr(ctx, a, s);
+      if(s > 4) ne2(ctx, 0.62);
+    }
+  } else if(o.k === 'lf6'){
+    ctx.beginPath(); ctx.moveTo(-0.5, -0.42); ctx.lineTo(0.5, -0.42); ctx.lineTo(0, 0.46); ctx.closePath();
+    ctx.fillStyle = '#f4f4f0'; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-0.41, -0.36); ctx.lineTo(0.41, -0.36); ctx.lineTo(0, 0.34); ctx.closePath();
+    ctx.fillStyle = '#f2c230'; ctx.fill();
+    if(s > 3) txt(ctx, String(o.v), 0, -0.1, 0.4, '#111');
+  } else if(o.k === 'lf7'){
+    ctx.fillStyle = '#111'; ctx.fillRect(-0.36, -0.46, 0.72, 0.92);
+    ctx.fillStyle = '#f4f4f0'; ctx.fillRect(-0.32, -0.42, 0.64, 0.84);
+    if(s > 3) txt(ctx, String(o.v), 0, 0.02, 0.6, '#111');
+  } else if(o.k === 'ne5'){
+    ctx.fillStyle = '#111'; ctx.fillRect(-0.3, -0.3, 0.6, 0.6);
+    ctx.fillStyle = '#f4f4f0'; ctx.fillRect(-0.27, -0.27, 0.54, 0.54);
+    if(s > 3) txt(ctx, 'H', 0, 0.02, 0.44, '#111');
+  } else if(o.k === 'ra10'){
+    ctx.beginPath(); ctx.arc(0, 0.3, 0.62, Math.PI, 0); ctx.closePath();
+    ctx.fillStyle = '#f4f4f0'; ctx.fill(); ctx.lineWidth = 0.05; ctx.strokeStyle = '#111'; ctx.stroke();
+    if(s > 12){ txt(ctx, 'Halt für', 0, -0.08, 0.13, '#111'); txt(ctx, 'Rangier-', 0, 0.06, 0.13, '#111'); txt(ctx, 'fahrten', 0, 0.2, 0.13, '#111'); }
+  } else if(o.k === 'ls'){
+    box(ctx, -0.32, -0.24, 0.64, 0.48, s);
+    const sh1 = S.lsSh1;
+    lamp(ctx, -0.15, 0.1, 0.075, sh1 ? C.white : C.red, true, s);
+    lamp(ctx, 0.15, 0.1, 0.075, C.red, !sh1, s);
+    lamp(ctx, 0.15, -0.1, 0.075, C.white, sh1, s);
+  } else if(o.k === 'sign'){
+    ctx.fillStyle = '#1d4f91'; ctx.fillRect(-1.2, -0.26, 2.4, 0.52);
+    if(s > 6) txt(ctx, o.name, 0, 0.01, 0.34, '#fff');
+  }
+  ctx.restore();
+}
+function ersatzLamps(ctx, m, on, blink, s, y0){
+  if(!m.ersatz) return;
+  if(m.ersatz === 'zs7'){
+    lamp(ctx, -0.15, y0, 0.06, C.yel, on, s); lamp(ctx, 0.15, y0, 0.06, C.yel, on, s); lamp(ctx, 0, y0+0.2, 0.06, C.yel, on, s);
+  } else {
+    const lit = on && (m.ersatz === 'zs8' ? blink : true);
+    lamp(ctx, 0, y0, 0.06, C.white, lit, s); lamp(ctx, -0.15, y0+0.2, 0.06, C.white, lit, s); lamp(ctx, 0.15, y0+0.2, 0.06, C.white, lit, s);
+  }
+}
+
+// ---------------- Zeichnen: Strecke ----------------
+const view = document.getElementById('view'), vctx = view.getContext('2d');
+function hash(n){ let x = Math.sin(n*127.1 + 311.7)*43758.5453; return x - Math.floor(x); }
+function render(){
+  const ctx = vctx, W = view.width, H = view.height;
+  if(!W || !H) return;
+  const hy = H*0.42, f = H*0.8, cx = W/2, camH = 3.0, base = S.front;
+  const P = (z, x, h) => [cx + x*f/z, hy + (camH - h)*f/z];
+  const u = Math.max(H/450, 0.85*Math.min(window.devicePixelRatio || 1, 2));
+  // Himmel
+  let g = ctx.createLinearGradient(0, 0, 0, hy);
+  g.addColorStop(0, '#5f8db8'); g.addColorStop(1, '#cbd9df');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, hy + 1);
+  // Hügel
+  ctx.fillStyle = '#8fa6a6';
+  ctx.beginPath(); ctx.moveTo(0, hy);
+  for(let x = 0; x <= W; x += 8*u){ const k = x/W; ctx.lineTo(x, hy - (18 + 14*Math.sin(k*7 + 1) + 8*Math.sin(k*19))*u); }
+  ctx.lineTo(W, hy); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#6f8a7c';
+  ctx.beginPath(); ctx.moveTo(0, hy);
+  for(let x = 0; x <= W; x += 8*u){ const k = x/W; ctx.lineTo(x, hy - (6 + 7*Math.sin(k*11 + 4) + 4*Math.sin(k*29))*u); }
+  ctx.lineTo(W, hy); ctx.closePath(); ctx.fill();
+  // Boden
+  g = ctx.createLinearGradient(0, hy, 0, H);
+  g.addColorStop(0, '#8a9a66'); g.addColorStop(1, '#55693a');
+  ctx.fillStyle = g; ctx.fillRect(0, hy, W, H - hy);
+  const ZN = 3.5, ZF = 4000;
+  const quad = (z1, z2, x1, x2, h, col) => {
+    const a = P(z1, x1, h), b = P(z1, x2, h), c = P(z2, x2, h), d = P(z2, x1, h);
+    ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.closePath(); ctx.fill();
+  };
+  // Schotter
+  quad(ZN, ZF, -1.9, 1.9, 0, '#8d877f');
+  quad(ZN, ZF, -6.1, -2.3, 0, '#857f78');
+  // Schwellen
+  ctx.strokeStyle = '#4b3f34';
+  for(const tx of [0, -4.2]){
+    for(let k = Math.ceil((base + ZN)/0.65); ; k++){
+      const z = k*0.65 - base; if(z > 140) break;
+      const a = P(z, tx - 1.3, 0.02), b = P(z, tx + 1.3, 0.02);
+      ctx.lineWidth = Math.max(0.6, 0.2*f/z);
+      ctx.globalAlpha = Math.min(1, 1.6 - z/110);
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
+  // Schienen
+  for(const tx of [0, -4.2]) for(const sx of [-0.72, 0.72]) quad(ZN, ZF, tx + sx - 0.04, tx + sx + 0.04, 0.16, '#c4c6c6');
+  // Bahnsteige
+  for(const s of STATIONS){
+    const z1 = Math.max(ZN, s.from - base), z2 = s.to - base;
+    if(z2 <= ZN || z1 > 2500) continue;
+    quad(z1, z2, 1.75, 7.5, 0.76, '#a7a39b');
+    quad(z1, z2, 1.75, 1.95, 0.77, '#f2f0e8');
+    const a = P(z1, 1.75, 0.76), b = P(z2, 1.75, 0.76), c = P(z2, 1.75, 0), d = P(z1, 1.75, 0);
+    ctx.fillStyle = '#6d6a65'; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.closePath(); ctx.fill();
+  }
+  // Fahrdraht
+  ctx.strokeStyle = '#2b2f30'; ctx.lineWidth = Math.max(1, u*0.8);
+  for(const tx of [0, -4.2]){ const a = P(tx ? 40 : ZN, tx, 5.6), b = P(ZF, tx, 5.6); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); }
+
+  // Tiefensortierte Objekte
+  const items = [];
+  for(let k = Math.ceil((base + ZN)/60); ; k++){ const z = k*60 - base; if(z > 1400) break; items.push({z, t:'mast'}); }
+  for(let k = Math.ceil((base + ZN)/23); ; k++){
+    const z = k*23 - base; if(z > 1100) break;
+    const r1 = hash(k), r2 = hash(k + 77);
+    if(r1 < 0.35) continue;
+    const side = r2 < 0.5 ? -1 : 1;
+    items.push({z, t:'tree', x: side*(9 + r1*28), hgt: 6 + r2*9, tone: hash(k + 5)});
+  }
+  for(const o of OBJS){ const z = o.pos - base; if(z > ZN && z < 3000) items.push({z, t:'obj', o}); }
+  if(S.lead.on){ const z = S.lead.front - TRAIN_LEN - base; if(z > ZN && z < 3000) items.push({z, t:'lead'}); }
+  items.sort((a, b) => b.z - a.z);
+  for(const it of items){
+    const z = it.z, s = f/z;
+    const fog = Math.min(0.85, z/2600);
+    if(it.t === 'mast'){
+      const a = P(z, 3.4, 0), b = P(z, 3.4, 7), c = P(z, 3.4, 6.2), d = P(z, -0.1, 6.2);
+      ctx.strokeStyle = '#4a5250'; ctx.lineWidth = Math.max(0.8, 0.22*s);
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.moveTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.stroke();
+    } else if(it.t === 'tree'){
+      const a = P(z, it.x, 0), b = P(z, it.x, it.hgt);
+      const w = 2.4*s, hgt = a[1] - b[1];
+      ctx.fillStyle = it.tone < 0.5 ? '#2f4a2c' : '#3c5a33';
+      ctx.globalAlpha = 1 - fog*0.6;
+      ctx.beginPath(); ctx.ellipse(b[0], b[1] + hgt*0.35, w, hgt*0.45, 0, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+    } else if(it.t === 'lead'){
+      const a = P(z, -1.45, 4.0), b = P(z, 1.45, 0.9);
+      ctx.fillStyle = '#9da6a9'; ctx.fillRect(a[0], a[1], b[0]-a[0], b[1]-a[1]);
+      ctx.fillStyle = '#c62f2a'; ctx.fillRect(a[0], a[1] + (b[1]-a[1])*0.55, b[0]-a[0], (b[1]-a[1])*0.12);
+      ctx.fillStyle = '#28323a'; const w1 = P(z, -1.1, 3.4), w2 = P(z, 1.1, 2.5); ctx.fillRect(w1[0], w1[1], w2[0]-w1[0], w2[1]-w1[1]);
+      for(const sx of [-1.05, 1.05]){ const p = P(z, sx, 1.25); ctx.fillStyle = '#ff2a1f'; ctx.shadowColor = '#ff2a1f'; ctx.shadowBlur = 8*u; ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(1.5*u, 0.12*s), 0, 7); ctx.fill(); ctx.shadowBlur = 0; }
+    } else {
+      const o = it.o, g0 = P(z, o.x, o.k === 'ne5' || o.k === 'sign' ? 0.76 : 0), hd = P(z, o.x, o.h);
+      const mastTop = o.k === 'main' ? hd[1] + (MAIN[o.ref].sys === 'ks' ? 0.6 : 0.9)*s : hd[1];
+      ctx.strokeStyle = '#3d4443'; ctx.lineWidth = Math.max(0.8, 0.14*s);
+      if(o.k !== 'ls'){ ctx.beginPath(); ctx.moveTo(g0[0], g0[1]); ctx.lineTo(hd[0], mastTop); ctx.stroke(); }
+      if(o.k === 'main' && s > 2.5){
+        const m1 = P(z, o.x, 2.9);
+        const w = 0.26*s, h = 0.9*s;
+        ctx.fillStyle = '#f2f2ee'; ctx.fillRect(m1[0] - w/2, m1[1] - h, w, h);
+        ctx.fillStyle = '#d0281f'; ctx.fillRect(m1[0] - w/2, m1[1] - h*0.75, w, h*0.18); ctx.fillRect(m1[0] - w/2, m1[1] - h*0.38, w, h*0.18);
+      }
+      ctx.save(); ctx.translate(hd[0], hd[1]); glyph(ctx, o, s, S.t); ctx.restore();
+    }
+  }
+  // Dunst
+  g = ctx.createLinearGradient(0, hy - 30*u, 0, hy + 60*u);
+  g.addColorStop(0, 'rgba(203,217,223,0)'); g.addColorStop(0.45, 'rgba(203,217,223,.55)'); g.addColorStop(1, 'rgba(203,217,223,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, hy - 30*u, W, 90*u);
+  // Führerstandsrahmen
+  ctx.fillStyle = '#121615';
+  ctx.fillRect(0, H - 14*u, W, 14*u);
+  hud(ctx, W, H, u);
+}
+function bounds(o){
+  if(o.k === 'main'){
+    const m = MAIN[o.ref];
+    if(m.sys === 'ks') return [m.zs3 ? -1.12 : -0.55, m.zs3vBox ? 1.18 : 0.63];
+    return [-0.82, m.mastVr >= 0 ? 2.27 : 0.9];
+  }
+  if(o.k === 'dist'){ const d = DIST[o.ref]; return d.sys === 'ks' ? [-0.34, MAIN[d.target].zs3 ? 1.67 : 1.22] : [-0.42, 1.24]; }
+  if(o.k === 'ls') return [-0.24, 0.24];
+  if(o.k === 'ra10') return [-0.34, 0.32];
+  return [-0.46, 0.46];
+}
+function nextObj(){
+  let best = null;
+  for(const o of OBJS){
+    if(!['main','dist','lf6','lf7','ls','ra10'].includes(o.k)) continue;
+    const d = o.pos - S.front;
+    if(d > 0 && d < 3000 && (!best || d < best.d)) best = {o, d};
+  }
+  return best;
+}
+function objName(o){
+  if(o.k === 'main') return 'Signal ' + MAIN[o.ref].id;
+  if(o.k === 'dist') return 'Vorsignal ' + DIST[o.ref].for;
+  if(o.k === 'lf6') return 'Lf 6';
+  if(o.k === 'lf7') return 'Lf 7';
+  if(o.k === 'ls') return 'Ls-Signal';
+  if(o.k === 'ra10') return 'Ra 10';
+  return '';
+}
+function objText(o){
+  if(o.k === 'main') return mainText(o.ref);
+  if(o.k === 'dist') return distText(o.ref);
+  if(o.k === 'lf6') return 'Lf 6 – ' + o.v*10 + ' km/h angekündigt';
+  if(o.k === 'lf7') return 'Lf 7 – ' + o.v*10 + ' km/h';
+  if(o.k === 'ls') return S.lsSh1 ? 'Sh 1 – Fahrverbot aufgehoben' : 'Sh 0 – Halt! Fahrverbot';
+  if(o.k === 'ra10') return 'Ra 10 – Rangierhalttafel';
+  return '';
+}
+function fmtM(d){ return Math.round(d).toLocaleString('de-DE') + ' m'; }
+function hud(ctx, W, H, u){
+  const n = nextObj();
+  const pw = 112*u, ph = 172*u, px = W - pw - 10*u, py = 10*u;
+  ctx.fillStyle = 'rgba(12,16,15,.78)'; rr(ctx, px, py, pw, ph, 8*u); ctx.fill();
+  ctx.font = '600 ' + Math.round(11*u) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = '#8e9f99';
+  ctx.fillText('SIGNAL-LUPE', px + pw/2, py + 6*u);
+  if(n){
+    const [bt, bb] = bounds(n.o), aTop = py + 22*u, aH = ph - 62*u;
+    const sc = Math.min(48*u, aH/(bb - bt), (pw - 16*u)/1.4);
+    ctx.save(); ctx.translate(px + pw/2, aTop + aH/2 - (bt + bb)/2*sc);
+    glyph(ctx, n.o, sc, S.t); ctx.restore();
+    ctx.fillStyle = '#e6ebe8'; ctx.textBaseline = 'bottom';
+    ctx.font = '700 ' + Math.round(13*u) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
+    ctx.fillText(objName(n.o), px + pw/2, py + ph - 20*u);
+    ctx.font = Math.round(12*u) + 'px "Share Tech Mono",monospace';
+    ctx.fillStyle = '#f2c230';
+    ctx.fillText(fmtM(n.d), px + pw/2, py + ph - 6*u);
+  }
+  if(lern){
+    const va = vAllowed();
+    const line = 'Zul. ' + va.v + ' km/h (' + va.src + ')' + (n ? ' · ' + objName(n.o) + ': ' + objText(n.o) : '');
+    ctx.font = '500 ' + Math.round(13*u) + 'px "Barlow","Segoe UI",sans-serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    const tw = Math.min(W - 20*u - pw - 20*u, ctx.measureText(line).width + 16*u);
+    ctx.fillStyle = 'rgba(12,16,15,.72)'; rr(ctx, 10*u, 10*u, tw, 24*u, 6*u); ctx.fill();
+    ctx.save(); ctx.beginPath(); ctx.rect(10*u, 10*u, tw, 24*u); ctx.clip();
+    ctx.fillStyle = S.v*3.6 > va.v + 0.5 ? '#ffb3aa' : '#e6ebe8';
+    ctx.fillText(line, 18*u, 22*u); ctx.restore();
+  }
+  if(S.zwang){
+    ctx.fillStyle = 'rgba(160,20,14,.85)'; rr(ctx, 10*u, H - 52*u, Math.min(W*0.6, 360*u), 30*u, 6*u); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.font = '700 ' + Math.round(15*u) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
+    ctx.fillText('ZWANGSBREMSUNG – ' + (S.v > 0 ? 'Zug bremst' : 'Frei drücken'), 20*u, H - 37*u);
+  }
+}
+
+// ---------------- Tacho ----------------
+const tacho = document.getElementById('tacho'), tctx = tacho.getContext('2d');
+function drawTacho(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), size = tacho.clientWidth || 200;
+  if(tacho.width !== Math.round(size*dpr)){ tacho.width = tacho.height = Math.round(size*dpr); }
+  const ctx = tctx, W = tacho.width, c = W/2, R = W*0.46;
+  ctx.clearRect(0, 0, W, W);
+  const A0 = Math.PI*0.75, A1 = Math.PI*2.25, VM = 160;
+  const ang = v => A0 + (A1 - A0)*Math.min(v, VM)/VM;
+  ctx.fillStyle = '#0c0f0e'; ctx.beginPath(); ctx.arc(c, c, R, 0, Math.PI*2); ctx.fill();
+  ctx.lineWidth = W*0.012; ctx.strokeStyle = '#33413e'; ctx.stroke();
+  for(let v = 0; v <= VM; v += 5){
+    const a = ang(v), major = v % 20 === 0, mid = v % 10 === 0;
+    const r1 = R*(major ? 0.78 : mid ? 0.83 : 0.87), r2 = R*0.92;
+    ctx.strokeStyle = '#d9e0dd'; ctx.lineWidth = W*(major ? 0.011 : 0.005);
+    ctx.beginPath(); ctx.moveTo(c + Math.cos(a)*r1, c + Math.sin(a)*r1); ctx.lineTo(c + Math.cos(a)*r2, c + Math.sin(a)*r2); ctx.stroke();
+    if(major){ ctx.fillStyle = '#d9e0dd'; ctx.font = '600 ' + Math.round(W*0.075) + 'px "Barlow Condensed","Arial Narrow",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(v), c + Math.cos(a)*R*0.64, c + Math.sin(a)*R*0.64); }
+  }
+  if(lern){
+    const va = vAllowed().v, a = ang(va);
+    ctx.strokeStyle = '#f2c230'; ctx.lineWidth = W*0.03;
+    ctx.beginPath(); ctx.arc(c, c, R*0.955, a - 0.04, a + 0.04); ctx.stroke();
+  }
+  const P = S.pzb;
+  if(P.m1000 || P.m500 || P.befehl){
+    const a = ang(P.lim); ctx.strokeStyle = '#ff4b3e'; ctx.lineWidth = W*0.03;
+    ctx.beginPath(); ctx.arc(c, c, R*0.955, a - 0.03, a + 0.03); ctx.stroke();
+  }
+  const vk = S.v*3.6, a = ang(vk);
+  ctx.strokeStyle = '#ffffff'; ctx.lineWidth = W*0.018; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(c - Math.cos(a)*R*0.12, c - Math.sin(a)*R*0.12); ctx.lineTo(c + Math.cos(a)*R*0.82, c + Math.sin(a)*R*0.82); ctx.stroke();
+  ctx.fillStyle = '#2a3331'; ctx.beginPath(); ctx.arc(c, c, R*0.08, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#cfe8d8'; ctx.font = Math.round(W*0.13) + 'px "Share Tech Mono",monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(String(Math.round(vk)), c, c + R*0.45);
+  ctx.fillStyle = '#8e9f99'; ctx.font = '600 ' + Math.round(W*0.055) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
+  ctx.fillText('km/h', c, c + R*0.63);
+}
+
+// ---------------- UI ----------------
+let lern = true;
+const $ = id => document.getElementById(id);
+const el = {lm55:$('lm55'), lm70:$('lm70'), lm85:$('lm85'), lm1000:$('lm1000'), lm500:$('lm500'), lmBef:$('lmBef'),
+  sifa:$('sifaLm'), digi:$('digi'), iHalt:$('iHalt'), iSig:$('iSig'), iZul:$('iZul'), iErr:$('iErr'), handle:$('handle'), lever:$('lever')};
+function leverLabel(l){ return l === -8 ? 'SB' : l < 0 ? 'B' + (-l) : l > 0 ? 'F' + l : '0'; }
+function setLever(l){
+  l = Math.max(-8, Math.min(8, l));
+  if(l === S.lever) return;
+  S.lever = l; audio.init();
+  el.handle.textContent = leverLabel(l);
+  el.handle.style.top = (8 + (8 - l)/16*(el.lever.clientHeight - 16)) + 'px';
+  el.lever.setAttribute('aria-valuenow', l); el.lever.setAttribute('aria-valuetext', leverLabel(l));
+}
+function placeHandle(){ el.handle.textContent = leverLabel(S.lever); el.handle.style.top = (8 + (8 - S.lever)/16*(el.lever.clientHeight - 16)) + 'px'; }
+function updateUI(){
+  const P = S.pzb, Z = ZUGART[P.zug], blink = (S.t % 1) < 0.5;
+  const lamps = {'55':false, '70':false, '85':false};
+  if(P.restr){ lamps['85'] = blink; lamps['70'] = !blink; }
+  else lamps[Z.lamp] = (P.m1000 || P.m500) ? blink : true;
+  el.lm55.classList.toggle('on', lamps['55']); el.lm70.classList.toggle('on', lamps['70']); el.lm85.classList.toggle('on', lamps['85']);
+  el.lm1000.classList.toggle('on', !!(P.m1000 && S.front - P.m1000.s0 < 700));
+  el.lm500.classList.toggle('on', !!P.m500);
+  el.lmBef.classList.toggle('on', P.befehl);
+  el.sifa.classList.toggle('on', S.sifa.t >= 30);
+  let d;
+  if(S.zwang) d = 'ZB · ' + S.zwang.reason;
+  else if(P.m1000 || P.m500) d = 'PZB ' + (P.restr ? 'restriktiv ' : '') + '≤ ' + Math.round(P.lim) + ' km/h' + (P.m1000 && !P.m1000.ack ? ' · WACHSAM!' : '');
+  else d = (S.mode === 'rangier' ? 'Rangierfahrt' : 'Zugfahrt') + ' · Zugart ' + P.zug + ' · ' + leverLabel(S.lever);
+  el.digi.textContent = d; el.digi.classList.toggle('alarm', !!S.zwang);
+  // Fahrplan
+  let nh = null;
+  STATIONS.forEach((s,i) => { if(!s.first && !S.st[i].done && !nh) nh = s; });
+  el.iHalt.textContent = nh ? nh.name + ' · ' + fmtM(nh.stop - S.front) : (S.mode === 'rangier' ? 'vor Ra 10 · ' + fmtM(RA10_POS - S.front) : '–');
+  let ns = null;
+  MAIN.forEach((m,i) => { if(!ns && m.pos > S.front) ns = i; });
+  el.iSig.textContent = ns === null ? (S.mode === 'rangier' ? 'Ls-Signal' : '–') : MAIN[ns].id + ' · ' + fmtM(MAIN[ns].pos - S.front) + (lern ? ' · ' + mainText(ns) : '');
+  const va = vAllowed();
+  el.iZul.textContent = lern ? va.v + ' km/h · ' + va.src : 'Lernhilfe aus';
+  el.iErr.textContent = S.errors.length + (S.zbCount ? ' · ' + S.zbCount + ' ZB' : '');
+  document.querySelectorAll('#zugart button').forEach(b => { b.disabled = S.v > 0; b.setAttribute('aria-pressed', String(b.dataset.z === P.zug)); });
+}
+
+// Hebel per Zeigen
+(function(){
+  const tr = el.lever; let drag = false;
+  const fromY = y => { const r = tr.getBoundingClientRect(); const k = (y - r.top - 8)/(r.height - 16); setLever(Math.round(8 - k*16)); };
+  tr.addEventListener('pointerdown', e => { drag = true; tr.setPointerCapture(e.pointerId); fromY(e.clientY); });
+  tr.addEventListener('pointermove', e => { if(drag) fromY(e.clientY); });
+  tr.addEventListener('pointerup', () => { drag = false; });
+  tr.addEventListener('pointercancel', () => { drag = false; });
+  tr.addEventListener('keydown', e => { if(e.key === 'ArrowUp'){ setLever(S.lever + 1); e.preventDefault(); } if(e.key === 'ArrowDown'){ setLever(S.lever - 1); e.preventDefault(); } });
+})();
+$('lUp').addEventListener('click', () => setLever(S.lever + 1));
+$('lDn').addEventListener('click', () => setLever(S.lever - 1));
+$('lSB').addEventListener('click', () => setLever(-8));
+$('bWach').addEventListener('click', () => { audio.init(); pressWachsam(); });
+$('bFrei').addEventListener('click', () => { audio.init(); pressFrei(); });
+$('bSifa').addEventListener('click', () => { audio.init(); pressSifa(); });
+(function(){
+  const b = $('bBef');
+  const on = e => { e.preventDefault(); audio.init(); S.pzb.befehl = true; b.classList.add('down'); try{ b.setPointerCapture(e.pointerId); }catch(_){} };
+  const off = () => { S.pzb.befehl = false; b.classList.remove('down'); };
+  b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('lostpointercapture', off);
+  b.addEventListener('contextmenu', e => e.preventDefault());
+})();
+document.querySelectorAll('#zugart button').forEach(b => b.addEventListener('click', () => {
+  if(S.v > 0) return; S.pzb.zug = b.dataset.z; log('Zugart ' + b.dataset.z + ' eingestellt');
+}));
+$('tLern').addEventListener('click', e => { lern = !lern; e.currentTarget.setAttribute('aria-pressed', String(lern)); });
+$('tTon').addEventListener('click', e => { audio.on = !audio.on; if(!audio.on) audio.stopAll(); e.currentTarget.setAttribute('aria-pressed', String(audio.on)); });
+$('tPause').addEventListener('click', e => { S.paused = !S.paused; if(S.paused) audio.stopAll(); e.currentTarget.setAttribute('aria-pressed', String(S.paused)); });
+$('tReset').addEventListener('click', reset);
+$('endRestart').addEventListener('click', reset);
+document.addEventListener('keydown', e => {
+  if(e.target.closest && e.target.closest('input,textarea')) return;
+  const k = e.key.toLowerCase();
+  if(e.repeat && (k === 'b' || k === ' ')) { e.preventDefault(); return; }
+  if(k === 'w' || (k === 'arrowup' && e.target !== el.lever)){ setLever(S.lever + 1); e.preventDefault(); }
+  else if(k === 's' || (k === 'arrowdown' && e.target !== el.lever)){ setLever(S.lever - 1); e.preventDefault(); }
+  else if(k === 'q'){ audio.init(); pressWachsam(); }
+  else if(k === 'e'){ audio.init(); pressFrei(); }
+  else if(k === ' '){ audio.init(); pressSifa(); e.preventDefault(); }
+  else if(k === 'b'){ audio.init(); S.pzb.befehl = true; $('bBef').classList.add('down'); }
+  else if(k === 'p'){ $('tPause').click(); }
+});
+document.addEventListener('keyup', e => { if(e.key.toLowerCase() === 'b'){ S.pzb.befehl = false; $('bBef').classList.remove('down'); } });
+document.addEventListener('pointerdown', () => audio.init(), {once:true});
+
+function resize(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = view.clientWidth, h = view.clientHeight;
+  view.width = Math.round(w*dpr); view.height = Math.round(h*dpr);
+  placeHandle();
+}
+function reset(){
+  audio.stopAll();
+  S = newState();
+  for(const k in flags) delete flags[k];
+  logEl.textContent = '';
+  $('end').hidden = true;
+  $('tPause').setAttribute('aria-pressed', 'false');
+  placeHandle();
+  log('RB 3807 nach Tannau, Zugart M. Warten, bis Ausfahrsignal A Fahrt zeigt.', 'fdl');
+  log('Hebel auf F stellen zum Anfahren. Sifa während der Fahrt alle 30 s betätigen.');
+}
+reset();
+new ResizeObserver(resize).observe(view);
+resize();
+let last = performance.now();
+function frame(now){
+  let dt = (now - last)/1000; last = now;
+  if(dt > 0.1) dt = 0.1;
+  if(!S.paused && !S.finished){ const n = Math.max(1, Math.ceil(dt/0.02)); for(let i = 0; i < n && !S.finished; i++) step(dt/n); }
+  render(); drawTacho(); updateUI();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+window.__sim = { get S(){ return S; }, step, setLever, pressWachsam, pressFrei, pressSifa };
+})();
+</script>
+
+</body>
+</html>
