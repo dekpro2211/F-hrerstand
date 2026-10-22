@@ -4,8 +4,8 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 
 ## Inhalt
 
-- **Signalsysteme:** Ks (Ks 1, Ks 1 blinkend, Ks 2, Hp 0, Zs 3, Zs 3v), H/V (Hp 0/1/2, Vr 0/1/2, Ne 2), Lf 6/Lf 7, Ne 3 (Vorsignalbaken), Ne 5, Ne 6 (Haltepunkttafel), Sh 0/Sh 1, Ra 10, Ersatzsignale Zs 1, Zs 7, Zs 8, Hektometertafeln alle 100 m
-- **Gegengleis:** Mit Zs 8 fährt der Zug über die Weichenverbindung auf das Gegengleis (Weichenbereich 40 km/h), dort wirken die Gleismagnete des Regelgleises nicht; vor der nächsten Betriebsstelle zurück auf das Regelgleis
+- **Signalsysteme:** Ks (Ks 1, Ks 1 blinkend, Ks 2, Hp 0, Zs 3, Zs 3v), H/V (Hp 0/1/2, Vr 0/1/2, Ne 2), Lf 6/Lf 7, Ne 1 (Trapeztafel), Ne 3 (Vorsignalbaken), Ne 5, Ne 6 (Haltepunkttafel), Sh 0/Sh 1, Ra 10, Ersatzsignale Zs 1, Zs 7, Zs 8, Hektometertafeln alle 100 m, Bezeichnungstafeln an den Tunnelportalen (Name, Tunnelsymbol, Länge)
+- **Gegengleis:** Mit Zs 8 fährt der Zug über die Weichenverbindung auf das Gegengleis (Weichenbereich 40 km/h), dort wirken die Gleismagnete des Regelgleises nicht; vor der nächsten Betriebsstelle zurück auf das Regelgleis. Am Gegengleis steht in Höhe des Einfahrsignals die Trapeztafel Ne 1 mit Kilometerangabe und 2000-Hz-Magnet – Vorbeifahrt nur mit Zustimmung des Fdl und Befehl, sonst Zwangsbremsung
 - **Signallogik:** selbsttätiger Streckenblock mit vorausfahrendem Zug, Ausfahrt nach Haltezeit, gestörte Signale mit Ersatzsignal durch den Fdl
 - **PZB 90 nach Ril 483 und AVG-Schulungsunterlage Modul 17:**
   - Gleismagnete 1000/500/2000 Hz, Doppelgleismagnet 1000/2000 Hz am Mehrabschnittssignal, 500 Hz vor Zs 3 bis Kennziffer 3
