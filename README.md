@@ -6,8 +6,17 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 
 - **Signalsysteme:** Ks (Ks 1, Ks 1 blinkend, Ks 2, Hp 0, Zs 3, Zs 3v), H/V (Hp 0/1/2, Vr 0/1/2, Ne 2), Lf 6/Lf 7, Ne 5, Sh 0/Sh 1, Ra 10, Ersatzsignale Zs 1, Zs 7, Zs 8
 - **Signallogik:** selbsttätiger Streckenblock mit vorausfahrendem Zug, Ausfahrt nach Haltezeit, gestörte Signale mit Ersatzsignal durch den Fdl
-- **PZB 90 (vereinfacht nach Ril 483):** 1000/500/2000 Hz, Zugarten O/M/U, Bremskurven, restriktive Überwachung, Wachsam/Frei/Befehl 40
+- **PZB 90 nach Ril 483 und AVG-Schulungsunterlage Modul 17:**
+  - Gleismagnete 1000/500/2000 Hz, Doppelgleismagnet 1000/2000 Hz am Mehrabschnittssignal, 500 Hz vor Zs 3 bis Kennziffer 3
+  - Geschwindigkeitsprüfabschnitt (GPA) an Lf 6 Kennziffer 8/9, Geschwindigkeitsüberwachungsabschnitt (GÜ, 2000 Hz) vor Lf 7 ab Kennziffer 10
+  - Zugarten O/M/U, Bremskurven, Wachsam binnen 4 s, Wachsam auch an Signalen in Warnstellung ohne wirksamen Magnet
+  - Restriktive Überwachung (Wechselblinken), Startprogramm, Befreien mit Prüfung der Zulässigkeit, „Unberechtigtes Befreien“
+  - Befehl 40 (über 40 km/h wirkungslos), Leuchtmelder nach I60R inkl. „Fahrzeug hat gesandet“
+  - Ablauf nach PZB-Zwangsbremsung mit Fdl (mündliche Zustimmung bzw. Befehl 2), gestörte Streckeneinrichtung melden
+  - Funktionsprüfung (Wachsam + Frei), 5-km/h-Puffer nach Ril 483
+  - Fahrzeugwahl: Regelfahrzeug oder AVG-Stadtbahn (PZB 90 Version AVG: Zugart O fest, 100 km/h, Frühhalt VÜ 3 / Spähalt VÜ 2)
 - **Sifa:** 30-s-Zyklus mit Leuchtmelder, Summer und Zwangsbremsung
+- **Fahrgastbetrieb:** zusätzliche Haltepunkte, Türen freigeben und schließen, Fahrgastwechsel mit wartenden Reisenden, Traktionssperre bei offenen Türen, Ansage „Nächster Halt“
 - **Auswertung:** Signalverstöße, Geschwindigkeitsüberschreitungen, ausgelassene Halte, Zwangsbremsungen
 
 ## Szenarien
@@ -42,6 +51,8 @@ Bestandene Szenarien werden im Browser gespeichert (localStorage).
 | `E` | Frei |
 | `B` (halten) | Befehl 40 |
 | `Leertaste` | Sifa |
+| `F` | Fahrdienstleiter verständigen |
+| `T` | Türen freigeben / schließen |
 | `P` | Pause |
 
 Auf dem Smartphone werden Hebel und Tasten per Touch bedient.

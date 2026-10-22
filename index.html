@@ -35,18 +35,31 @@ h1{font-family:var(--f-display);font-weight:700;font-size:1.2rem;letter-spacing:
 .chip:hover{border-color:var(--muted)}
 .chip[aria-pressed="true"]{border-color:var(--signal);color:var(--signal)}
 .chip:focus-visible,.btn:focus-visible,.seg button:focus-visible,.lever-track:focus-visible,.step:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
-.view{position:relative;max-height:max(240px,calc(100vh - 380px));width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9;max-width:100%}
+.view{position:relative;max-height:max(240px,calc(100vh - 410px));width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9;max-width:100%}
 .view canvas{width:100%;height:100%;display:block;touch-action:none}
 .desk{display:grid;gap:6px;grid-template-columns:repeat(12,minmax(0,1fr));background:var(--desk);border:1px solid var(--line);border-radius:10px;padding:6px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:7px;min-width:0;display:grid;gap:5px;align-content:start}
 .p-tacho{grid-column:span 3}.p-pzb{grid-column:span 4}.p-lever{grid-column:span 2}.p-info{grid-column:span 3}
 @media (max-width:900px){.p-tacho{order:1}.p-lever{order:2}.p-pzb{order:3}.p-info{order:4}.p-tacho{grid-column:span 6}.p-lever{grid-column:span 6}.p-pzb{grid-column:span 12}.p-info{grid-column:span 12}#tacho{max-width:130px}.lever-track{height:128px}}
 .lbl{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.09em;font-size:.68rem;color:var(--muted)}
-#tacho{width:100%;max-width:160px;aspect-ratio:1;justify-self:center;display:block}
+#tacho{width:100%;max-width:145px;aspect-ratio:1;justify-self:center;display:block}
 .digi{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:3px 6px;font-size:.78rem;min-height:1.9em;color:#cfe8d8;font-variant-numeric:tabular-nums}
 .digi.alarm{color:#ffd2cc;border-color:var(--stop)}
 /* PZB */
-.lamps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
+.lamps{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.lm.s.on{background:#e9e1c8;color:#2a2416;box-shadow:0 0 12px #e9e1c8}
+.chip.fdl{padding:2px 8px}
+.doors{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.dbtn{appearance:none;font-family:var(--f-display);font-weight:700;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;border:1px solid #2f7a4e;background:#15291e;color:#9fe8bb;padding:6px 10px;cursor:pointer;touch-action:manipulation;flex:1 1 auto;min-width:0}
+.dbtn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.dbtn.open{border-color:#c98a2d;background:#33230e;color:#ffcf8a}
+.dbtn.busy{border-color:var(--line);background:var(--panel-2);color:var(--muted)}
+.dbtn.need{animation:pulseg .8s steps(2) infinite}
+@keyframes pulseg{50%{background:#24543a}}
+.dtxt{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.r-zug .lbl{margin-left:auto}
+.chip.fdl.alert{border-color:var(--blue);color:var(--blue);animation:pulseb .8s steps(2) infinite}
+@keyframes pulseb{50%{background:#173a5e}}
 .lm{display:grid;place-items:center;aspect-ratio:1;border-radius:50%;border:2px solid #0c0f0e;font-family:var(--f-display);font-weight:700;font-size:.7rem;line-height:1;text-align:center;color:#3c4744;background:#141917;max-width:38px;width:100%;justify-self:center;transition:background .08s}
 .lm.b.on{background:var(--blue);color:#06213f;box-shadow:0 0 14px var(--blue)}
 .lm.y.on{background:var(--signal);color:#3a2b00;box-shadow:0 0 14px var(--signal)}
@@ -111,6 +124,8 @@ kbd{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--l
 .menu-card{max-width:820px}
 .menu-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .menu-list{display:grid;gap:12px}
+.veh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.veh .seg button{font-size:.8rem;padding:4px 10px}
 .lvl-h{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:var(--muted);margin:0 0 6px}
 .lvl-h i{width:9px;height:9px;border-radius:50%;display:block}
 .lvl-1 i{background:var(--go)}.lvl-2 i{background:var(--signal)}.lvl-3 i{background:var(--stop)}
@@ -140,6 +155,7 @@ kbd{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--l
   .p-tacho>.lbl,.p-lever>.lbl,.r-top>.lbl,.r-zug>.lbl,.p-info>.lbl{display:none}
   #tacho{max-width:100px}
   .digi{font-size:.64rem;min-height:0;padding:2px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dbtn{font-size:.68rem;padding:5px 6px}.dtxt{font-size:.6rem}
   .lever-track{height:78px}.handle{height:16px;font-size:.66rem}
   .lever-scale{font-size:.56rem}
   .steps{gap:3px}.step{font-size:1.2rem;padding:10px 0}.step.sb{font-size:.55rem;padding:1px 0}
@@ -198,6 +214,7 @@ kbd{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--l
       <span class="lbl">Geschwindigkeit</span>
       <canvas id="tacho" width="240" height="240" aria-label="Tachometer"></canvas>
       <div class="digi" id="digi">–</div>
+      <div class="doors"><button class="dbtn" id="bDoor" aria-label="Türen (Taste T)">Türen freigeben</button><span class="dtxt" id="doorTxt">–</span></div>
     </div>
 
     <div class="panel p-pzb">
@@ -210,6 +227,7 @@ kbd{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--l
         <div class="lm y" id="lm1000">1000<small>Hz</small></div>
         <div class="lm r" id="lm500">500<small>Hz</small></div>
         <div class="lm w" id="lmBef">Bef<small>40</small></div>
+        <div class="lm s" id="lmSand" title="Fahrzeug hat gesandet">Sand</div>
       </div>
       <div class="btns">
         <button class="btn wach" id="bWach" aria-label="PZB Wachsam (Taste Q)"><span class="cap"></span>Wachsam</button>
@@ -218,6 +236,7 @@ kbd{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--l
         <button class="btn sifa" id="bSifa" aria-label="Sifa betätigen (Leertaste)"><span class="cap"></span>Sifa</button>
       </div>
       <div class="row r-zug">
+        <button class="chip fdl" id="bFdl" title="Fahrdienstleiter verständigen (Taste F)">Fdl</button>
         <span class="lbl">Zugart</span>
         <div class="seg" id="zugart" role="group" aria-label="Zugart">
           <button data-z="O" aria-pressed="false">O</button><button data-z="M" aria-pressed="true">M</button><button data-z="U" aria-pressed="false">U</button>
@@ -245,6 +264,7 @@ kbd{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--l
         <dt>Signal</dt><dd id="iSig">–</dd>
         <dt>Zulässig</dt><dd id="iZul">–</dd>
         <dt>Magnet</dt><dd id="iMag">–</dd>
+        <dt>Fahrgäste</dt><dd id="iPax">–</dd>
         <dt>Fehler</dt><dd id="iErr" class="err-count">0</dd>
       </dl>
       <ul class="log" id="log" aria-live="polite"></ul>
@@ -258,7 +278,8 @@ kbd{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--l
         <h3>Bedienung</h3>
         <ul>
           <li>Hebel: ziehen oder <kbd>▲</kbd>/<kbd>▼</kbd> bzw. <kbd>W</kbd>/<kbd>S</kbd>. Oben Fahrstufen F1–F8, unten Bremsstufen B1–B7 und SB (Schnellbremsung).</li>
-          <li><kbd>Q</kbd> Wachsam · <kbd>E</kbd> Frei · <kbd>B</kbd> Befehl (halten) · <kbd>Leertaste</kbd> Sifa · <kbd>P</kbd> Pause</li>
+          <li><kbd>Q</kbd> Wachsam · <kbd>E</kbd> Frei · <kbd>B</kbd> Befehl (halten) · <kbd>Leertaste</kbd> Sifa · <kbd>F</kbd> Fdl · <kbd>T</kbd> Türen · <kbd>P</kbd> Pause</li>
+          <li>An jedem Bahnhof und Haltepunkt: an der Haltetafel halten, Türen freigeben, Fahrgastwechsel abwarten, Türen schließen. Mit offenen Türen ist die Traktion gesperrt.</li>
           <li>„Szenarien“ öffnet die Auswahl: 15 Fahrten in drei Stufen. Bestandene Szenarien werden in diesem Browser gespeichert.</li>
           <li>Zugart nur im Stillstand wählbar; jedes Szenario setzt seine eigene.</li>
           <li>Die Signal-Lupe oben rechts zeigt das nächste Signal vergrößert. Gelbe Kästen rechts am Gleis sind PZB-Gleismagnete; mit Lernhilfe steht darüber, ob und mit welcher Frequenz sie wirken.</li>
@@ -279,21 +300,31 @@ kbd{font-family:var(--f-mono);background:var(--panel-2);border:1px solid var(--l
       <div>
         <h3>PZB 90 und Sifa</h3>
         <ul>
-          <li>1000 Hz am Vorsignal: binnen 4 s Wachsam drücken. Danach Bremskurve (M: 125 → 70 km/h in 29 s), Überwachung 1250 m.</li>
-          <li>500 Hz 250 m vor dem Hauptsignal: M 50 → 35 km/h. 2000 Hz am Hp 0: sofort Zwangsbremsung.</li>
-          <li>Unter 10 km/h länger als 15 s: restriktiv (45 km/h, bei 500 Hz 25 km/h). Frei befreit nach 700 m, wenn kein 500 Hz wirkt.</li>
-          <li>Ersatzsignal: Befehl gedrückt halten und mit höchstens 40 km/h am Signal vorbei.</li>
-          <li>Sifa: spätestens alle 30 s betätigen, sonst Leuchtmelder, Summer und Zwangsbremsung. Nach Zwangsbremsung im Stillstand Frei drücken.</li>
+          <li><b>1000 Hz</b> (Vr 0, Vr 2, Ks 2, ständige Langsamfahrstelle): binnen 4 s Wachsam. Kurve O 165 → 85 km/h in 23 s, M 125 → 70 in 29 s, U 105 → 55 in 38 s. Leuchtmelder 1000 Hz 700 m, Überwachung 1250 m. Neue 1000-Hz-Beeinflussung: erneut Wachsam.</li>
+          <li><b>Wachsam</b> auch an Signalen in Warnstellung ohne wirksamen Magnet: Ks 1 blinkend und Lf 6 bis Kennziffer 9.</li>
+          <li><b>500 Hz</b> 250 m vor Hp 0 und 150 m vor Zs 3 bis Kennziffer 3: O 65 → 45, M 50 → 35, U 40 → 25 km/h auf 153 m. <b>2000 Hz</b> am Hp 0: sofort Zwangsbremsung.</li>
+          <li><b>Restriktiv</b> nach mehr als 15 s unter 10 km/h: 85/70 Wechselblinken, 45 km/h, bei 500 Hz 25 km/h. Startprogramm nach dem Aufrüsten ebenso. AVG-Stadtbahn: Halt in den ersten 500 m = Frühhalt (VÜ 3), Gleichblinken, 65 km/h bis 800 m.</li>
+          <li><b>Befreien</b> (Frei): technisch erst nach 700 m und ohne 500 Hz. Zulässig nur, wenn das nächste Hauptsignal Fahrt über 30 km/h zeigt und keine 500-Hz-Beeinflussung folgt – sonst „Unberechtigtes Befreien“ und Zwangsbremsung am 500-Hz-Magnet.</li>
+          <li><b>Befehl</b> nur mit Zs 1, Zs 7, Zs 8 oder schriftlichem Befehl: halten, bis Befehl 40 leuchtet. Über 40 km/h wirkungslos.</li>
+          <li><b>GPA</b> an Lf 6: Kennziffer 8 wirksam über 95 km/h, 9 über 105 km/h (1000 Hz). <b>GÜ</b> vor Lf 7 ab Kennziffer 10: 2000 Hz über der Prüfgeschwindigkeit (100 → 120, 110 → 130, 120 → 135, 130 → 140, 140 → 150 km/h).</li>
+          <li>Alle Überwachungsgeschwindigkeiten mindestens <b>5 km/h unterfahren</b>.</li>
+          <li><b>Nach PZB-Zwangsbremsung:</b> Stillstand, Fdl verständigen (Taste Fdl), Zustimmung abwarten – am Hauptsignal Befehl 2 –, Fahrschalter in Bremsstellung, Frei. Leuchtmelder: 1000/500 blinken, „Sand“ leuchtet.</li>
+          <li><b>Streckeneinrichtung gestört</b> (Beeinflussung passt nicht zum Signal): von Halt am nächsten Hauptsignal ausgehen und dem Fdl Standort, Frequenz und „ständig wirksam“ melden.</li>
+          <li><b>Funktionsprüfung</b> täglich: im Stillstand Wachsam und Frei gleichzeitig (auf dem Handy kurz nacheinander).</li>
+          <li><b>Sifa:</b> spätestens alle 30 s betätigen, sonst Leuchtmelder, Summer und Zwangsbremsung; im Stillstand mit Sifa oder Frei zurücksetzen.</li>
         </ul>
       </div>
     </div>
-    <p class="note">Lern- und Übungssimulator mit vereinfachter Fahrdynamik. Die PZB-Werte folgen Ril 483 in vereinfachter Form. Ersetzt weder Signalbuch noch Ausbildung.</p>
+    <p class="note">Lern- und Übungssimulator mit vereinfachter Fahrdynamik. Die PZB-Logik folgt Ril 483 und der AVG-Schulungsunterlage Modul 17 (Zugbeeinflussungssysteme). Ersetzt weder Signalbuch noch Ausbildung.</p>
   </details>
 
   <div class="overlay" id="menu" hidden>
     <div class="card menu-card" role="dialog" aria-labelledby="menuT">
       <div class="menu-head"><h2 id="menuT">Szenarien</h2><button class="chip" id="menuClose">Schließen</button></div>
       <p class="note">Leicht mit Lernhilfe, Mittel mit Störungen und Zugfolge, Schwer ohne Lernhilfe mit Güterzug, 160 km/h, Nacht und der kompletten Strecke. Lernhilfe lässt sich jederzeit umschalten.</p>
+      <div class="veh"><span class="lbl">Fahrzeug</span>
+        <div class="seg" id="vehSeg" role="group" aria-label="Fahrzeug"><button data-v="regel">Regelfahrzeug</button><button data-v="avg">AVG-Stadtbahn</button></div></div>
+      <p class="note" id="vehNote"></p>
       <div id="menuList" class="menu-list"></div>
     </div>
   </div>
@@ -321,83 +352,96 @@ const ZUGART = {
 };
 const LVL = {1:'Leicht', 2:'Mittel', 3:'Schwer'};
 const SCEN = [
- {id:1, lvl:1, title:'Erste Fahrt', goal:'Anfahren, Lf 6/Lf 7 und Zs 3 beachten, Sifa bedienen, an der Haltetafel halten.',
-  zug:'M', lineV:100, lern:true,
+ {id:1, lvl:1, title:'Erste Fahrt', goal:'PZB-Funktionsprüfung (Wachsam und Frei gleichzeitig), Startprogramm befreien, Lf 6 mit Wachsam bestätigen (Prüfabschnitt über 95 km/h), Zs 3, Sifa, Halt an der Haltetafel.',
+  zug:'M', lineV:100, lern:true, test:true,
+  halts:[{name:'Altdorf Ost',pos:2000},{name:'Lindach',pos:4200}],
   stations:[{name:'Altdorf',from:-240,to:20,stop:0,first:true},{name:'Birkenau',from:5780,to:6025,stop:6000}],
   main:[{id:'A',sys:'ks',pos:80,zs3:6},{id:'B',sys:'ks',pos:2700},{id:'C',sys:'ks',pos:5300,zs3:4}],
   lf:[{k:'lf6',pos:1500,v:8},{k:'lf7',pos:2300,v:8},{k:'lf7',pos:3400,v:10}], end:6500},
- {id:2, lvl:1, title:'Halt erwarten', goal:'Ks 2 erkennen, 1000 Hz mit Wachsam quittieren, vor dem Hp 0 halten und die 500-Hz-Prüfung bestehen.',
+ {id:2, lvl:1, title:'Halt erwarten', goal:'Ks 2 und 1000 Hz mit Wachsam, 500-Hz-Prüfung, Halt vor dem Hp 0. Nach 15 s Stillstand wird die PZB restriktiv: nach der Fahrtstellung unter 25 km/h anfahren, danach unter 45 km/h bis zum Ende der Überwachung.',
   zug:'M', lineV:100, lern:true,
+  halts:[{name:'Cellen Süd',pos:3800},{name:'Hochfeld',pos:5600}],
   stations:[{name:'Cellen',from:-240,to:20,stop:0,first:true},{name:'Dornheim',from:6780,to:7025,stop:7000}],
-  main:[{id:'A',sys:'ks',pos:80},{id:'B',sys:'ks',pos:2600,cond:{stop:15}},{id:'C',sys:'ks',pos:4900},{id:'D',sys:'ks',pos:6400,zs3:6}],
+  main:[{id:'A',sys:'ks',pos:80},{id:'B',sys:'ks',pos:2600,cond:{stop:30}},{id:'C',sys:'ks',pos:4900},{id:'D',sys:'ks',pos:6400,zs3:6}],
   dist:[{for:'B',sys:'ks',pos:1600}], end:7300},
- {id:3, lvl:1, title:'H/V-Signale', goal:'Hp 0/1/2 und Vr 0/1/2 lesen, Langsamfahrt einhalten, Vorsignal am Mast beachten, Ausfahrt nach dem Halt abwarten.',
+ {id:3, lvl:1, title:'H/V-Signale', goal:'Hp 0/1/2 und Vr 0/1/2 lesen. Auch Vr 2 ist Warnstellung: 1000 Hz und Wachsam. Vorsignal am Mast, Halt im Bahnhof mit restriktiver Überwachung, danach befreien.',
   zug:'M', lineV:100, lern:true,
+  halts:[{name:'Eschbach Ost',pos:1150},{name:'Kleinbach',pos:6500}],
   stations:[{name:'Eschbach',from:-240,to:20,stop:0,first:true},{name:'Feldkirch',from:4380,to:4625,stop:4600},{name:'Grünau',from:9180,to:9425,stop:9400}],
   main:[{id:'A',sys:'hv',pos:80,hp2:true},{id:'B',sys:'hv',pos:2600},{id:'C',sys:'hv',pos:4000,hp2:true},{id:'D',sys:'hv',pos:4850,cond:{st:1,t:20}},{id:'E',sys:'hv',pos:8800}],
   dist:[{for:'B',sys:'hv',pos:1600},{for:'C',sys:'hv',pos:3000},{for:'D',sys:'hv',pos:4000,mast:'C'},{for:'E',sys:'hv',pos:7800}], end:9700},
- {id:4, lvl:1, title:'Geschwindigkeitswechsel', goal:'Lf 6/Lf 7, Zs 3 und Zs 3v sowie Ks 1 blinkend umsetzen. Erhöhungen gelten erst, wenn der Zugschluss vorbei ist.',
+ {id:4, lvl:1, title:'Geschwindigkeitswechsel', goal:'Lf 6 bis Kennziffer 9 und Ks 1 blinkend mit Wachsam bestätigen. Prüfabschnitt an Lf 6 (9) über 105 km/h, ständiger 1000-Hz-Magnet an Lf 6 (7), 500 Hz vor Zs 3 (3).',
   zug:'M', lineV:120, lern:true,
+  halts:[{name:'Hagenbach Nord',pos:1800},{name:'Mittelbach',pos:4700},{name:'Steinach',pos:8500}],
   stations:[{name:'Hagenbach',from:-240,to:20,stop:0,first:true},{name:'Ilsfeld',from:10780,to:11025,stop:11000}],
-  main:[{id:'A',sys:'ks',pos:80,zs3:6},{id:'B',sys:'ks',pos:2600},{id:'C',sys:'ks',pos:5200,zs3:8},{id:'D',sys:'ks',pos:7900},{id:'E',sys:'ks',pos:10400,zs3:4}],
+  main:[{id:'A',sys:'ks',pos:80,zs3:6},{id:'B',sys:'ks',pos:2600},{id:'C',sys:'ks',pos:5200,zs3:8},{id:'D',sys:'ks',pos:7900},{id:'E',sys:'ks',pos:10400,zs3:3}],
   lf:[{k:'lf6',pos:3300,v:9},{k:'lf7',pos:4300,v:9},{k:'lf7',pos:6000,v:12},{k:'lf6',pos:6600,v:7},{k:'lf7',pos:7600,v:7},{k:'lf7',pos:9000,v:10}], end:11300},
  {id:5, lvl:1, title:'Rangierfahrt', goal:'Höchstens 25 km/h, Sh 0/Sh 1 an den Lichtsperrsignalen beachten, vor der Ra 10 anhalten.',
   zug:'M', lineV:25, lern:true, stations:[], main:[],
   rangier:{after:-1, ls:[{pos:250, stand:8},{pos:900, stand:6}], ra10:1500}, end:1650},
  {id:6, lvl:2, title:'Ersatzsignal Zs 1', goal:'Vor zwei gestörten Signalen (Ks und H/V) halten, Zs 1 abwarten und mit Befehl 40 vorbeifahren.',
   zug:'M', lineV:100, lern:true,
+  halts:[{name:'Jettingen Ost',pos:1100},{name:'Lindenhof',pos:3600},{name:'Rotfelden',pos:5900}],
   stations:[{name:'Jettingen',from:-240,to:20,stop:0,first:true},{name:'Kirchheim',from:7980,to:8225,stop:8200}],
   main:[{id:'A',sys:'ks',pos:80},{id:'B',sys:'ks',pos:2600,ersatz:'zs1',when:{stop:4}},{id:'C',sys:'hv',pos:5200,ersatz:'zs1',when:{stop:4}},{id:'D',sys:'ks',pos:7500,zs3:6}],
   dist:[{for:'B',sys:'ks',pos:1600},{for:'C',sys:'hv',pos:4200},{for:'D',sys:'ks',pos:6500}], end:8500},
  {id:7, lvl:2, title:'Vorsichtsignal Zs 7', goal:'Ausfahrt mit Zs 7, danach auf Sicht mit höchstens 40 km/h: Vor dem stehenden Zug anhalten. Die Sichtfahrt endet am nächsten Hauptsignal.',
   zug:'M', lineV:100, lern:true,
+  halts:[{name:'Hirschau',pos:3600},{name:'Talmühle',pos:6400}],
   stations:[{name:'Lahrbach',from:-240,to:20,stop:0,first:true},{name:'Mühlbach',from:7980,to:8225,stop:8200}],
   main:[{id:'A',sys:'hv',pos:80,ersatz:'zs7',when:{st:0,t:10}},{id:'B',sys:'hv',pos:2400,block:true},{id:'C',sys:'ks',pos:5000,block:true},{id:'D',sys:'ks',pos:7600,zs3:6,block:true}],
   dist:[{for:'B',sys:'hv',pos:1400},{for:'C',sys:'ks',pos:4000}],
   lead:{front:1700, v:0, wait:150, vmax:16.7, exit:6200}, end:8500},
  {id:8, lvl:2, title:'Gegengleis Zs 8', goal:'Zs 8 erkennen, mit Befehl 40 vorbeifahren und den Weichenbereich mit höchstens 40 km/h befahren.',
   zug:'M', lineV:120, lern:true,
+  halts:[{name:'Nagold Süd',pos:1300},{name:'Emmingen',pos:4200},{name:'Wildberg',pos:7000}],
   stations:[{name:'Nagold',from:-240,to:20,stop:0,first:true},{name:'Oberndorf',from:8780,to:9025,stop:9000}],
   main:[{id:'A',sys:'ks',pos:80,zs3:6},{id:'B',sys:'ks',pos:3000,ersatz:'zs8',when:{approach:1500}},{id:'C',sys:'ks',pos:6000,ersatz:'zs8',when:{approach:1200}},{id:'D',sys:'ks',pos:8400,zs3:6}],
   dist:[{for:'B',sys:'ks',pos:2000},{for:'C',sys:'ks',pos:5000},{for:'D',sys:'ks',pos:7400}], end:9300},
- {id:9, lvl:2, title:'Dichter Zugverkehr', goal:'Im Blockabstand hinter einem langsameren Zug fahren: Ks 2 früh umsetzen, PZB-Überwachungen sauber abarbeiten.',
+ {id:9, lvl:2, title:'Dichter Zugverkehr', goal:'Im Blockabstand hinter einem langsameren Zug: jede neue 1000-Hz-Beeinflussung erneut mit Wachsam, Überwachung läuft wieder 1250 m. Nur befreien, wenn das nächste Hauptsignal Fahrt zeigt.',
   zug:'M', lineV:120, lern:true,
+  halts:[{name:'Kappelrodeck',pos:3800},{name:'Schönau',pos:9900}],
   stations:[{name:'Plattenau',from:-240,to:20,stop:0,first:true},{name:'Quellbach',from:5780,to:6025,stop:6000},{name:'Rabenstein',from:12280,to:12525,stop:12500}],
   main:[{id:'A',sys:'ks',pos:80,zs3:6,block:true},{id:'B',sys:'ks',pos:1600,block:true},{id:'C',sys:'ks',pos:3100,block:true},{id:'D',sys:'ks',pos:4600,block:true},{id:'E',sys:'ks',pos:5400,zs3:6,block:true},{id:'F',sys:'ks',pos:6250,zs3:6,block:true,cond:{st:1,t:20}},{id:'G',sys:'ks',pos:7800,block:true},{id:'H',sys:'ks',pos:9300,block:true},{id:'I',sys:'ks',pos:10800,block:true},{id:'J',sys:'ks',pos:11900,zs3:6,block:true}],
   lead:{front:1300, v:10, vmax:20, exit:11500, stops:[{pos:6000,t:45}]}, end:12800},
- {id:10, lvl:2, title:'Nebel', goal:'Nur 300 m Sicht: Signale erst spät erkennbar. Vorsignale und Ne 2 bewusst suchen, vorausschauend bremsen.',
+ {id:10, lvl:2, title:'Nebel', goal:'Nur 300 m Sicht. Unterwegs ist ein Gleismagnet gestört: 1000 Hz bei Fahrt erwarten. Wachsam, von Halt am nächsten Hauptsignal ausgehen, erst befreien, wenn es Fahrt zeigt, und die Störung dem Fdl melden.',
   zug:'M', lineV:100, lern:true, sicht:300, lightSicht:450,
+  halts:[{name:'Nebelhof',pos:5800},{name:'Moosbach',pos:10800}],
   stations:[{name:'Sandau',from:-240,to:20,stop:0,first:true},{name:'Talheim',from:6780,to:7025,stop:7000},{name:'Unterau',from:12780,to:13025,stop:13000}],
   main:[{id:'A',sys:'ks',pos:80,zs3:6},{id:'B',sys:'ks',pos:2800,cond:{time:150}},{id:'C',sys:'ks',pos:5000},{id:'D',sys:'ks',pos:6500,zs3:4},{id:'E',sys:'hv',pos:7300,cond:{st:1,t:20}},{id:'F',sys:'hv',pos:9800,ersatz:'zs1',when:{stop:4}},{id:'G',sys:'hv',pos:12500,hp2:true}],
-  dist:[{for:'B',sys:'ks',pos:1800},{for:'F',sys:'hv',pos:8800},{for:'G',sys:'hv',pos:11500}],
+  dist:[{for:'B',sys:'ks',pos:1800},{for:'C',sys:'ks',pos:4000,gestoert:true},{for:'F',sys:'hv',pos:8800},{for:'G',sys:'hv',pos:11500}],
   lf:[{k:'lf6',pos:3400,v:8},{k:'lf7',pos:4300,v:8},{k:'lf7',pos:5300,v:10}], end:13300},
- {id:11, lvl:3, title:'Schwerer Güterzug', goal:'550 m langer Güterzug, Zugart U: schwache Bremse, langer Bremsweg. Erhöhungen erst, wenn der ganze Zug vorbei ist.',
-  zug:'U', lineV:100, lern:false, train:{len:550, acc:0.45, brk:0.62, vmax:100, tau:3.5},
+ {id:11, lvl:3, freight:true, title:'Schwerer Güterzug', goal:'550 m langer Güterzug, Zugart U: schwache Bremse, Kurve 105 → 55 km/h in 38 s, 500 Hz 40 → 25 km/h. Ständiger 1000-Hz-Magnet an Lf 6 (6).',
+  zug:'U', dbOnly:true, lineV:100, lern:false, train:{len:550, acc:0.45, brk:0.62, vmax:100, tau:3.5},
   stations:[{name:'Vaihingen Gbf',from:-600,to:20,stop:0,first:true},{name:'Wendlingen Gbf',from:13350,to:14025,stop:14000}],
   main:[{id:'A',sys:'ks',pos:80,zs3:4},{id:'B',sys:'ks',pos:3000},{id:'C',sys:'ks',pos:4800},{id:'D',sys:'ks',pos:6000,cond:{stop:20}},{id:'E',sys:'ks',pos:9000},{id:'F',sys:'hv',pos:12800,hp2:true}],
   dist:[{for:'F',sys:'hv',pos:11800}],
   lf:[{k:'lf6',pos:7000,v:6},{k:'lf7',pos:8000,v:6},{k:'lf7',pos:9600,v:9}], end:14300},
- {id:12, lvl:3, title:'Schnellfahrt', goal:'Zugart O mit 160 km/h: Bremswege über 1 km. Ks 2 sofort umsetzen, die 1000-Hz-Kurve fällt in 23 s auf 85 km/h.',
-  zug:'O', lineV:160, lern:false, train:{len:200, acc:1.5, brk:1, vmax:160, tau:1},
+ {id:12, lvl:3, title:'Schnellfahrt', goal:'Zugart O mit 160 km/h: Ks 2 sofort umsetzen, Kurve 165 → 85 km/h in 23 s. Vor Lf 7 (12) liegt ein Überwachungsabschnitt: 2000 Hz über 135 km/h.',
+  zug:'O', dbOnly:true, lineV:160, lern:false, train:{len:200, acc:1.5, brk:1, vmax:160, tau:1},
+  halts:[{name:'Mittelstadt Hbf',pos:10200}],
   stations:[{name:'Wiesental',from:-240,to:20,stop:0,first:true},{name:'Zellhausen',from:21780,to:22025,stop:22000}],
   main:[{id:'A',sys:'ks',pos:80,zs3:8},{id:'B',sys:'ks',pos:4000},{id:'C',sys:'ks',pos:8000,cond:{time:260}},{id:'D',sys:'ks',pos:12000},{id:'E',sys:'ks',pos:16000},{id:'F',sys:'ks',pos:20500,zs3:6}],
   dist:[{for:'C',sys:'ks',pos:6800},{for:'F',sys:'ks',pos:19300}],
   lf:[{k:'lf6',pos:13000,v:12},{k:'lf7',pos:14200,v:12},{k:'lf7',pos:16500,v:16}], end:22300},
  {id:13, lvl:3, title:'Störungen im Betrieb', goal:'Zs 7 bei der Ausfahrt, Zs 1 am Blocksignal, ein stehender Zug im Block und Zs 8 zum Gegengleis auf einer Fahrt.',
   zug:'M', lineV:100, lern:false,
+  halts:[{name:'Bad Ahausen',pos:2700},{name:'Dürrenbach',pos:7700},{name:'Flein',pos:10200}],
   stations:[{name:'Ahausen',from:-240,to:20,stop:0,first:true},{name:'Brühlingen',from:6280,to:6525,stop:6500},{name:'Cleebronn',from:12280,to:12525,stop:12500}],
   main:[{id:'A',sys:'hv',pos:80,ersatz:'zs7',when:{st:0,t:8}},{id:'B',sys:'hv',pos:1800,ersatz:'zs1',when:{stop:4}},{id:'C',sys:'ks',pos:4000,block:true},{id:'D',sys:'ks',pos:5900,zs3:4,block:true},{id:'E',sys:'ks',pos:6800,cond:{st:1,t:20}},{id:'F',sys:'ks',pos:9000,ersatz:'zs8',when:{approach:1500}},{id:'G',sys:'ks',pos:11900,zs3:6}],
   dist:[{for:'B',sys:'hv',pos:800},{for:'C',sys:'ks',pos:3000},{for:'F',sys:'ks',pos:8000},{for:'G',sys:'ks',pos:10900}],
   lead:{front:4300, v:0, wait:60, vmax:18, exit:5700}, end:12800},
  {id:14, lvl:3, title:'Nachtfahrt', goal:'Dunkelheit: Signallichter sind weit sichtbar, Tafeln erst im Scheinwerferlicht. Vorausfahrender Zug mit Zwischenhalt.',
   zug:'M', lineV:120, lern:false, night:true, sicht:180, lightSicht:3000,
+  halts:[{name:'Dorfen Ost',pos:4000},{name:'Gaisbach',pos:11300}],
   stations:[{name:'Dorfen',from:-240,to:20,stop:0,first:true},{name:'Ebersbach',from:6780,to:7025,stop:7000},{name:'Fichtenau',from:13780,to:14025,stop:14000}],
   main:[{id:'A',sys:'ks',pos:80,zs3:6,block:true},{id:'B',sys:'ks',pos:2600,block:true},{id:'C',sys:'ks',pos:5200,block:true},{id:'D',sys:'ks',pos:6500,zs3:6,block:true},{id:'E',sys:'ks',pos:7300,zs3:6,block:true,cond:{st:1,t:20}},{id:'F',sys:'hv',pos:9600,block:true},{id:'G',sys:'hv',pos:13500,hp2:true}],
   dist:[{for:'F',sys:'hv',pos:8600},{for:'G',sys:'hv',pos:12500}],
   lead:{front:3000, v:12, vmax:25, exit:11000, stops:[{pos:7000,t:30}]},
   lf:[{k:'lf6',pos:10000,v:9},{k:'lf7',pos:11000,v:9}], end:14300},
- {id:15, lvl:3, title:'Abschlussfahrt', goal:'Die ganze Strecke Lindenau – Tannau: alle Signalarten, Ersatzsignale, Zugfolge und Rangierfahrt. Ohne Lernhilfe.',
-  zug:'M', lineV:120, lern:false,
+ {id:15, lvl:3, title:'Abschlussfahrt', goal:'Die ganze Strecke Lindenau – Tannau mit Funktionsprüfung, allen Signalarten, Ersatzsignalen, Prüf- und Überwachungsabschnitt, Zugfolge und Rangierfahrt. Ohne Lernhilfe.',
+  zug:'M', lineV:120, lern:false, test:true,
+  halts:[{name:'Lindenau Ost',pos:2200},{name:'Mittelberg',pos:5200},{name:'Kirchwald',pos:11000},{name:'Tannenberg',pos:17000}],
   stations:[{name:'Lindenau',from:-240,to:20,stop:0,first:true},{name:'Bergheim',from:7680,to:7925,stop:7900},{name:'Waldheim',from:12780,to:13025,stop:13000},{name:'Tannau',from:18980,to:19225,stop:19200}],
   main:[{id:'A',sys:'ks',pos:80,zs3:6,block:true},{id:'B',sys:'ks',pos:3100,block:true},{id:'C',sys:'ks',pos:6300,block:true},{id:'D',sys:'ks',pos:7300,zs3:6,block:true},{id:'E',sys:'ks',pos:8100,zs3:6,cond:{st:1,t:20}},{id:'F',sys:'hv',pos:10200,ersatz:'zs1',when:{stop:4}},{id:'G',sys:'hv',pos:12500,hp2:true},{id:'H',sys:'hv',pos:13250,ersatz:'zs7',when:{st:2,t:20}},{id:'I',sys:'hv',pos:14900},{id:'J',sys:'ks',pos:16600,ersatz:'zs8',when:{approach:1500}},{id:'K',sys:'ks',pos:18500,zs3:4}],
   dist:[{for:'F',sys:'hv',pos:9200},{for:'G',sys:'hv',pos:11500},{for:'H',sys:'hv',pos:12500,mast:'G'},{for:'I',sys:'hv',pos:13900},{for:'J',sys:'ks',pos:15600},{for:'K',sys:'ks',pos:17500}],
@@ -405,13 +449,25 @@ const SCEN = [
   lead:{front:2700, v:16, vmax:27.8, exit:6900},
   rangier:{after:3, ls:[{pos:19400, stand:8}], ra10:19900}, end:20060}
 ];
+let AVG = false, VEHICLE = 'regel';
+try{ VEHICLE = localStorage.getItem('fst-veh') === 'avg' ? 'avg' : 'regel'; }catch(e){}
+let RANG_AFTER = null, FREIGHT = false;
 let SC, MAIN, DIST, STATIONS, LF, MAGNETS, OBJS, LSIG, RA10_POS, END_POS, TRAIN_LEN, VEH_VMAX, ACC_F, BRK_F, TAU, SICHT, LSICHT, NIGHT;
 const idx = id => MAIN.findIndex(m => m.id === id);
 function loadScenario(id){
   SC = SCEN.find(s => s.id === id) || SCEN[0];
   const cp = o => JSON.parse(JSON.stringify(o || []));
-  STATIONS = cp(SC.stations); MAIN = cp(SC.main); DIST = cp(SC.dist); LF = cp(SC.lf);
-  const tr = Object.assign({len:150, acc:1, brk:1, vmax:140, tau:1}, SC.train || {});
+  MAIN = cp(SC.main); DIST = cp(SC.dist); LF = cp(SC.lf);
+  // Bahnhöfe und Haltepunkte (Fahrgastwechsel) nach Lage sortieren, Verweise auf Bahnhofsnummern umrechnen
+  const base = cp(SC.stations).map((st, k) => Object.assign(st, {orig:k}));
+  const halts = cp(SC.halts).map(h => ({name:h.name, from:h.pos - 220, to:h.pos + 25, stop:h.pos, hp:true}));
+  STATIONS = base.concat(halts).sort((a, b) => a.stop - b.stop);
+  const remap = k => STATIONS.findIndex(st => st.orig === k);
+  MAIN.forEach(m => { if(m.cond && m.cond.st !== undefined) m.cond.st = remap(m.cond.st); if(m.when && m.when.st !== undefined) m.when.st = remap(m.when.st); });
+  RANG_AFTER = SC.rangier ? (SC.rangier.after >= 0 ? remap(SC.rangier.after) : -1) : null;
+  FREIGHT = !!SC.freight;
+  AVG = VEHICLE === 'avg' && !SC.dbOnly;
+  const tr = Object.assign({len:150, acc:1, brk:1, vmax:140, tau:1}, SC.train || {}, AVG ? {len:76, acc:1.15, brk:1.15, vmax:100, tau:0.9} : {});
   TRAIN_LEN = tr.len; VEH_VMAX = tr.vmax; ACC_F = tr.acc; BRK_F = tr.brk; TAU = tr.tau;
   SICHT = SC.sicht || 3000; LSICHT = SC.lightSicht || 3000; NIGHT = !!SC.night;
   LSIG = SC.rangier ? cp(SC.rangier.ls) : []; RA10_POS = SC.rangier ? SC.rangier.ra10 : null; END_POS = SC.end;
@@ -426,16 +482,36 @@ function loadScenario(id){
     const ex = MAIN.find(m => m.pos > st.stop && m.pos < st.stop + 900);
     st.zoneEnd = Math.max(st.to + 150, ex ? ex.pos : 0);
   });
-  if(SC.rangier && SC.rangier.after >= 0 && LSIG.length) STATIONS[SC.rangier.after].zoneEnd = Math.max(STATIONS[SC.rangier.after].zoneEnd, LSIG[0].pos);
+  if(RANG_AFTER !== null && RANG_AFTER >= 0 && LSIG.length) STATIONS[RANG_AFTER].zoneEnd = Math.max(STATIONS[RANG_AFTER].zoneEnd, LSIG[0].pos);
+  // PZB-Gleismagnete nach Ril 483 / Modul 17
   MAGNETS = [];
-  const add = (pos, f) => { let m = MAGNETS.find(x => x.pos === pos); if(!m){ m = {pos, fs:new Set()}; MAGNETS.push(m); } m.fs.add(f); };
-  DIST.forEach(d => add(d.pos, 1000));
-  MAIN.forEach(m => { if(m.sys === 'ks') add(m.pos, 1000); add(m.pos, 2000); add(m.pos - 250, 500); });
-  MAGNETS.forEach(m => { m.type = [...m.fs].sort((a,b) => a-b).join('/') + ' Hz'; });
+  const add = (pos, f, kind, ref, v) => { pos = Math.round(pos); let m = MAGNETS.find(x => x.pos === pos); if(!m){ m = {pos, fs:[]}; MAGNETS.push(m); } m.fs.push({f, kind, ref, v, spd: kind === 'gpa' || kind === 'gue'}); };
+  DIST.forEach((d,j) => add(d.pos, 1000, d.mast ? 'mast' : 'vs', j));
+  MAIN.forEach((m,i) => {
+    if(m.sys === 'ks') add(m.pos, 1000, 'ks1000', i);       // Doppelgleismagnet 1000/2000 am Mehrabschnittssignal
+    add(m.pos, 2000, 'hs2000', i);
+    add(m.pos - 250, 500, 'hs500', i);
+    if(m.zs3 && m.zs3 <= 3) add(m.pos - 150, 500, 'zs3', i); // 500 Hz ca. 150 m vor Zs 3 mit Kennziffer 1–3
+  });
+  const GUE = {10:[120,485], 11:[130,405], 12:[135,355], 13:[140,315], 14:[150,215]};
+  const lfs = LF.slice().sort((a,b) => a.pos - b.pos); let cur = SC.lineV;
+  lfs.forEach((l,k) => {
+    if(l.k === 'lf6'){
+      const nv = l.v*10;
+      if(l.v <= 7 && nv < 0.8*cur) add(l.pos, 1000, 'lf');        // ständig wirksam, Reduzierung über 20 %
+      else if(l.v === 8) add(l.pos, 1000, 'gpa', null, 95);         // Geschwindigkeitsprüfabschnitt
+      else if(l.v === 9) add(l.pos, 1000, 'gpa', null, 105);
+      else if(GUE[l.v] && nv < cur){                                 // Geschwindigkeitsüberwachungsabschnitt
+        const n7 = lfs.slice(k + 1).find(x => x.k === 'lf7');
+        if(n7) add(n7.pos - GUE[l.v][1], 2000, 'gue', null, GUE[l.v][0]);
+      }
+    } else { if(l.v <= 3) add(l.pos - 150, 500, 'lf'); cur = l.v*10; }
+  });
+  MAGNETS.forEach(m => { m.type = [...new Set(m.fs.map(e => e.f))].sort((a,b) => a-b).join('/') + ' Hz' + (m.fs.some(e => e.kind === 'gpa') ? ' GPA' : m.fs.some(e => e.kind === 'gue') ? ' GÜ' : ''); });
   MAGNETS.sort((a,b) => a.pos - b.pos);
   OBJS = [];
   MAIN.forEach((m,i) => OBJS.push({k:'main', ref:i, pos:m.pos, x:2.6, h:m.sys === 'ks' ? 5.4 : 5.6}));
-  DIST.forEach((d,i) => { if(!d.mast) OBJS.push({k:'dist', ref:i, pos:d.pos, x:2.6, h:4.2}); });
+  DIST.forEach((d,i) => { if(!d.mast) OBJS.push({k:'dist', ref:i, pos:d.pos, x:2.6, h:4.6}); });
   LF.forEach(l => OBJS.push({k:l.k, v:l.v, pos:l.pos, x:2.4, h:3.0}));
   STATIONS.forEach(s => {
     OBJS.push({k:'ne5', pos:s.stop, x:2.35, h:2.7});
@@ -444,7 +520,6 @@ function loadScenario(id){
   LSIG.forEach((l,i) => OBJS.push({k:'ls', ref:i, pos:l.pos, x:1.95, h:0.55}));
   if(RA10_POS !== null) OBJS.push({k:'ra10', pos:RA10_POS, x:2.2, h:1.9});
 }
-function magActive(pos){ const m = S.mags.find(x => x.pos === pos); return m ? m.f : 0; }
 
 // ---------------- Zustand ----------------
 let S;
@@ -452,16 +527,83 @@ function newState(){
   const L = SC.lead ? Object.assign({len:150, acc:0.8, wait:0, stops:[], si:0}, JSON.parse(JSON.stringify(SC.lead)), {on:true}) : {on:false, front:-1e9, len:150};
   return {
     t:0, front:0, v:0, lever:-3, brake:0.39*BRK_F, zwang:null, finished:false, paused:false,
-    lineV:SC.lineV, pendingLine:null, restr:[], mode:(SC.rangier && SC.rangier.after === -1) ? 'rangier' : 'zug',
+    lineV:SC.lineV, pendingLine:null, restr:[], mode:(RANG_AFTER === -1) ? 'rangier' : 'zug',
     lead:L,
     st: STATIONS.map(() => ({done:false})), stT: STATIONS.map(() => 0), sbT: MAIN.map(() => 0),
+    pax: paxPlan(), onboard: paxStart(), door:{state:'zu', t:0, lockMsg:false, station:-1}, carried:0, announced:{},
     ls: LSIG.map(() => ({sh1:false, t:0})),
     sig: MAIN.map(() => ({aspect:'HP0', ersatzOn:false, zs3On:false, zs3v:0})),
     dsig: DIST.map(() => ({aspect:'VR0', zs3v:0})),
     ra10Err:false,
-    pzb:{zug:SC.zug, m1000:null, m500:null, restr:false, slowT:0, befehl:false, lim:ZUGART[SC.zug].vmax},
-    sifa:{t:0}, sifaN:0, errors:[], zbCount:0, over:{t:0, flag:false}, mags:[]
+    pzb:pzbNew(), wt:null, fdlNeed:null, fdlBusy:null, stoer:null, testDone:false, testWarned:false,
+    sifa:{t:0}, sifaN:0, errors:[], zbCount:0, over:{t:0, flag:false}
   };
+}
+
+// ---------------- Fahrgäste und Türen ----------------
+function hn(str){ let h = 0; for(const c of str) h = (h*31 + c.charCodeAt(0)) >>> 0; return h; }
+function paxStart(){ return FREIGHT || !STATIONS.length ? 0 : 28 + hn(STATIONS[0].name) % 30; }
+function paxPlan(){
+  return STATIONS.map((st, i) => {
+    if(FREIGHT || st.first) return {state:'none', on:0, off:0, left:0};
+    const h = hn(st.name), last = i === STATIONS.length - 1;
+    const big = !st.hp;
+    return {state:'pending', last, keepOpen: last && RANG_AFTER !== i, on: last ? 0 : (big ? 8 : 3) + h % (big ? 22 : 12), off: big ? 6 + (h >> 4) % 18 : 2 + (h >> 4) % 10, left:0, prog:0, dur:0};
+  });
+}
+function atPlatform(i){
+  const st = STATIONS[i];
+  return S.front <= st.to + 5 && S.front - TRAIN_LEN >= st.from - 5;
+}
+function pressDoor(){
+  const D = S.door;
+  if(FREIGHT){ log('Güterzug – keine Fahrgasttüren', 'fdl'); return; }
+  if(D.state === 'zu'){
+    if(S.v > 0.05){ log('Türfreigabe nur im Stillstand', 'fdl'); return; }
+    const i = STATIONS.findIndex((st, k) => !st.first && atPlatform(k));
+    D.state = 'auf'; D.t = 0; D.lockMsg = false; audio.beep(520, .25, 'sine', .03);
+    if(i < 0){ error('Türen außerhalb eines Bahnsteigs freigegeben'); D.station = -1; return; }
+    D.station = i;
+    if(!S.st[i].done){ S.st[i].done = true; log('Halt in ' + STATIONS[i].name + ': ' + Math.round(STATIONS[i].stop - S.front) + ' m vor der Haltetafel', 'fdl'); }
+    const P = S.pax[i];
+    if(P.state === 'pending'){
+      if(P.last) P.off = S.onboard;
+      P.off = Math.min(P.off, S.onboard);
+      P.dur = Math.min(45, Math.max(10, 6 + 0.45*(P.on + P.off)));
+      P.state = 'run'; P.prog = 0; P.base = S.onboard;
+      log('Türen frei – ' + P.off + ' steigen aus, ' + P.on + ' steigen ein', 'fdl');
+    } else log('Türen frei – kein Fahrgastwechsel mehr nötig', 'fdl');
+    return;
+  }
+  if(D.state === 'auf'){
+    const P = D.station >= 0 ? S.pax[D.station] : null;
+    if(P && P.state === 'run'){ log('Fahrgäste steigen noch ein und aus – Tür reversiert', 'fdl'); return; }
+    D.state = 'schliessen'; D.t = 0; log('Türen schließen', 'fdl'); audio.beep(980, .35, 'square', .025);
+  }
+}
+function doorUpdate(dt){
+  const D = S.door;
+  if(D.state === 'schliessen' && (D.t += dt) >= 3){
+    D.state = 'zu';
+    log('Türen geschlossen – Traktion frei', 'fdl');
+    const st = D.station >= 0 ? STATIONS[D.station] : null;
+    const nx = STATIONS.findIndex((s2, k) => k > D.station && !S.st[k].done);
+    if(st && nx >= 0 && !S.announced[nx]){ S.announced[nx] = true; log('Ansage: Nächster Halt ' + STATIONS[nx].name, 'fdl'); }
+  }
+  if(D.state === 'auf' && D.station >= 0){
+    const P = S.pax[D.station];
+    if(P.state === 'run'){
+      P.prog = Math.min(1, P.prog + dt/P.dur);
+      const offPart = P.off/(P.on + P.off || 1);
+      const outN = Math.round(P.off*Math.min(1, P.prog/Math.max(offPart, 0.01)));
+      const inN = P.prog <= offPart ? 0 : Math.round(P.on*(P.prog - offPart)/(1 - offPart || 1));
+      S.onboard = P.base - outN + inN;
+      if(P.prog >= 1){
+        P.state = 'done'; S.onboard = P.base - P.off + P.on; S.carried += P.off;
+        log('Fahrgastwechsel in ' + STATIONS[D.station].name + ' abgeschlossen – ' + S.onboard + ' Fahrgäste an Bord' + (P.keepOpen ? '' : '. Türen schließen'), 'fdl');
+      }
+    }
+  }
 }
 
 // ---------------- Meldungen ----------------
@@ -509,21 +651,13 @@ function computeAspects(){
       else if(m.zs3){ r.aspect = 'KS1B'; r.zs3v = m.zs3; }
       else r.aspect = 'KS1';
     } else r.aspect = hp0[ti] ? 'VR0' : (m.hp2 ? 'VR2' : 'VR1');
+    if(d.mast && hp0[idx(d.mast)]) r.aspect = 'DARK';   // Vorsignal am Hp 0 zeigenden Hauptsignal ist dunkel
   });
-  // PZB-Gleismagnete
-  const mags = [];
-  DIST.forEach((d,j) => { const a = S.dsig[j].aspect; if(a === 'KS2' || a === 'VR0') mags.push({pos:d.pos, f:1000}); });
-  MAIN.forEach((m,i) => {
-    const a = S.sig[i].aspect;
-    if(m.sys === 'ks' && a === 'KS2') mags.push({pos:m.pos, f:1000});
-    if(a === 'HP0'){ mags.push({pos:m.pos-250, f:500}); mags.push({pos:m.pos, f:2000}); }
-  });
-  S.mags = mags;
 }
 const ASPECT_TXT = {
   KS1:'Ks 1 – Fahrt', KS1B:'Ks 1 blinkend – Fahrt, Zs 3v beachten', KS2:'Ks 2 – Halt erwarten',
   HP0:'Hp 0 – Halt', HP1:'Hp 1 – Fahrt', HP2:'Hp 2 – Langsamfahrt',
-  VR0:'Vr 0 – Halt erwarten', VR1:'Vr 1 – Fahrt erwarten', VR2:'Vr 2 – Langsamfahrt erwarten'
+  VR0:'Vr 0 – Halt erwarten', VR1:'Vr 1 – Fahrt erwarten', VR2:'Vr 2 – Langsamfahrt erwarten', DARK:'dunkel'
 };
 const ERSATZ_TXT = {zs1:'Zs 1 – Ersatzsignal', zs7:'Zs 7 – Vorsichtsignal', zs8:'Zs 8 – Gegengleis-Ersatzsignal'};
 function mainText(i){
@@ -532,7 +666,7 @@ function mainText(i){
   if(m.ersatz && r.ersatzOn) t += ' + ' + ERSATZ_TXT[m.ersatz];
   if(r.zs3On) t += ' · Zs 3: ' + m.zs3*10;
   if(r.zs3v) t += ' · Zs 3v: ' + r.zs3v*10;
-  if(m.mastVr >= 0) t += ' · am Mast ' + ASPECT_TXT[S.dsig[m.mastVr].aspect].split(' – ')[0];
+  if(m.mastVr >= 0) t += S.dsig[m.mastVr].aspect === 'DARK' ? ' · Vr am Mast dunkel' : ' · am Mast ' + ASPECT_TXT[S.dsig[m.mastVr].aspect].split(' – ')[0];
   return t;
 }
 function distText(j){ const r = S.dsig[j]; return ASPECT_TXT[r.aspect] + (r.zs3v ? ' · Zs 3v: ' + r.zs3v*10 : ''); }
@@ -545,79 +679,227 @@ function vAllowed(){
   return {v, src};
 }
 
-// ---------------- PZB 90 ----------------
-function zwang(reason){
-  if(S.zwang) return;
-  S.zwang = {reason}; S.zbCount++;
-  error('Zwangsbremsung: ' + reason);
-  audio.stop('hupe'); audio.beep(320, .9, 'square', .06);
+// ---------------- PZB 90 (Ril 483, Schulungsunterlage AVG Modul 17) ----------------
+// Regelfahrzeug: Zugart je Szenario, Startprogramm nach dem Aufrüsten.
+// AVG-Stadtbahn (PZB 90 Version AVG, GT8-100C/D): Zugart O fest, Frühhalt VÜ 3, 85 blinkt die ersten 40 m.
+function pzbNew(){
+  const zug = AVG ? 'O' : SC.zug;
+  return {zug, mon:[], hidden:[], m500:null, restr:null, start: AVG ? null : {s0:0}, noData: AVG ? {s0:0} : null,
+    slowT:0, befehl:false, befLamp:false, lim:ZUGART[zug].vmax, pufT:0, pufFlag:false, test:null, lastW:-9, lastF:-9};
 }
-function pzbMagnet(f){
-  const P = S.pzb, Z = ZUGART[P.zug], vk = S.v*3.6;
-  if(f === 1000){
-    P.m1000 = {s0:S.front, t:0, ack:false, ackT:0};
-    log('1000 Hz – Wachsamkeitstaste betätigen', 'pzb');
-    audio.start('hupe', 440, 'square', .045);
-  } else if(f === 500){
-    const lim = P.restr ? 25 : Z.v500a;
-    P.m500 = {s0:S.front};
-    log('500 Hz – Prüfgeschwindigkeit ' + lim + ' km/h', 'pzb');
-    if(vk > lim) zwang('500 Hz, ' + lim + ' km/h überschritten');
-  } else if(f === 2000){
-    if(P.befehl && vk <= 40) log('2000 Hz mit Befehl 40 überfahren', 'pzb');
-    else zwang('2000 Hz – Halt zeigendes Signal');
+function pzbActive(P){ return P.mon.length > 0 || !!P.m500 || !!P.start; }
+function lmLen(P){ return P.restr === 'vu3' ? 800 : 700; }
+function zwang(reason, kind, atMain){
+  if(S.zwang) return;
+  kind = kind || 'pzb';
+  S.zwang = {reason, kind, pos:S.front}; S.zbCount++;
+  error((kind === 'pzb' ? 'PZB-Zwangsbremsung: ' : 'Zwangsbremsung: ') + reason);
+  audio.stop('hupe'); audio.beep(320, .9, 'square', .06);
+  if(kind === 'pzb'){
+    S.pzb.mon.forEach(m => { m.ack = true; });
+    S.fdlNeed = {atMain:!!atMain, ok:false, err:false};
   }
+}
+// Gleismagnet wirksam? vk nur für geschwindigkeitsabhängige Magnete (GPA, GÜ)
+function magEntryActive(e, vk){
+  switch(e.kind){
+    case 'vs': { const a = S.dsig[e.ref].aspect; return a === 'VR0' || a === 'VR2' || a === 'KS2' || !!DIST[e.ref].gestoert; }
+    case 'mast': { const a = S.dsig[e.ref].aspect; return a === 'VR0' || a === 'VR2'; }
+    case 'ks1000': return S.sig[e.ref].aspect === 'KS2';
+    case 'hs500': case 'hs2000': return S.sig[e.ref].aspect === 'HP0';
+    case 'zs3': return S.sig[e.ref].zs3On;
+    case 'lf': return true;
+    case 'gpa': case 'gue': return vk !== undefined && vk > e.v;
+  }
+  return false;
+}
+function magLabel(m){
+  for(const e of m.fs){
+    if(e.kind === 'gpa') return {txt:'GPA > ' + e.v, f:1000, spd:true, v:e.v};
+    if(e.kind === 'gue') return {txt:'GÜ > ' + e.v, f:2000, spd:true, v:e.v};
+  }
+  for(const e of m.fs) if(magEntryActive(e)) return {txt:e.f + ' Hz', f:e.f};
+  return {txt:'aus', f:0};
+}
+function pzbCross(m){
+  const vk = S.v*3.6;
+  for(const e of m.fs){
+    if(!magEntryActive(e, vk)){
+      if(e.kind === 'gue' && vk > e.v - 5) error('Ril 483: Geschwindigkeitsüberwachungsabschnitt nicht um mindestens 5 km/h unterfahren (Prüfgeschwindigkeit ' + e.v + ' km/h)');
+      continue;
+    }
+    if(e.f === 1000) pzb1000(e);
+    else if(e.f === 500) pzb500(e);
+    else pzb2000(e);
+  }
+}
+function pzb1000(e){
+  const P = S.pzb;
+  P.mon.push({s0:S.front, t:0, ack:false, ackT:0, wtFail:false});
+  log(e.kind === 'gpa' ? '1000 Hz am Geschwindigkeitsprüfabschnitt (über ' + e.v + ' km/h) – Wachsam' : '1000 Hz – Wachsam binnen 4 s', 'pzb');
+  audio.start('hupe', 440, 'square', .045);
+  if(e.kind === 'vs' && DIST[e.ref].gestoert){
+    const a = S.dsig[e.ref].aspect;
+    if((a === 'VR1' || a === 'KS1' || a === 'KS1B') && !S.stoer){
+      S.stoer = {name:'Vorsignal ' + DIST[e.ref].for, reported:false};
+      if(lern) log('Hinweis: 1000 Hz obwohl das Vorsignal Fahrt erwarten zeigt – Streckeneinrichtung gestört. Von Halt ausgehen und dem Fdl melden.', 'fdl');
+    }
+  }
+}
+function pzb500(e){
+  const P = S.pzb, Z = ZUGART[P.zug], vk = S.v*3.6;
+  if(P.hidden.length){ P.hidden = []; zwang('Unberechtigtes Befreien', 'pzb', false); return; }
+  const rStd = P.restr === 'std' || !!P.start;
+  const a = rStd ? 45 : Z.v500a, b = rStd ? 25 : Z.v500e;
+  P.m500 = {s0:S.front, r25:false};
+  log('500 Hz – höchstens ' + a + ' km/h, binnen 153 m unter ' + b + ' km/h', 'pzb');
+  if(vk > a) zwang('Geschwindigkeitsüberschreitung (500 Hz, ' + a + ' km/h)', 'pzb', false);
+}
+function pzb2000(e){
+  const P = S.pzb, vk = S.v*3.6;
+  if(e.kind === 'gue'){ zwang('Geschwindigkeitsüberwachungsabschnitt, Prüfgeschwindigkeit ' + e.v + ' km/h überschritten', 'pzb', false); return; }
+  if(P.befehl && vk <= 40){ P.befLamp = true; log('Wirksamer 2000-Hz-Magnet mit PZB-Befehl befahren – Befehl 40 leuchtet', 'pzb'); audio.beep(700, .25, 'sine', .04); return; }
+  zwang(P.befehl ? '2000-Hz-Beeinflussung (Befehl über 40 km/h wirkungslos)' : '2000-Hz-Beeinflussung', 'pzb', true);
 }
 function pzbUpdate(dt){
-  const P = S.pzb, Z = ZUGART[P.zug], vk = S.v*3.6;
-  if(P.m1000){
-    P.m1000.t += dt;
-    if(!P.m1000.ack){
-      P.m1000.ackT += dt;
-      if(P.m1000.ackT > 4){ P.m1000.ack = true; zwang('Wachsamkeitstaste nicht binnen 4 s betätigt'); }
-    }
-    if(S.front - P.m1000.s0 > 1250) P.m1000 = null;
+  const P = S.pzb, Z = ZUGART[P.zug], vk = S.v*3.6, fr = S.front;
+  if(P.test){ P.test.t += dt; if(P.test.t >= 3.2){ P.test = null; endTest(); } P.lim = 0; return; }
+  for(const m of P.mon){
+    m.t += dt;
+    if(!m.ack){ m.ackT += dt; if(m.ackT > 4){ m.ack = true; m.wtFail = true; audio.stop('hupe'); zwang('WT nicht zeitgerecht betätigt', 'pzb', false); } }
   }
-  if(P.m500 && S.front - P.m500.s0 > 250) P.m500 = null;
-  if(!P.m1000 && !P.m500){ if(P.restr) log('PZB-Überwachung beendet', 'pzb'); P.restr = false; P.slowT = 0; }
-  else if(vk < 10 && !P.restr){
+  P.mon = P.mon.filter(m => fr - m.s0 <= 1250);
+  P.hidden = P.hidden.filter(m => fr - m.s0 <= 1250);
+  if(P.m500 && fr - P.m500.s0 > 250) P.m500 = null;
+  if(P.start && fr - P.start.s0 > 1250){ P.start = null; log('Startprogramm nach 1250 m beendet', 'pzb'); }
+  if(P.noData && fr - P.noData.s0 > 40){ P.noData = null; log('PZB-Daten vorhanden – 85 Dauerlicht', 'pzb'); }
+  if(!pzbActive(P)){
+    if(P.restr) log('Restriktive Überwachung beendet', 'pzb');
+    P.restr = null; P.slowT = 0; P.pufFlag = false;
+  } else if(vk < 10){
     P.slowT += dt;
-    if(P.slowT > 15){ P.restr = true; log('PZB restriktiv: 45 km/h, bei 500 Hz 25 km/h', 'pzb'); }
-  } else if(vk >= 10) P.slowT = 0;
+    if(P.slowT > 15){
+      if(P.m500 && (P.start || P.restr === 'std')) P.m500.r25 = true;
+      if(!P.start){
+        const newest = P.mon[P.mon.length - 1];
+        const want = (AVG && newest && fr - newest.s0 < 500) ? 'vu3' : 'std';
+        if(P.restr !== want && P.restr !== 'std'){
+          P.restr = want;
+          if(P.m500 && want === 'std') P.m500.r25 = true;
+          log(want === 'vu3' ? 'Frühhalt (VÜ 3): 85/70 Gleichblinken – unter 65 km/h' : 'Restriktiv' + (AVG ? ' (Spähalt, VÜ 2)' : '') + ': 85/70 Wechselblinken – unter 45 km/h, bei 500 Hz unter 25 km/h', 'pzb');
+        }
+      }
+    }
+  } else P.slowT = 0;
+  const rStd = P.restr === 'std' || !!P.start;
   let lim = Z.vmax;
-  if(P.m1000){
-    lim = Math.min(lim, P.restr ? 45 : Math.max(Z.v1000, Z.vmax - (Z.vmax - Z.v1000)*P.m1000.t/Z.t1000));
+  for(const m of P.mon){
+    const l = P.restr === 'vu3' ? 65 : rStd ? 45 : Math.max(Z.v1000, Z.vmax - (Z.vmax - Z.v1000)*m.t/Z.t1000);
+    lim = Math.min(lim, l);
   }
+  if(P.start) lim = Math.min(lim, 45);
   if(P.m500){
-    const d = S.front - P.m500.s0;
-    lim = Math.min(lim, P.restr ? 25 : (d < 153 ? Z.v500a - (Z.v500a - Z.v500e)*d/153 : Z.v500e));
+    const d = fr - P.m500.s0;
+    const l = rStd ? (P.m500.r25 ? 25 : (d < 153 ? 45 - 20*d/153 : 25)) : (d < 153 ? Z.v500a - (Z.v500a - Z.v500e)*d/153 : Z.v500e);
+    lim = Math.min(lim, l);
   }
-  if(P.befehl) lim = Math.min(lim, 40);
   P.lim = lim;
-  if(!S.zwang && vk > lim + 0.5) zwang('PZB-Überwachung, ' + Math.round(lim) + ' km/h überschritten');
+  if(!S.zwang && vk > lim + 0.5) zwang('Geschwindigkeitsüberschreitung (v-Überwachung ' + Math.round(lim) + ' km/h)', 'pzb', false);
+  // Ril 483: Überwachungsgeschwindigkeiten um mindestens 5 km/h unterfahren
+  if(pzbActive(P) && !S.zwang && lim < Z.vmax - 0.5 && vk > lim - 5 && vk > 3){
+    P.pufT += dt;
+    if(P.pufT > 1.5 && !P.pufFlag){ P.pufFlag = true; error('Ril 483: v-Überwachung ' + Math.round(lim) + ' km/h nicht um mindestens 5 km/h unterfahren'); }
+  } else P.pufT = 0;
 }
+function requireWT(name){ S.wt = {t:0, name, ok:false}; }
 function pressWachsam(){
   const P = S.pzb;
-  if(P.m1000 && !P.m1000.ack){ P.m1000.ack = true; audio.stop('hupe'); log('Wachsam betätigt', 'pzb'); }
+  P.lastW = S.t;
+  if(S.v === 0 && !S.zwang && !P.test && S.t - P.lastF < 1){ startTest(); return; }
+  let any = false;
+  for(const m of P.mon) if(!m.ack){ m.ack = true; any = true; }
+  if(any){ audio.stop('hupe'); log('Wachsam betätigt', 'pzb'); }
+  if(S.wt && !S.wt.ok){ S.wt.ok = true; any = true; }
+  if(any) audio.beep(880, .18, 'sine', .035);
+}
+function befreienVerbot(){
+  const ni = MAIN.findIndex(m => m.pos > S.front);
+  if(ni < 0) return null;
+  const m = MAIN[ni], d = m.pos - S.front, r = S.sig[ni];
+  if(d > Math.min(LSICHT, 1500)) return 'Signal ' + m.id + ' noch nicht erkennbar – Fahrtbegriff über 30 km/h nötig';
+  if(r.aspect === 'HP0') return 'Signal ' + m.id + ' zeigt Halt';
+  if(r.zs3On && m.zs3 <= 3) return 'Fahrtbegriff am Signal ' + m.id + ' nicht größer als 30 km/h';
+  return null;
 }
 function pressFrei(){
   const P = S.pzb;
+  P.lastF = S.t;
+  if(P.test) return;
+  if(S.v === 0 && !S.zwang && S.t - P.lastW < 1){ startTest(); return; }
   if(S.zwang){
-    if(S.v < 0.05){ S.zwang = null; S.sifa.t = 0; log('Zwangsbremsung im Stillstand aufgehoben', 'pzb'); }
-    else log('Frei wirkt erst im Stillstand', 'pzb');
+    if(S.v > 0.05){ log('Frei wirkt erst im Stillstand', 'pzb'); return; }
+    if(S.lever > 0){ log('Zum Zurücksetzen Fahrschalter in Bremsstellung bringen', 'pzb'); return; }
+    const k = S.zwang.kind; S.zwang = null; S.sifa.t = 0; P.befLamp = false;
+    log(k === 'pzb' ? 'PZB-Zwangsbremsung mit Frei aufgehoben' : 'Zwangsbremsung aufgehoben', 'pzb');
+    if(k === 'pzb' && S.fdlNeed && !S.fdlNeed.ok) log('Vor der Weiterfahrt mit dem Fdl abklären (Taste Fdl)', 'fdl');
     return;
   }
-  if(P.m1000 || P.restr){
-    const d1000 = P.m1000 ? S.front - P.m1000.s0 : 9999;
-    if(!P.m500 && d1000 > 700){ P.m1000 = null; P.restr = false; P.slowT = 0; log('PZB befreit', 'pzb'); }
-    else log('Befreiung nicht möglich: ' + (P.m500 ? '500 Hz wirkt' : '1000-Hz-Leuchtmelder an'), 'pzb');
-  }
+  if(!(P.mon.length || P.restr || P.start)){ log('Keine Restriktion – Frei ohne Wirkung', 'pzb'); return; }
+  if(P.m500){ log('Befreien nicht möglich: 500-Hz-Überwachung läuft', 'pzb'); return; }
+  if(P.mon.some(m => S.front - m.s0 < lmLen(P))){ log('Befreien nicht möglich: 1000-Hz-Leuchtmelder leuchtet noch (' + lmLen(P) + ' m)', 'pzb'); return; }
+  const why = befreienVerbot();
+  P.hidden = P.hidden.concat(P.mon.map(m => ({s0:m.s0})));
+  P.mon = []; P.start = null; P.restr = null; P.slowT = 0; P.pufFlag = false;
+  log('PZB befreit', 'pzb'); audio.beep(660, .15, 'sine', .035);
+  if(why) error('Unzulässiges Befreien: ' + why);
 }
-function pressSifa(){ if(S.sifa.t >= 30) S.sifaN++; S.sifa.t = 0; audio.stop('sifa'); }
+function pressSifa(){
+  if(S.zwang && S.zwang.kind === 'sifa' && S.v < 0.05){ S.zwang = null; log('Sifa-Zwangsbremsung aufgehoben', 'pzb'); }
+  if(S.sifa.t >= 30) S.sifaN++;
+  S.sifa.t = 0; audio.stop('sifa');
+}
+function startTest(){
+  const P = S.pzb;
+  if(P.test) return;
+  P.test = {t:0}; P.mon = []; P.m500 = null; P.hidden = []; P.restr = null; P.start = null; P.noData = null;
+  audio.stop('hupe'); audio.beep(500, .5, 'square', .04);
+  log('PZB-Funktionsprüfung läuft – Leuchtmelder und Akustik beobachten', 'pzb');
+}
+function endTest(){
+  const P = S.pzb;
+  S.testDone = true;
+  if(!AVG) P.start = {s0:S.front};
+  log('Funktionsprüfung fehlerfrei: Druckabfall am Federspeicher, alle Leuchtmelder, Akustik' + (AVG ? ' – 85 Dauerlicht' : ' – Startprogramm aktiv'), 'pzb');
+}
+function pressFdl(){
+  if(S.fdlBusy){ log('Fdl: Einen Moment, bitte …', 'fdl'); return; }
+  const km = (S.front/1000).toFixed(1).replace('.', ',');
+  if(S.fdlNeed && !S.fdlNeed.ok){
+    if(S.v > 0.05){ log('Erst anhalten, dann den Fdl verständigen', 'fdl'); return; }
+    const atMain = S.fdlNeed.atMain;
+    log('An Fdl: PZB-Zwangsbremsung bei km ' + km + (atMain ? ' am Hauptsignal' : '') + ', Fahrzeug hat gesandet', 'fdl');
+    S.fdlBusy = {t: atMain ? 12 : 5, fn: () => {
+      S.fdlNeed.ok = true;
+      if(atMain){
+        const n = MAIN.findIndex(m => m.pos > S.front + 1);
+        S.restr.push({v:40, endFront: n >= 0 ? MAIN[n].pos : 1e9, src:'Befehl 2 – Fahrt auf Sicht'});
+        log('Fdl: Befehl Nr. 2 erteilt – auf Sicht, höchstens 40 km/h bis ' + (n >= 0 ? 'Signal ' + MAIN[n].id : 'zum Fahrtende'), 'fdl');
+      } else log('Fdl: Zustimmung zur Weiterfahrt (mündlich)', 'fdl');
+    }};
+    return;
+  }
+  if(S.stoer && !S.stoer.reported){
+    S.stoer.reported = true;
+    log('An Fdl: PZB-Streckeneinrichtung gestört am ' + S.stoer.name + ', 1000-Hz-Magnet ständig wirksam', 'fdl');
+    S.fdlBusy = {t:4, fn: () => log('Fdl: Verstanden, nachfolgende Züge erhalten einen Befehl', 'fdl')};
+    return;
+  }
+  log('Fdl: Keine Meldung erforderlich', 'fdl');
+}
 
 // ---------------- Simulation ----------------
 function brakeTarget(){
-  if(S.zwang || S.lever === -8) return 1.25*BRK_F;
+  if(S.zwang || S.lever === -8 || S.pzb.test) return 1.25*BRK_F;
   if(S.lever < 0) return (-S.lever)/7*0.9*BRK_F;
   return 0;
 }
@@ -653,7 +935,8 @@ function step(dt){
   const bt = brakeTarget();
   S.brake += (bt - S.brake) * Math.min(1, dt / ((bt > S.brake ? 1.0 : 2.2) * TAU));
   let trac = 0;
-  if(S.lever > 0 && !S.zwang && S.v*3.6 < VEH_VMAX && S.brake < 0.08) trac = (S.lever/8) * Math.min(0.9*ACC_F, 12*ACC_F/Math.max(S.v, 0.1));
+  if(S.door.state !== 'zu' && S.lever > 0 && !S.door.lockMsg){ S.door.lockMsg = true; log('Traktionssperre – Türen nicht geschlossen', 'fdl'); }
+  if(S.lever > 0 && !S.zwang && S.door.state === 'zu' && S.v*3.6 < VEH_VMAX && S.brake < 0.08) trac = (S.lever/8) * Math.min(0.9*ACC_F, 12*ACC_F/Math.max(S.v, 0.1));
   const res = S.v > 0 ? 0.008 + 0.00005*S.v*S.v : 0;
   const wasMoving = S.v > 0;
   S.v = Math.max(0, S.v + (trac - S.brake - res)*dt);
@@ -663,12 +946,17 @@ function step(dt){
   const fr = S.front, rear = fr - TRAIN_LEN, vk = S.v*3.6;
   const crossed = p => prev < p && p <= fr;
 
-  for(const m of S.mags) if(crossed(m.pos)) pzbMagnet(m.f);
+  for(const m of MAGNETS) if(crossed(m.pos)) pzbCross(m);
   MAIN.forEach((m,i) => { if(crossed(m.pos)) onMainPass(i); });
-  DIST.forEach((d,j) => { if(!d.mast && crossed(d.pos) && lern) log('Vorsignal ' + d.for + ': ' + distText(j)); });
+  DIST.forEach((d,j) => {
+    if(d.mast || !crossed(d.pos)) return;
+    const r = S.dsig[j], a = r.aspect;
+    if(a === 'VR0' || a === 'VR2' || a === 'KS2' || (a === 'KS1B' && r.zs3v <= 9)) requireWT('Vorsignal ' + d.for + ' (' + ASPECT_TXT[a].split(' – ')[0] + ')');
+    if(lern) log('Vorsignal ' + d.for + ': ' + distText(j));
+  });
   for(const l of LF){
     if(!crossed(l.pos)) continue;
-    if(l.k === 'lf6') log('Lf 6: ' + l.v*10 + ' km/h ab dem nächsten Lf 7');
+    if(l.k === 'lf6'){ log('Lf 6: ' + l.v*10 + ' km/h ab dem nächsten Lf 7'); if(l.v <= 9) requireWT('Lf 6 (Kennziffer ' + l.v + ')'); }
     else {
       const nv = l.v*10;
       if(nv < S.lineV){ S.lineV = nv; S.pendingLine = null; log('Lf 7: ' + nv + ' km/h ab hier'); }
@@ -697,19 +985,30 @@ function step(dt){
   }
   if(wasMoving && S.v === 0) onStop();
   STATIONS.forEach((s,i) => {
-    if(s.first || S.st[i].done) return;
-    if(fr > s.to + 20){ S.st[i].done = true; error('Planhalt in ' + s.name + ' ausgelassen'); }
+    if(s.first) return;
+    if(!S.st[i].done){ if(fr > s.to + 20){ S.st[i].done = true; S.pax[i].state = 'none'; error('Planhalt in ' + s.name + ' ausgelassen'); } return; }
+    if(S.pax[i].state === 'pending' && fr > s.to + 20){ S.pax[i].state = 'none'; error('Abfahrt aus ' + s.name + ' ohne Fahrgastwechsel'); }
   });
+  doorUpdate(dt);
   fdlEvents();
 
   pzbUpdate(dt);
+  if(S.wt){
+    if(S.wt.ok) S.wt = null;
+    else if((S.wt.t += dt) > 4){
+      if(!(S.zwang && /WT/.test(S.zwang.reason))) error('Ril 483: Wachsam am ' + S.wt.name + ' nicht betätigt');
+      S.wt = null;
+    }
+  }
+  if(S.fdlBusy && (S.fdlBusy.t -= dt) <= 0){ const f = S.fdlBusy.fn; S.fdlBusy = null; f(); }
+  if(S.fdlNeed && !S.fdlNeed.ok && !S.fdlNeed.err && !S.zwang && S.v > 1){ S.fdlNeed.err = true; error('Weiterfahrt nach PZB-Zwangsbremsung ohne Zustimmung des Fdl'); }
+  if(SC.test && !S.testDone && !S.testWarned && S.front > 5){ S.testWarned = true; error('PZB-Funktionsprüfung vor Fahrtantritt nicht durchgeführt'); }
   if(S.v > 0.3 && !S.zwang){
     S.sifa.t += dt;
     if(S.sifa.t >= 30) once('sifa' + S.sifaN, () => log('Sifa-Leuchtmelder: Sifa betätigen!', 'pzb'));
     if(S.sifa.t >= 32.5) audio.start('sifa', 900, 'square', .04, true);
-    if(S.sifa.t >= 35){ zwang('Sifa nicht betätigt'); S.sifa.t = 0; S.sifaN++; audio.stop('sifa'); }
+    if(S.sifa.t >= 35){ zwang('Sifa nicht betätigt', 'sifa'); S.sifa.t = 0; S.sifaN++; audio.stop('sifa'); }
   } else if(S.v <= 0.3){ audio.stop('sifa'); }
-  if(S.pzb.befehl && vk > 40 && !S.zwang) zwang('Befehl 40 überschritten');
   const va = vAllowed().v;
   if(vk > va + 2){
     S.over.t += dt;
@@ -721,7 +1020,7 @@ function step(dt){
     else if(S.mode === 'rangier' && S.v === 0 && fr >= RA10_POS - 70 && fr <= RA10_POS) finish();
   } else {
     const li = STATIONS.length - 1;
-    if(li > 0 && S.st[li].done && S.v === 0 && S.stT[li] >= 2) finish();
+    if(li > 0 && S.st[li].done && S.v === 0 && S.stT[li] >= 2 && (FREIGHT || S.pax[li].state === 'done' || S.pax[li].state === 'none')) finish();
   }
 }
 function onMainPass(i){
@@ -733,6 +1032,8 @@ function onMainPass(i){
     } else error('Signal ' + m.id + ': Halt zeigendes Signal überfahren (Hp 0)');
     return;
   }
+  if(r.aspect === 'KS2' || (r.aspect === 'KS1B' && r.zs3v <= 9)) requireWT('Signal ' + m.id + ' (' + ASPECT_TXT[r.aspect].split(' – ')[0] + ')');
+  if(m.mastVr >= 0){ const va = S.dsig[m.mastVr].aspect; if(va === 'VR0' || va === 'VR2') requireWT('Vorsignal am Signal ' + m.id + ' (' + ASPECT_TXT[va].split(' – ')[0] + ')'); }
   if(r.zs3On) S.restr.push({v:m.zs3*10, endRear:m.pos + 300, src:'Zs 3 am Signal ' + m.id});
   if(r.aspect === 'HP2') S.restr.push({v:40, endRear:m.pos + 300, src:'Hp 2 am Signal ' + m.id});
   if(lern) log('Signal ' + m.id + ': ' + mainText(i));
@@ -746,7 +1047,8 @@ function onStop(){
       const d = Math.round(s.stop - fr);
       if(d < -3) error('Haltetafel in ' + s.name + ' um ' + (-d) + ' m überfahren');
       else log('Halt in ' + s.name + ': ' + (d <= 0 ? 'an der Haltetafel' : d + ' m vor der Haltetafel'), 'fdl');
-      if(SC.rangier && SC.rangier.after === i) log('Stehen bleiben: Der Rangierauftrag folgt in etwa 10 s.', 'fdl');
+      if(!FREIGHT && lern) log('Fahrgastwechsel: Türen freigeben (Taste T)', 'fdl');
+      if(RANG_AFTER === i) log('Nach dem Aussteigen stehen bleiben: Der Rangierauftrag folgt.', 'fdl');
     }
   });
 }
@@ -770,7 +1072,7 @@ function fdlEvents(){
     }
     if(m.cond && (m.cond.st !== undefined || m.cond.stop !== undefined) && !condHold(m, i)) once('c' + i, () => log('Fdl: Fahrstraße ab Signal ' + m.id + ' eingestellt', 'fdl'));
   });
-  if(SC.rangier && SC.rangier.after >= 0 && S.mode === 'zug' && S.stT[SC.rangier.after] >= 10){
+  if(RANG_AFTER !== null && RANG_AFTER >= 0 && S.mode === 'zug' && S.stT[RANG_AFTER] >= 10 && S.door.state === 'zu' && (FREIGHT || S.pax[RANG_AFTER].state !== 'pending' && S.pax[RANG_AFTER].state !== 'run')){
     S.mode = 'rangier';
     log('Zugfahrt beendet. Rangierfahrt: höchstens 25 km/h, Sh-Signale beachten, vor der Ra 10 halten.', 'fdl');
   }
@@ -781,6 +1083,7 @@ try{ RES = JSON.parse(localStorage.getItem('fst-res') || '{}') || {}; }catch(e){
 function saveRes(){ try{ localStorage.setItem('fst-res', JSON.stringify(RES)); }catch(e){} }
 function finish(reason){
   if(S.finished) return;
+  if(!reason && S.stoer && !S.stoer.reported) error('Gestörte PZB-Streckeneinrichtung nicht dem Fdl gemeldet');
   S.finished = true; audio.stopAll();
   const body = document.getElementById('endBody');
   body.textContent = '';
@@ -789,7 +1092,7 @@ function finish(reason){
   document.getElementById('endT').textContent = reason ? 'Fahrt abgebrochen' : (ok ? 'Bestanden – fehlerfrei' : 'Ziel erreicht');
   const last = STATIONS[STATIONS.length - 1];
   const where = SC.rangier ? 'Abgestellt vor der Ra 10.' : 'Angekommen in ' + (last ? last.name : '') + '.';
-  p.textContent = 'Szenario ' + SC.id + ' · ' + SC.title + '. ' + (reason ? reason + '. ' : where + ' ') + 'Fahrzeit ' + fmtT(S.t) + ' · ' + S.errors.length + ' Fehler · ' + S.zbCount + ' Zwangsbremsungen.';
+  p.textContent = 'Szenario ' + SC.id + ' · ' + SC.title + '. ' + (reason ? reason + '. ' : where + ' ') + 'Fahrzeit ' + fmtT(S.t) + ' · ' + S.errors.length + ' Fehler · ' + S.zbCount + ' Zwangsbremsungen' + (FREIGHT ? '.' : ' · ' + S.carried + ' Fahrgäste ans Ziel gebracht.');
   body.append(p);
   if(S.errors.length){
     const ol = document.createElement('ol');
@@ -856,14 +1159,24 @@ function txt(ctx, str, x, y, size, color, glow){
 }
 function ne2(ctx, y){
   if(ONLYLIGHT) return;
-  ctx.fillStyle = '#f2f2ee'; ctx.fillRect(-0.24, y, 0.48, 0.62);
-  ctx.fillStyle = '#111';
-  for(const dy of [0.08, 0.34]){ ctx.beginPath(); ctx.moveTo(-0.16, y+dy+0.2); ctx.lineTo(0.16, y+dy+0.2); ctx.lineTo(0, y+dy); ctx.closePath(); ctx.fill(); }
+  // Ne 2: schwarzgeränderte weiße Tafel, zwei schwarze Winkel, die sich mit der Spitze berühren
+  const w = 0.44, h = 0.6, x0 = -w/2, m = y + h/2, i = 0.07;
+  ctx.fillStyle = '#111'; ctx.fillRect(x0, y, w, h);
+  ctx.fillStyle = '#f2f2ee'; ctx.fillRect(x0 + 0.03, y + 0.03, w - 0.06, h - 0.06);
+  ctx.strokeStyle = '#111'; ctx.lineWidth = 0.07; ctx.lineJoin = 'miter'; ctx.lineCap = 'butt';
+  ctx.beginPath(); ctx.moveTo(x0 + i, y + i); ctx.lineTo(0, m); ctx.lineTo(-x0 - i, y + i); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x0 + i, y + h - i); ctx.lineTo(0, m); ctx.lineTo(-x0 - i, y + h - i); ctx.stroke();
+  ctx.fillStyle = '#3d4443'; ctx.fillRect(-0.03, y + h, 0.06, 0.25);
 }
+// Lichtvorsignal nach Ril 301.0201: vier Lampen, rechts oben Grün über Gelb, links unten Grün über Gelb
+// Vr 0: zwei gelbe Lichter nach rechts steigend · Vr 1: zwei grüne · Vr 2: links Gelb, rechts steigend Grün
 function drawVr(ctx, a, s){
-  box(ctx, -0.42, -0.42, 0.84, 0.84, s);
-  lamp(ctx, -0.2, 0.2, 0.1, a === 'VR1' ? C.green : C.yel, true && a !== undefined, s);
-  lamp(ctx, 0.2, -0.2, 0.1, a === 'VR0' ? C.yel : C.green, true, s);
+  box(ctx, -0.3, -0.55, 0.6, 1.1, s);
+  const r = 0.085;
+  lamp(ctx, 0.13, -0.37, r, C.green, a === 'VR1' || a === 'VR2', s);
+  lamp(ctx, 0.13, -0.15, r, C.yel, a === 'VR0', s);
+  lamp(ctx, -0.13, 0.15, r, C.green, a === 'VR1', s);
+  lamp(ctx, -0.13, 0.37, r, C.yel, a === 'VR0' || a === 'VR2', s);
 }
 function glyph(ctx, o, s, t){
   const blink = (t % 1) < 0.55;
@@ -887,7 +1200,7 @@ function glyph(ctx, o, s, t){
       lamp(ctx, 0.14, -0.24, 0.1, C.red, false, s);
       lamp(ctx, 0, 0.1, 0.1, C.yel, a === 'HP2', s);
       ersatzLamps(ctx, m, eo, blink, s, 0.42);
-      if(m.mastVr >= 0){ ctx.translate(0, 1.85); drawVr(ctx, S.dsig[m.mastVr].aspect, s); }
+      if(m.mastVr >= 0){ ctx.translate(0, 1.6); drawVr(ctx, S.dsig[m.mastVr].aspect, s); }
     }
   } else if(o.k === 'dist'){
     const d = DIST[o.ref], r = S.dsig[o.ref], a = r.aspect;
@@ -896,10 +1209,10 @@ function glyph(ctx, o, s, t){
       lamp(ctx, 0.13, -0.13, 0.1, C.green, a === 'KS1' || (a === 'KS1B' && blink), s);
       lamp(ctx, -0.13, 0.13, 0.1, C.yel, a === 'KS2', s);
       if(MAIN[d.target].zs3){ box(ctx, -0.28, 0.44, 0.56, 0.46, s); if(r.zs3v) txt(ctx, String(r.zs3v), 0, 0.68, 0.38, C.yel, true); }
-      if(s > 4) ne2(ctx, MAIN[d.target].zs3 ? 1.05 : 0.6);
+      if(s > 4) ne2(ctx, MAIN[d.target].zs3 ? 1.05 : 0.5);
     } else {
       drawVr(ctx, a, s);
-      if(s > 4) ne2(ctx, 0.62);
+      if(s > 4) ne2(ctx, 0.75);
     }
   } else if(o.k === 'lf6'){
     ctx.beginPath(); ctx.moveTo(-0.5, -0.42); ctx.lineTo(0.5, -0.42); ctx.lineTo(0, 0.46); ctx.closePath();
@@ -1029,6 +1342,15 @@ function render(){
   }
   for(const o of OBJS){ const z = o.pos - base; if(z > ZN && z < Math.min(3000, LSICHT)) items.push({z, t:'obj', o}); }
   for(const m of MAGNETS){ const z = m.pos - base; if(z > ZN && z < Math.min(900, SICHT)) items.push({z, t:'mag', m}); }
+  STATIONS.forEach((st, i) => {
+    const P = S.pax[i]; if(!P || (P.state !== 'pending' && P.state !== 'run')) return;
+    const n = P.state === 'pending' ? P.on : Math.round(P.on*(1 - Math.max(0, (P.prog - P.off/(P.on + P.off || 1))/(1 - P.off/(P.on + P.off || 1) || 1))));
+    for(let k = 0; k < Math.min(n, 30); k++){
+      const h1 = hash(i*97 + k), h2 = hash(i*131 + k*7);
+      const z = st.stop - 15 - h1*Math.min(200, TRAIN_LEN + 30) - base;
+      if(z > ZN + 1 && z < 450) items.push({z, t:'pax', x:2.35 + h2*1.9, c:k % 5, hh:1.55 + (h1*10 % 1)*0.35});
+    }
+  });
   if(S.lead.on){ const z = S.lead.front - S.lead.len - base; if(z > ZN && z < (NIGHT ? 3000 : Math.min(3000, SICHT*1.1))) items.push({z, t:'lead'}); }
   items.sort((a, b) => b.z - a.z);
   for(const it of items){
@@ -1054,18 +1376,25 @@ function render(){
         const a = P(z1, 0.9, 0.22), b = P(z1, 1.35, 0.22), c = P(z1, 1.35, 0), d = P(z1, 0.9, 0);
         ctx.fillStyle = '#1b1b1b'; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.closePath(); ctx.fill();
         if(lern && z < 350){
-          const f = magActive(it.m.pos), p = P(z, 1.12, 0.9);
+          const ml = magLabel(it.m), f = ml.spd ? 0 : ml.f, p = P(z, 1.12, 0.9);
           const fs = Math.max(9*u, Math.min(16*u, 0.5*s));
           ctx.font = '700 ' + Math.round(fs) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
-          const label = f ? f + ' Hz' : 'aus';
+          const label = ml.txt;
           const tw = ctx.measureText(label).width + fs*0.6;
-          ctx.fillStyle = f === 1000 ? '#f2c230' : f === 500 ? '#ff4b3e' : f === 2000 ? '#f3f5ff' : 'rgba(20,25,24,.75)';
+          ctx.fillStyle = ml.spd ? '#4fa3ff' : f === 1000 ? '#f2c230' : f === 500 ? '#ff4b3e' : f === 2000 ? '#f3f5ff' : 'rgba(20,25,24,.75)';
           rr(ctx, p[0] - tw/2, p[1] - fs*0.7, tw, fs*1.4, fs*0.3); ctx.fill();
-          ctx.fillStyle = f ? '#111' : '#9aa8a3'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillStyle = (f || ml.spd) ? '#111' : '#9aa8a3'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillText(label, p[0], p[1] + fs*0.05);
         }
         ctx.globalAlpha = 1;
       }
+    } else if(it.t === 'pax'){
+      const g = P(z, it.x, 0.76), hd = P(z, it.x, 0.76 + it.hh), w = Math.max(1, 0.42*s);
+      const cols = NIGHT ? ['#3a3f4a','#4a3a36','#33433a','#47423a','#3d3a48'] : ['#2f5d8a','#a6463b','#3f7a52','#c9a227','#6b4f8a'];
+      ctx.globalAlpha = vis;
+      ctx.fillStyle = cols[it.c]; rr(ctx, g[0] - w/2, hd[1] + (g[1] - hd[1])*0.18, w, (g[1] - hd[1])*0.82, Math.min(w/2, 0.12*s)); ctx.fill();
+      ctx.fillStyle = NIGHT ? '#5a4c42' : '#e2b993'; ctx.beginPath(); ctx.arc(hd[0], hd[1] + (g[1] - hd[1])*0.09, Math.max(0.8, 0.12*s), 0, 7); ctx.fill();
+      ctx.globalAlpha = 1;
     } else if(it.t === 'lead'){
       const a = P(z, -1.45, 4.0), b = P(z, 1.45, 0.9);
       const body = z <= SICHT;
@@ -1108,9 +1437,9 @@ function bounds(o){
   if(o.k === 'main'){
     const m = MAIN[o.ref];
     if(m.sys === 'ks') return [m.zs3 ? -1.12 : -0.55, m.zs3vBox ? 1.18 : 0.63];
-    return [-0.82, m.mastVr >= 0 ? 2.27 : 0.9];
+    return [-0.82, m.mastVr >= 0 ? 2.15 : 0.9];
   }
-  if(o.k === 'dist'){ const d = DIST[o.ref]; return d.sys === 'ks' ? [-0.34, MAIN[d.target].zs3 ? 1.67 : 1.22] : [-0.42, 1.24]; }
+  if(o.k === 'dist'){ const d = DIST[o.ref]; return d.sys === 'ks' ? [-0.34, MAIN[d.target].zs3 ? 1.9 : 1.35] : [-0.55, 1.6]; }
   if(o.k === 'ls') return [-0.24, 0.24];
   if(o.k === 'ra10') return [-0.34, 0.32];
   return [-0.46, 0.46];
@@ -1168,7 +1497,7 @@ function hud(ctx, W, H, u){
   }
   if(lern){
     const va = vAllowed();
-    const line = 'Zul. ' + va.v + ' km/h (' + va.src + ')' + (n ? ' · ' + objName(n.o) + ': ' + (visible(n.o, n.d) ? objText(n.o) : 'noch nicht erkennbar') : '');
+    const line = 'Zul. ' + va.v + ' km/h (' + va.src + ')' + (pzbActive(S.pzb) ? ' · PZB ' + Math.round(S.pzb.lim) : '') + (n ? ' · ' + objName(n.o) + ': ' + (visible(n.o, n.d) ? objText(n.o) : 'noch nicht erkennbar') : '');
     ctx.font = '500 ' + Math.round(13*u) + 'px "Barlow","Segoe UI",sans-serif';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     const tw = Math.min(W - 20*u - pw - 20*u, ctx.measureText(line).width + 16*u);
@@ -1187,10 +1516,12 @@ function hud(ctx, W, H, u){
     ctx.fillText(msg, W/2, H*0.58 + 15*u);
   }
   if(S.zwang){
-    ctx.fillStyle = 'rgba(160,20,14,.85)'; rr(ctx, 10*u, H - 52*u, Math.min(W*0.6, 360*u), 30*u, 6*u); ctx.fill();
-    ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    const zt = 'ZWANGSBREMSUNG – ' + (S.v > 0 ? 'Zug bremst' : (S.zwang.kind === 'pzb' && S.fdlNeed && !S.fdlNeed.ok ? 'Fdl verständigen, dann Frei' : (S.zwang.kind === 'sifa' ? 'Sifa oder Frei drücken' : 'Frei drücken')));
     ctx.font = '700 ' + Math.round(15*u) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
-    ctx.fillText('ZWANGSBREMSUNG – ' + (S.v > 0 ? 'Zug bremst' : 'Frei drücken'), 20*u, H - 37*u);
+    const zw = Math.min(W - 20*u, ctx.measureText(zt).width + 20*u);
+    ctx.fillStyle = 'rgba(160,20,14,.85)'; rr(ctx, 10*u, H - 52*u, zw, 30*u, 6*u); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(zt, 20*u, H - 37*u);
   }
 }
 
@@ -1218,7 +1549,7 @@ function drawTacho(){
     ctx.beginPath(); ctx.arc(c, c, R*0.955, a - 0.04, a + 0.04); ctx.stroke();
   }
   const P = S.pzb;
-  if(P.m1000 || P.m500 || P.befehl){
+  if(lern && pzbActive(P)){
     const a = ang(P.lim); ctx.strokeStyle = '#ff4b3e'; ctx.lineWidth = W*0.03;
     ctx.beginPath(); ctx.arc(c, c, R*0.955, a - 0.03, a + 0.03); ctx.stroke();
   }
@@ -1249,13 +1580,39 @@ function setLever(l){
 function placeHandle(){ el.handle.textContent = leverLabel(S.lever); el.handle.style.top = (8 + (8 - S.lever)/16*(el.lever.clientHeight - 16)) + 'px'; }
 function updateUI(){
   const P = S.pzb, Z = ZUGART[P.zug], blink = (S.t % 1) < 0.5;
-  const lamps = {'55':false, '70':false, '85':false};
-  if(P.restr){ lamps['85'] = blink; lamps['70'] = !blink; }
-  else lamps[Z.lamp] = (P.m1000 || P.m500) ? blink : true;
-  el.lm55.classList.toggle('on', lamps['55']); el.lm70.classList.toggle('on', lamps['70']); el.lm85.classList.toggle('on', lamps['85']);
-  el.lm1000.classList.toggle('on', !!(P.m1000 && S.front - P.m1000.s0 < 700));
-  el.lm500.classList.toggle('on', !!P.m500);
-  el.lmBef.classList.toggle('on', P.befehl);
+  // Leuchtmelder nach I60R / EBI Cab 500 (Modul 17, Tag 1 und 2)
+  const L = {'55':false, '70':false, '85':false, l1000:false, l500:false, bef:false, sand:false};
+  if(P.test){
+    const seq = ['85', '70', '55', 'l1000', 'l500', 'bef', 'sand'], k = Math.floor(P.test.t/0.35);
+    if(k < seq.length) L[seq[k]] = true; else seq.forEach(x => { L[x] = true; });
+  } else if(S.zwang && S.zwang.kind === 'pzb'){
+    L.l1000 = blink; L.l500 = blink; L.sand = true;            // Zugart-LM dunkel, 1000/500 blinken
+  } else {
+    if(P.restr === 'vu3'){ L['85'] = blink; L['70'] = blink; }  // Gleichblinken (Frühhalt, AVG)
+    else if(P.restr === 'std' || P.start){ L['85'] = blink; L['70'] = !blink; } // Wechselblinken
+    else if(P.m500) L[ZUGART[P.zug].lamp] = true;
+    else if(P.mon.length || P.noData) L[ZUGART[P.zug].lamp] = blink;
+    else L[ZUGART[P.zug].lamp] = true;
+    L.l1000 = P.mon.some(m => m.ack && !m.wtFail && S.front - m.s0 < lmLen(P));
+    L.l500 = !!P.m500;
+    L.bef = P.befLamp;
+  }
+  el.lm55.hidden = AVG;
+  el.lm55.classList.toggle('on', L['55']); el.lm70.classList.toggle('on', L['70']); el.lm85.classList.toggle('on', L['85']);
+  el.lm1000.classList.toggle('on', L.l1000); el.lm500.classList.toggle('on', L.l500);
+  el.lmBef.classList.toggle('on', L.bef); $('lmSand').classList.toggle('on', L.sand);
+  {
+    const D = S.door, b = $('bDoor'), Pi = D.station >= 0 ? S.pax[D.station] : null;
+    const here = STATIONS.findIndex((st, k) => !st.first && S.pax[k].state === 'pending' && S.st[k].done);
+    let lab = 'Türen freigeben', cls = '';
+    if(D.state === 'auf'){ if(Pi && Pi.state === 'run'){ lab = 'Fahrgastwechsel ' + Math.ceil((1 - Pi.prog)*Pi.dur) + ' s'; cls = 'busy'; } else { lab = 'Türen schließen'; cls = 'open'; } }
+    else if(D.state === 'schliessen'){ lab = 'Türen schließen …'; cls = 'busy'; }
+    b.textContent = lab; b.className = 'dbtn ' + cls + (lern && D.state === 'zu' && here >= 0 && S.v === 0 ? ' need' : '') + (lern && D.state === 'auf' && cls === 'open' && S.door.station >= 0 && !S.pax[S.door.station].keepOpen ? ' need' : '');
+    b.disabled = FREIGHT;
+    const dtxt = FREIGHT ? 'Güterzug' : (D.state === 'zu' ? 'Türen zu' : D.state === 'auf' ? 'Türen offen' : 'schließen') + ' · ' + S.onboard + ' Fahrgäste';
+    $('doorTxt').textContent = dtxt; $('iPax').textContent = FREIGHT ? '–' : S.onboard + ' an Bord · ' + S.carried + ' am Ziel';
+  }
+  $('bFdl').classList.toggle('alert', !!((S.fdlNeed && !S.fdlNeed.ok) || (S.stoer && !S.stoer.reported && lern)));
   el.sifa.classList.toggle('on', S.sifa.t >= 30 && blink);
   const sb = $('sifaBar'), sp = Math.min(1, S.sifa.t/30);
   sb.firstChild.style.width = (sp*100) + '%';
@@ -1263,12 +1620,13 @@ function updateUI(){
   sb.hidden = !lern; $('sifaTxt').textContent = lern ? (S.v > 0.3 ? Math.max(0, Math.ceil(30 - S.sifa.t)) + ' s' : 'ruht') : '';
   $('bSifa').classList.toggle('alert', S.sifa.t >= 30);
   const nm = MAGNETS.find(m => m.pos > S.front);
-  if(nm){ const f = magActive(nm.pos); $('iMag').textContent = nm.type + ' · ' + fmtM(nm.pos - S.front) + ' · ' + (lern ? (f ? 'wirksam ' + f + ' Hz' : 'unwirksam') : '?'); }
+  if(nm){ const ml = magLabel(nm); $('iMag').textContent = nm.type + ' · ' + fmtM(nm.pos - S.front) + ' · ' + (lern ? (ml.spd ? 'wirksam über ' + ml.v + ' km/h' : ml.f ? 'wirksam ' + ml.f + ' Hz' : 'unwirksam') : '?'); }
   else $('iMag').textContent = '–';
   let d;
-  if(S.zwang) d = 'ZB · ' + S.zwang.reason;
-  else if(P.m1000 || P.m500) d = 'PZB ' + (P.restr ? 'restriktiv ' : '') + '≤ ' + Math.round(P.lim) + ' km/h' + (P.m1000 && !P.m1000.ack ? ' · WACHSAM!' : '');
-  else d = (S.mode === 'rangier' ? 'Rangierfahrt' : 'Zugfahrt') + ' · Zugart ' + P.zug + ' · ' + leverLabel(S.lever);
+  if(P.test) d = 'Funktionsprüfung läuft';
+  else if(S.zwang) d = (S.zwang.kind === 'pzb' ? 'S · ' : 'ZB · ') + S.zwang.reason;
+  else if(pzbActive(P)) d = 'v-Überwachung ' + Math.round(P.lim) + ' km/h' + (P.mon.some(m => !m.ack) ? ' · WACHSAM!' : '');
+  else d = (S.mode === 'rangier' ? 'Rangierfahrt' : 'Zugfahrt') + ' · Zugart ' + P.zug + (AVG ? ' fest' : '') + ' · ' + leverLabel(S.lever);
   el.digi.textContent = d; el.digi.classList.toggle('alarm', !!S.zwang);
   // Fahrplan
   let nh = null;
@@ -1281,7 +1639,7 @@ function updateUI(){
   const va = vAllowed();
   el.iZul.textContent = lern ? va.v + ' km/h · ' + va.src : 'Lernhilfe aus';
   el.iErr.textContent = S.errors.length + (S.zbCount ? ' · ' + S.zbCount + ' ZB' : '');
-  document.querySelectorAll('#zugart button').forEach(b => { b.disabled = S.v > 0; b.setAttribute('aria-pressed', String(b.dataset.z === P.zug)); });
+  document.querySelectorAll('#zugart button').forEach(b => { b.disabled = S.v > 0 || AVG; b.setAttribute('aria-pressed', String(b.dataset.z === P.zug)); });
 }
 
 // Hebel per Zeigen
@@ -1300,15 +1658,19 @@ $('lSB').addEventListener('click', () => setLever(-8));
 $('bWach').addEventListener('click', () => { audio.init(); pressWachsam(); });
 $('bFrei').addEventListener('click', () => { audio.init(); pressFrei(); });
 $('bSifa').addEventListener('click', () => { audio.init(); pressSifa(); });
+$('bFdl').addEventListener('click', () => { audio.init(); pressFdl(); });
+$('bDoor').addEventListener('click', () => { audio.init(); pressDoor(); });
+function befehlOn(){ if(!S.pzb.befehl) audio.beep(620, .2, 'sine', .03); S.pzb.befehl = true; }
+function befehlOff(){ S.pzb.befehl = false; S.pzb.befLamp = false; }
 (function(){
   const b = $('bBef');
-  const on = e => { e.preventDefault(); audio.init(); S.pzb.befehl = true; b.classList.add('down'); try{ b.setPointerCapture(e.pointerId); }catch(_){} };
-  const off = () => { S.pzb.befehl = false; b.classList.remove('down'); };
+  const on = e => { e.preventDefault(); audio.init(); befehlOn(); b.classList.add('down'); try{ b.setPointerCapture(e.pointerId); }catch(_){} };
+  const off = () => { befehlOff(); b.classList.remove('down'); };
   b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('lostpointercapture', off);
   b.addEventListener('contextmenu', e => e.preventDefault());
 })();
 document.querySelectorAll('#zugart button').forEach(b => b.addEventListener('click', () => {
-  if(S.v > 0) return; S.pzb.zug = b.dataset.z; log('Zugart ' + b.dataset.z + ' eingestellt');
+  if(S.v > 0 || AVG) return; S.pzb.zug = b.dataset.z; log('Zugart ' + b.dataset.z + ' eingestellt');
 }));
 $('tLern').addEventListener('click', e => { lern = !lern; e.currentTarget.setAttribute('aria-pressed', String(lern)); });
 $('tTon').addEventListener('click', e => { audio.on = !audio.on; if(!audio.on) audio.stopAll(); e.currentTarget.setAttribute('aria-pressed', String(audio.on)); });
@@ -1319,9 +1681,15 @@ $('endNext').addEventListener('click', () => startScenario(SC.id + 1));
 $('endMenu').addEventListener('click', () => { $('end').hidden = true; openMenu(); });
 $('tMenu').addEventListener('click', openMenu);
 $('menuClose').addEventListener('click', closeMenu);
+document.querySelectorAll('#vehSeg button').forEach(b => b.addEventListener('click', () => {
+  VEHICLE = b.dataset.v; try{ localStorage.setItem('fst-veh', VEHICLE); }catch(e){}
+  buildMenu();
+}));
 let menuOpen = false;
 function scTags(sc){
-  const t = ['Zugart ' + sc.zug];
+  const t = [VEHICLE === 'avg' && !sc.dbOnly ? 'Stadtbahn O' : 'Zugart ' + sc.zug];
+  if(sc.dbOnly && VEHICLE === 'avg') t.push('nur Regelfahrzeug');
+  if(sc.test) t.push('Funktionsprüfung');
   if(sc.train && sc.train.len > 300) t.push(sc.train.len + ' m');
   if(sc.lineV >= 150) t.push(sc.lineV + ' km/h');
   if(sc.night) t.push('Nacht');
@@ -1332,6 +1700,10 @@ function scTags(sc){
   return t;
 }
 function buildMenu(){
+  document.querySelectorAll('#vehSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === VEHICLE)));
+  $('vehNote').textContent = VEHICLE === 'avg'
+    ? 'PZB 90 Version AVG (GT8-100C/D, I60R): Zugart O fest, höchstens 100 km/h, Frühhalt (VÜ 3, 65 km/h) und Spähalt (VÜ 2, 45 km/h). Szenarien 11 und 12 fahren mit Regelfahrzeug.'
+    : 'PZB 90 nach Ril 483: Zugart je Szenario, Startprogramm nach dem Aufrüsten (45 km/h, Wechselblinken).';
   const list = $('menuList'); list.textContent = '';
   [1,2,3].forEach(lv => {
     const sec = document.createElement('section');
@@ -1372,10 +1744,12 @@ document.addEventListener('keydown', e => {
   else if(k === 'q'){ audio.init(); pressWachsam(); }
   else if(k === 'e'){ audio.init(); pressFrei(); }
   else if(k === ' '){ audio.init(); pressSifa(); e.preventDefault(); }
-  else if(k === 'b'){ audio.init(); S.pzb.befehl = true; $('bBef').classList.add('down'); }
+  else if(k === 'b'){ audio.init(); befehlOn(); $('bBef').classList.add('down'); }
+  else if(k === 'f'){ audio.init(); pressFdl(); }
+  else if(k === 't'){ audio.init(); pressDoor(); }
   else if(k === 'p'){ $('tPause').click(); }
 });
-document.addEventListener('keyup', e => { if(e.key.toLowerCase() === 'b'){ S.pzb.befehl = false; $('bBef').classList.remove('down'); } });
+document.addEventListener('keyup', e => { if(e.key.toLowerCase() === 'b'){ befehlOff(); $('bBef').classList.remove('down'); } });
 document.addEventListener('pointerdown', () => audio.init(), {once:true});
 
 function resize(){
@@ -1386,7 +1760,7 @@ function resize(){
 }
 function reset(){
   audio.stopAll();
-  S = newState();
+  S = newState(); computeAspects();
   for(const k in flags) delete flags[k];
   logEl.textContent = '';
   $('end').hidden = true;
@@ -1394,10 +1768,11 @@ function reset(){
   placeHandle();
   lern = SC.lern; $('tLern').setAttribute('aria-pressed', String(lern));
   const names = STATIONS.map(x => x.name).join(' – ');
-  $('sub').textContent = 'Szenario ' + SC.id + ' · ' + SC.title + (names ? ' · ' + names : '') + ' · ' + LVL[SC.lvl];
+  $('sub').textContent = 'Szenario ' + SC.id + ' · ' + SC.title + (names ? ' · ' + names : '') + ' · ' + LVL[SC.lvl] + (AVG ? ' · AVG-Stadtbahn' : '');
   log(SC.title + ': ' + SC.goal, 'fdl');
   if(S.mode === 'rangier') log('Rangierfahrt, höchstens 25 km/h. Am Lichtsperrsignal auf Sh 1 warten.');
-  else log('Zugart ' + SC.zug + '. Hebel auf F zum Anfahren, sobald das Signal Fahrt zeigt. Sifa während der Fahrt alle 30 s.');
+  else log((AVG ? 'AVG-Stadtbahn, Zugart O fest, höchstens 100 km/h. ' : 'Zugart ' + SC.zug + '. Startprogramm aktiv (45 km/h) – befreien, sobald das Signal Fahrt über 30 km/h zeigt. ') + (SC.test ? 'Vorher PZB-Funktionsprüfung: Wachsam und Frei gleichzeitig. ' : '') + 'Sifa während der Fahrt alle 30 s.');
+  { const nx = STATIONS.findIndex(st => !st.first); if(nx >= 0 && !FREIGHT){ S.announced[nx] = true; log('Ansage: Nächster Halt ' + STATIONS[nx].name + ' · ' + S.onboard + ' Fahrgäste an Bord', 'fdl'); } }
 }
 let lastId = 1;
 try{ lastId = parseInt(localStorage.getItem('fst-last'), 10) || 1; }catch(e){}
@@ -1415,7 +1790,7 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-window.__sim = { get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
+window.__sim = { pressDoor, pressFdl, befreienVerbot, pzbActive, lmLen, get MAGNETS(){ return MAGNETS; }, get AVG(){ return AVG; }, setVehicle(v){ VEHICLE = v; }, get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
 })();
 </script>
 
