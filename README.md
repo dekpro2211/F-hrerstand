@@ -17,8 +17,9 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
   - Funktionsprüfung (Wachsam + Frei), 5-km/h-Puffer nach Ril 483
   - Fahrzeugwahl: Regelfahrzeug oder AVG-Stadtbahn (PZB 90 Version AVG nach Schaublatt Betriebszustände: Zugart O fest, 100 km/h, Frühhalt VÜ 3 / Späthalt VÜ 2, nach 500 Hz 15 s unter 30 km/h → 25 km/h, Startprogramm 550 m)
   - PZB gestört (Leuchtmelder dunkel) und PZB-Störschalter: 50 km/h bis PZB i. O., Meldung an BZ (mit Bitte um Vormeldung) und Zü AVG, Störschalter nur bei ständiger Zwangsbremsung
-  - Leuchtmelder „S“ (Zwangsbremsung wirksam) und „PZB“ (störungsfreier Betrieb), Textanzeigen wie EBI Cab 500, Schaublatt als Tabelle in der Hilfe
+  - Leuchtmelderblock wie im GT8 (85, 70, 1000 Hz, 500 Hz, Befehl 40, „Fzg hat gesandet“, Leuchttaster „Indusi Befehl“/„Indusi Frei“; Regelfahrzeug zusätzlich 55), Textanzeigen wie EBI Cab 500, Schaublatt als Tabelle in der Hilfe
 - **Sifa:** 30-s-Zyklus mit Leuchtmelder, Summer und Zwangsbremsung
+- **Gegenverkehr:** Regionalzüge, Güterzüge und IC auf dem Nachbargleis (auf der S4 Stadtbahnen nur in den zweigleisigen Abschnitten), mit Spitzensignal und Vorbeifahrt; bei Gegengleisfahrt gesperrt
 - **Pfeife:** Taste zum Halten; an der Pfeiftafel Bü 4 etwa 3 s pfeifen, sonst Fehler am Bahnübergang
 - **Fahrgastbetrieb:** zusätzliche Haltepunkte, Türen freigeben und schließen, Fahrgastwechsel mit wartenden Reisenden, Traktionssperre bei offenen Türen, Ansage „Nächster Halt“
 - **Fahrplan:** Buchfahrplan je Zug mit Ankunft/Abfahrt, Blockstellen und Geschwindigkeitswechseln, Uhr und Verspätung im Streckenbild, Fehler bei vorzeitiger Abfahrt, Pünktlichkeitsauswertung

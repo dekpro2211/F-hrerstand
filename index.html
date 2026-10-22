@@ -35,7 +35,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:1.2rem;letter-spacing:
 .chip:hover{border-color:var(--muted)}
 .chip[aria-pressed="true"]{border-color:var(--signal);color:var(--signal)}
 .chip:focus-visible,.btn:focus-visible,.seg button:focus-visible,.lever-track:focus-visible,.step:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
-.view{position:relative;max-height:max(240px,calc(100vh - 410px));width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9;max-width:100%}
+.view{position:relative;max-height:max(240px,calc(100vh - 440px));width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9;max-width:100%}
 .view canvas{width:100%;height:100%;display:block;touch-action:none}
 .desk{display:grid;gap:6px;grid-template-columns:repeat(12,minmax(0,1fr));background:var(--desk);border:1px solid var(--line);border-radius:10px;padding:6px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:7px;min-width:0;display:grid;gap:5px;align-content:start}
@@ -73,7 +73,24 @@ h1{font-family:var(--f-display);font-weight:700;font-size:1.2rem;letter-spacing:
 .lm.r.on{background:var(--stop);color:#3d0500;box-shadow:0 0 14px var(--stop)}
 .lm.w.on{background:var(--white);color:#20232e;box-shadow:0 0 14px var(--white)}
 .lm small{font-size:.52rem;display:block}
-.btns{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 4px;align-content:center}
+.pzb-body{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}
+.i60{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;background:#959a98;padding:6px;border-radius:4px;border:1px solid #5d6360;box-shadow:inset 0 1px 0 #b5bab8}
+.i60.avg{grid-template-columns:repeat(2,minmax(0,1fr))}
+.lq,.lqb{box-sizing:border-box;display:grid;place-items:center;width:52px;aspect-ratio:1.3;border:3px solid #1d201f;border-radius:2px;font-family:var(--f-display);font-weight:700;line-height:1.02;text-align:center;padding:0}
+.lq{background:#b5b9b7;color:#8d9390;font-size:.85rem;box-shadow:inset 0 0 0 2px #d2d5d3;transition:background .08s}
+.lq.sm{font-size:.56rem}
+.lq.w{background:#d4d7d5;color:#2a2d2c}
+.lq[hidden]{display:none}
+.lq.b.on{background:#2f8fe6;color:#0a2847;box-shadow:0 0 12px #2f8fe6,inset 0 0 0 2px #8ccaff}
+.lq.y.on{background:#f5c938;color:#3a2b00;box-shadow:0 0 12px #f5c938,inset 0 0 0 2px #ffe58a}
+.lq.r.on{background:#ff6b3d;color:#3d0d00;box-shadow:0 0 12px #ff6b3d,inset 0 0 0 2px #ffb08f}
+.lq.w.on{background:#fff;color:#111;box-shadow:0 0 14px #fff}
+.lqb{appearance:none;cursor:pointer;font-size:.68rem;box-shadow:0 2px 0 #0b0d0c;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;transition:transform .05s}
+.lqb.bef{background:#eef0ee;color:#1e2120}
+.lqb.frei{background:#4fbf5a;color:#123d17}
+.lqb:active,.lqb.down{transform:translateY(2px);box-shadow:none;filter:brightness(.88)}
+.lqb:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 .btn{appearance:none;border:0;background:transparent;color:var(--fg);display:grid;justify-items:center;gap:4px;cursor:pointer;font-family:var(--f-display);font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.68rem;padding:0;-webkit-user-select:none;-webkit-touch-callout:none;user-select:none;touch-action:manipulation}
 .cap{width:min(44px,100%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4a5452,#1b201f 70%);border:3px solid #0b0e0d;box-shadow:0 3px 0 #070908,inset 0 0 0 3px var(--ring,#56625f);transition:transform .05s}
 .btn:active .cap,.btn.down .cap{transform:translateY(2px);box-shadow:0 1px 0 #070908,inset 0 0 0 3px var(--ring,#56625f)}
@@ -194,7 +211,8 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
   .steps{gap:3px}.step{font-size:1.2rem;padding:10px 0}.step.sb{font-size:.55rem;padding:1px 0}
   .p-pzb{grid-template-columns:minmax(0,1fr) auto;align-items:center}
   .r-top{grid-column:1;grid-row:1}.r-zug{grid-column:2;grid-row:1}
-  .lamps,.btns{grid-column:1/-1}
+  .pzb-body{grid-column:1/-1;gap:6px}
+  .lq,.lqb{width:48px;border-width:2px}.lq{font-size:.72rem}.lq.sm{font-size:.48rem}.lqb{font-size:.56rem}
   .lm{max-width:28px;font-size:.58rem;border-width:1px}.lm small{display:none}
   .cap{width:min(34px,100%);border-width:2px}.btn{font-size:.58rem;gap:1px}
   .seg button{font-size:.72rem;padding:1px 8px}
@@ -254,22 +272,24 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
     <div class="panel p-pzb">
       <div class="row r-top"><span class="lbl">PZB 90 · Leuchtmelder</span>
         <div class="sifa-lm" id="sifaLm"><i></i>Sifa<span class="sifa-bar" id="sifaBar" title="Zeit seit letzter Sifa-Betätigung"><b></b></span><span id="sifaTxt" class="err-count"></span></div></div>
-      <div class="lamps">
-        <div class="lm b" id="lm55">55</div>
-        <div class="lm b" id="lm70">70</div>
-        <div class="lm b" id="lm85">85</div>
-        <div class="lm y" id="lm1000">1000<small>Hz</small></div>
-        <div class="lm r" id="lm500">500<small>Hz</small></div>
-        <div class="lm w" id="lmBef">Bef<small>40</small></div>
-        <div class="lm s" id="lmSand" title="S – Zwangsbremsung wirksam">S</div>
-        <div class="lm g" id="lmPzb" title="PZB – Dauerlicht bei störungsfreiem Betrieb, dunkel bei Störschalter">PZB</div>
-      </div>
-      <div class="btns">
-        <button class="btn wach" id="bWach" aria-label="PZB Wachsam (Taste Q)"><span class="cap"></span>Wachsam</button>
-        <button class="btn frei" id="bFrei" aria-label="PZB Frei (Taste E)"><span class="cap"></span>Frei</button>
-        <button class="btn bef" id="bBef" aria-label="PZB Befehl 40 halten (Taste B)"><span class="cap"></span>Befehl</button>
-        <button class="btn sifa" id="bSifa" aria-label="Sifa betätigen (Leertaste)"><span class="cap"></span>Sifa</button>
-        <button class="btn pf" id="bPf" aria-label="Pfeifen (Taste H halten)"><span class="cap"></span>Pfeife</button>
+      <div class="pzb-body">
+        <!-- PZB-90-Leuchtmelderblock (I60R): AVG 2 Spalten, Regelfahrzeug 3 Spalten mit 55 -->
+        <div class="i60" id="i60" role="group" aria-label="PZB-Leuchtmelder">
+          <div class="lq b" id="lm85">85</div>
+          <div class="lq b" id="lm70">70</div>
+          <div class="lq b" id="lm55">55</div>
+          <div class="lq y" id="lm1000">1000<br>Hz</div>
+          <div class="lq r" id="lm500">500<br>Hz</div>
+          <div class="lq w" id="lmBef">Befehl<br>40</div>
+          <div class="lq w sm" id="lmSand" title="Leuchtet bei wirksamer PZB-Zwangsbremsung">Fzg hat<br>gesandet</div>
+          <button class="lqb bef" id="bBef" aria-label="Befehl halten (Taste B)"><span id="bBefT">Indusi<br>Befehl</span></button>
+          <button class="lqb frei" id="bFrei" aria-label="Frei (Taste E)"><span id="bFreiT">Indusi<br>Frei</span></button>
+        </div>
+        <div class="btns">
+          <button class="btn wach" id="bWach" aria-label="PZB Wachsam (Taste Q)"><span class="cap"></span>Wachsam</button>
+          <button class="btn sifa" id="bSifa" aria-label="Sifa betätigen (Leertaste)"><span class="cap"></span>Sifa</button>
+          <button class="btn pf" id="bPf" aria-label="Pfeifen (Taste H halten)"><span class="cap"></span>Pfeife</button>
+        </div>
       </div>
       <div class="row r-zug">
         <button class="chip fdl" id="bFdl" title="Fahrdienstleiter verständigen (Taste F)">Fdl</button>
@@ -334,6 +354,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
           <li><b>Lf 6</b> kündigt <b>Lf 7</b> an · <b>Lf 7</b> gilt ab dem Signal (Erhöhung erst, wenn der Zugschluss vorbei ist). Gleisbögen mit ständiger Geschwindigkeitsbeschränkung: Lf 6 im Bremswegabstand, Lf 7 am Bogenanfang, höheres Lf 7 am Bogenende.</li>
           <li><b>Sh 0</b> Halt! Fahrverbot · <b>Sh 1</b> Fahrverbot aufgehoben · <b>Ra 10</b> nicht darüber hinaus rangieren · <b>Ne 5</b> Haltetafel · <b>Ne 2</b> Vorsignaltafel</li>
           <li><b>Ne 3</b> Vorsignalbaken: weiße Tafeln mit 3, 2 und 1 nach rechts steigenden Streifen, 250, 175 und 100 m vor dem Vorsignal · <b>Ne 6</b> Haltepunkttafel: ein Haltepunkt ist zu erwarten</li>
+          <li><b>Gegenverkehr</b> auf dem Nachbargleis mit Spitzensignal Zg 1 (drei weiße Lichter). Auf der S4 nur in den zweigleisigen Abschnitten (Jöhlingen West – Wössingen Ost, Gölshausen – Industriegebiet, Eppingen West – Eppingen, ab Leingarten West und Innenstadt Heilbronn), sonst Zugkreuzung im Bahnhof. Bei Fahrt auf dem Gegengleis ist das Nachbargleis für Gegenzüge gesperrt.</li>
           <li><b>Bü 4</b> Pfeiftafel (weiße Tafel mit schwarzem P): etwa 3 Sekunden pfeifen – auf der S4 vor nicht technisch gesicherten Bahnübergängen (Taste Pfeife bzw. H halten)</li>
           <li><b>Ne 4</b> Schachbretttafel (schwarz-weiß, in Höhe des Hauptsignals): das Hauptsignal steht an ungewöhnlicher Stelle, z. B. links vom Gleis. Steht in der Regel an durchgehenden Hauptgleisen.</li>
           <li><b>Ne 1</b> Trapeztafel (weiße Trapeztafel an schwarz-weiß gestreiftem Pfahl): vor Bahnhöfen ohne Einfahrsignal; am Gegengleis mit Kilometerangabe in Höhe des Einfahrsignals, dort mit 2000-Hz-Magnet – nur mit Zustimmung des Fdl und Befehl vorbeifahren</li>
@@ -365,12 +386,12 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
           <li><b>Befehl</b> nur mit Zs 1, Zs 7, Zs 8 oder schriftlichem Befehl: halten, bis Befehl 40 leuchtet. Über 40 km/h wirkungslos.</li>
           <li><b>GPA</b> an Lf 6: Kennziffer 8 wirksam über 95 km/h, 9 über 105 km/h (1000 Hz). <b>GÜ</b> vor Lf 7 ab Kennziffer 10: 2000 Hz über der Prüfgeschwindigkeit (100 → 120, 110 → 130, 120 → 135, 130 → 140, 140 → 150 km/h).</li>
           <li>Alle Überwachungsgeschwindigkeiten mindestens <b>5 km/h unterfahren</b>.</li>
-          <li><b>Nach PZB-Zwangsbremsung:</b> Stillstand, Fdl verständigen (Taste Fdl), Zustimmung abwarten – am Hauptsignal Befehl 2 –, Fahrschalter in Bremsstellung, Frei. Leuchtmelder: 85/70 dunkel, 1000/500 blinken, „S“ leuchtet. Frei nur im Stillstand.</li>
+          <li><b>Nach PZB-Zwangsbremsung:</b> Stillstand, Fdl verständigen (Taste Fdl), Zustimmung abwarten – am Hauptsignal Befehl 2 –, Fahrschalter in Bremsstellung, Frei. Leuchtmelder: 85/70 dunkel, 1000/500 blinken, „Fzg hat gesandet“ leuchtet. Frei nur im Stillstand.</li>
           <li><b>Streckeneinrichtung gestört</b> (Beeinflussung passt nicht zum Signal): von Halt am nächsten Hauptsignal ausgehen und dem Fdl Standort, Frequenz und „ständig wirksam“ melden.</li>
           <li><b>PZB gestört</b> (Leuchtmelder 85 dunkel, Tasten ohne Wirkung oder Beeinflussungen passen nicht zur Signalisierung): höchstens 50 km/h bis PZB i. O., sofort BZ (mit Bitte um Vormeldung) und Zü AVG bzw. Fahrzeugdisponent melden.</li>
-          <li><b>Störschalter</b> (Taste Stör, nur im Stillstand) nur, wenn die PZB ständig Zwangsbremsungen erzeugt oder es für die Weiterfahrt technisch erforderlich ist. Dann 85 und PZB dunkel, 1000 Hz blinkt, höchstens 50 km/h, melden.</li>
+          <li><b>Störschalter</b> (Taste Stör, nur im Stillstand) nur, wenn die PZB ständig Zwangsbremsungen erzeugt oder es für die Weiterfahrt technisch erforderlich ist. Dann 85 dunkel, 1000 Hz blinkt, höchstens 50 km/h, melden.</li>
           <li><b>AVG-Stadtbahn:</b> nach 500 Hz länger als 15 s unter 30 km/h → nur noch 25 km/h (Wechselblinken + 500 Hz). Startprogramm im neu aufgerüsteten Führerstand: 45 km/h bis Befreien oder 550 m.</li>
-          <li><b>Leuchtmelder „S“</b> leuchtet bei wirksamer Zwangsbremsung, <b>„PZB“</b> bei störungsfreiem Betrieb (dunkel mit Störschalter).</li>
+          <li><b>Leuchtmelderblock</b> wie im GT8 (I60R): 85, 70, 1000 Hz, 500 Hz, Befehl 40, „Fzg hat gesandet“ (wirksame Zwangsbremsung) und die Leuchttaster „Indusi Befehl“ und „Indusi Frei“. Beim Regelfahrzeug zusätzlich 55.</li>
           <li><b>Funktionsprüfung</b> täglich: im Stillstand Wachsam und Frei gleichzeitig (auf dem Handy kurz nacheinander).</li>
           <li><b>Sifa:</b> spätestens alle 30 s betätigen, sonst Leuchtmelder, Summer und Zwangsbremsung; im Stillstand mit Sifa oder Frei zurücksetzen.</li>
         </ul>
@@ -393,7 +414,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
         <tr><td>85/70 Gleichblinken</td><td>VÜ 3 nach 800 m beendet</td><td>65 bis Befreien oder 450 m</td><td>ja*</td></tr>
         <tr><td>85 + 500 Hz</td><td>wirksamer 500-Hz-Magnet überfahren; mehr als 15 s unter 30 km/h → nur noch 25</td><td>45 bis 250 m</td><td>nein</td></tr>
         <tr><td>85/70 Wechselblinken + 500 Hz</td><td>Anfahrt nach Halt nach 500 Hz oder VÜ 2 übergeben</td><td>25 bis 250 m</td><td>nein</td></tr>
-        <tr><td>85/70 dunkel, 1000/500 Hz blinken, S</td><td>PZB-Zwangsbremsung bis zum Stillstand</td><td>–</td><td>nur Freitaste</td></tr>
+        <tr><td>85/70 dunkel, 1000/500 Hz blinken, Fzg hat gesandet</td><td>PZB-Zwangsbremsung bis zum Stillstand</td><td>–</td><td>nur Freitaste</td></tr>
       </tbody></table></div>
     <p class="note">* Nur befreien, wenn die Signalaufwertung größer als 30 km/h ist. Folgt in den nächsten 550 m ein wirksamer 500-Hz-Magnet, gibt es unabhängig von der Geschwindigkeit sofort eine Zwangsbremsung.</p>
     <p class="note">Lern- und Übungssimulator mit vereinfachter Fahrdynamik. Die PZB-Logik folgt Ril 483 und der AVG-Schulungsunterlage Modul 17 (Zugbeeinflussungssysteme). Ersetzt weder Signalbuch noch Ausbildung.</p>
@@ -826,7 +847,7 @@ SCEN.push(
 let AVG = false, VEHICLE = 'regel';
 try{ VEHICLE = localStorage.getItem('fst-veh') === 'avg' ? 'avg' : 'regel'; }catch(e){}
 let BW = 1000, RANG_AFTER = null, FREIGHT = false, FP = null, CLOCK0 = 0, TUNNELS = [], INFOS = [];
-let GG = [], HM = [], NE6 = [], NE1 = [], KMSEG = [], INLUPE = false, ARCS = [], BUE = [];
+let GG = [], HM = [], NE6 = [], NE1 = [], KMSEG = [], INLUPE = false, ARCS = [], BUE = [], OCZ = [];
 let SC, MAIN, DIST, STATIONS, LF, MAGNETS, OBJS, LSIG, RA10_POS, END_POS, TRAIN_LEN, VEH_VMAX, ACC_F, BRK_F, TAU, SICHT, LSICHT, NIGHT;
 const idx = id => MAIN.findIndex(m => m.id === id);
 function loadScenario(id){
@@ -981,6 +1002,14 @@ function loadScenario(id){
   GG.forEach(g => NE1.push({pos:g.b0 - 60, gg:true, ret:g, st:g.nst}));
   NE1.forEach(n => { n.km = kmAt(n.pos); n.kmTxt = n.km.toFixed(3).replace('.', ','); });
   NE1.sort((a, b) => a.pos - b.pos);
+  // Gegenverkehr auf dem Nachbargleis: Übungsstrecken zweigleisig; S4 nur in den zweigleisigen Abschnitten (sonst Kreuzung im Bahnhof)
+  OCZ = [];
+  if(SC.s4){
+    const q = SC.s4.p0, abs = n => { const r = S4.rows.find(x => x.t === 'st' && x.a === n); return r ? r.pos - q : null; };
+    [['Bft Jöhl West', 'Bft Wössing Ost'], ['Gölshausen', 'Bft Gö-Industrie'], ['Bft Epping West', 'Bft Eppingen Pbf']].forEach(([a, b]) => { const x = abs(a), y = abs(b); if(x !== null && y !== null) OCZ.push([x, y]); });
+    const lw = abs('Bft Leing West'), bo = KMSEG.find(g => g.bo);
+    if(lw !== null && bo) OCZ.push([lw, bo.to]);           // ab Leingarten West zweigleisig, Innenstadt Heilbronn (BOStrab) zweigleisig
+  } else if(!(SC.rangier && RANG_AFTER === -1)) OCZ.push([-1e9, 1e9]);
   // S4: nicht technisch gesicherte Bahnübergänge mit Pfeiftafel Bü 4 (Lage angenommen, Abstand 5 × Streckengeschwindigkeit in m, mind. 100 m)
   BUE = [];
   if(SC.s4){
@@ -1066,6 +1095,35 @@ function addBends(a, b, v, dirs){
   if(L < 60) return;
   for(let k = 0; k < n; k++){ const p0 = s0 + k*(L + gap); ARCS.push({s0:p0, s1:p0 + L, L, k:(dirs[k] === 'R' ? 1 : -1)/R}); }
 }
+// Gegenverkehr: Züge auf dem Nachbargleis, die entgegenkommen (ohne Einfluss auf die eigene Fahrt)
+const OC_KIND = {
+  rb:{len:110, vmax:140, body:'#c8102e', front:'#c8102e', band:'#f2f2ee', win:'#1f2a33'},
+  re:{len:160, vmax:160, body:'#b5122a', front:'#f2f2ee', band:'#b5122a', win:'#1f2a33'},
+  ic:{len:300, vmax:160, body:'#eceeed', front:'#eceeed', band:'#d0281f', win:'#1f2a33'},
+  gz:{len:480, vmax:100, body:'#5b4636', front:'#c8102e', band:null, win:null},
+  avg:{len:76, vmax:100, body:'#e3b51f', front:'#e3b51f', band:'#b8322a', win:'#1f2a33'}
+};
+function ocRnd(){ S.ocSeed = (S.ocSeed*16807) % 2147483647; return S.ocSeed/2147483647; }
+function ocStep(dt, prev){
+  for(const T of S.oc){
+    const f0 = T.front; T.front -= T.v*dt;
+    if(f0 > prev && T.front <= S.front && !T.passed){ T.passed = true; audio.beep(120, Math.min(3.5, T.len/Math.max(5, T.v + S.v)), 'sawtooth', .03); }
+  }
+  S.oc = S.oc.filter(T => T.front + T.len > S.front - 150);
+  if(!OCZ.length || S.t < S.ocNext) return;
+  S.ocNext = S.t + 12;
+  if(S.cross.some(X => X && X.state === 'run')) return;
+  const z = OCZ.find(r => S.front >= r[0] - 100 && S.front < r[1] - 800); if(!z) return;
+  const P0 = Math.min(S.front + 3200, z[1] - 30);
+  if(GG.some(g => g.b1 > S.front - 60 && g.a0 < P0 + 150)) return;               // Gegengleisfahrt: Nachbargleis gesperrt
+  if(S.oc.some(T => T.front + T.len > P0 - 400)) return;                          // Abstand zum vorigen Gegenzug
+  let kind = SC.s4 ? 'avg' : (r => r < 0.45 ? 'rb' : r < 0.65 ? 're' : r < 0.9 ? 'gz' : (SC.lineV >= 140 ? 'ic' : 'rb'))(ocRnd());
+  if(FREIGHT && kind === 'gz') kind = 'rb';
+  const K = OC_KIND[kind];
+  let vl = SC.lineV; LF.filter(l => l.k !== 'lf6' && l.pos <= P0).forEach(l => { vl = l.v*10; });
+  S.oc.push({front:P0, len:K.len, v:Math.min(K.vmax, vl, 160)/3.6*(0.8 + 0.2*ocRnd()), kind, seed:Math.floor(ocRnd()*1000)});
+  S.ocNext = S.t + 70 + ocRnd()*150;
+}
 function isBo(p){ return KMSEG.some(g => g.bo && p >= g.from && p < g.to); }
 function kmAt(p){ const g = KMSEG.find(g => p >= g.from && p < g.to) || KMSEG[0]; return g ? g.km0 + g.dir*(p - g.p0)/1000 : p/1000; }
 const smooth = t => t <= 0 ? 0 : t >= 1 ? 1 : t*t*(3 - 2*t);
@@ -1089,7 +1147,7 @@ function newState(){
     st: STATIONS.map(() => ({done:false})), stT: STATIONS.map(() => 0), sbT: MAIN.map(() => 0),
     cross: MAIN.map(m => m.cond && m.cond.crossSt !== undefined ? {state:'wait', front:0, v:0, t:0} : null),
     fpAct: STATIONS.map(st => ({arr: st.first ? 0 : null, dep:null, cand: st.first ? 0 : null})),
-    dweg:null, gg:null, horn:false, bue:BUE.map(() => ({acc:0, ok:false, done:false})), pzbF:null, pzbFi:0, pzbOff:false, ne1:NE1.map(n => ({perm:!!n.gg})), pax: paxPlan(), onboard: paxStart(), door:{state:'zu', t:0, lockMsg:false, station:-1}, carried:0, announced:{},
+    dweg:null, gg:null, oc:[], ocNext:30 + (SC.id % 7)*9, ocSeed:SC.id*7919 + 17, horn:false, bue:BUE.map(() => ({acc:0, ok:false, done:false})), pzbF:null, pzbFi:0, pzbOff:false, ne1:NE1.map(n => ({perm:!!n.gg})), pax: paxPlan(), onboard: paxStart(), door:{state:'zu', t:0, lockMsg:false, station:-1}, carried:0, announced:{},
     ls: LSIG.map(() => ({sh1:false, t:0})),
     sig: MAIN.map(() => ({aspect:'HP0', ersatzOn:false, zs3On:false, zs3v:0})),
     dsig: DIST.map(() => ({aspect:'VR0', zs3v:0})),
@@ -1439,7 +1497,7 @@ function pressStoer(){
     S.pzbOff = true; pzbClear();
     if(S.zwang && S.zwang.kind === 'pzb') S.zwang = null;
     S.fdlNeed = null;
-    log('PZB mit Störschalter abgeschaltet – LM 85 und PZB dunkel, 1000 Hz blinkt. Höchstens 50 km/h bis PZB i. O., ' + meldeStellen() + ' melden.', 'pzb');
+    log('PZB mit Störschalter abgeschaltet – LM 85 dunkel, 1000 Hz blinkt. Höchstens 50 km/h bis PZB i. O., ' + meldeStellen() + ' melden.', 'pzb');
     if(!S.pzbF){ error('Störschalter unzulässig betätigt – nur, wenn die PZB ständig Zwangsbremsungen erzeugt oder es für die Weiterfahrt technisch erforderlich ist'); S.pzbF = {kind:'off', t0:S.t, reported:false, zbN:0, fixT:0}; }
     else if(S.pzbF.kind === 'zb' && S.pzbF.zbN < 2 && lern) log('Hinweis: Der Störschalter ist für ständige Zwangsbremsungen gedacht – nach der ersten Zwangsbremsung zuerst mit dem Fdl abklären.', 'pzb');
     else if(S.pzbF.kind === 'dark' && lern) log('Hinweis: Bei dunkler PZB ist der Störschalter nicht erforderlich.', 'pzb');
@@ -1630,6 +1688,7 @@ function step(dt){
     if(crossed(g.b1)) log('Zurück auf dem Regelgleis');
     if(fr > g.b1 + 5) S.gg = null;
   }
+  ocStep(dt, prev);
   for(const n of NE6) if(crossed(n.pos)) log('Ne 6 – Haltepunkt ' + n.name + ' ist zu erwarten');
   BUE.forEach((b, k) => {
     const q = S.bue[k]; if(q.done) return;
@@ -2026,6 +2085,7 @@ const view = document.getElementById('view'), vctx = view.getContext('2d');
 const PAL_DAY = {sky0:'#5f8db8', sky1:'#cbd9df', hill1:'#8fa6a6', hill2:'#6f8a7c', g0:'#8a9a66', g1:'#55693a', bal:'#8d877f', bal2:'#857f78', sleeper:'#4b3f34', rail:'#c4c6c6', plat:'#a7a39b', edge:'#f2f0e8', platSide:'#6d6a65', wire:'#2b2f30', mast:'#4a5250', tree1:'#2f4a2c', tree2:'#3c5a33', haze:'203,217,223', sigMast:'#3d4443', frame:'#121615'};
 const PAL_FOG = Object.assign({}, PAL_DAY, {sky0:'#b7c1c5', sky1:'#d2d8da', hill1:'#c9d0d2', hill2:'#c4cccd', g0:'#b4bba9', g1:'#6f7d5a', haze:'206,213,215'});
 const PAL_NIGHT = {sky0:'#03050a', sky1:'#0e1522', hill1:'#0b1118', hill2:'#080c11', g0:'#090c09', g1:'#141a12', bal:'#3a3733', bal2:'#1a1917', sleeper:'#211b16', rail:'#8a8c8c', plat:'#4a4844', edge:'#8f8d86', platSide:'#2a2826', wire:'#0a0b0c', mast:'#2a2f2e', tree1:'#0c130b', tree2:'#0f180e', haze:'14,20,30', sigMast:'#2a302f', frame:'#070909'};
+function shade(hex, f){ const n = parseInt(hex.slice(1), 16); return 'rgb(' + Math.round((n >> 16)*f) + ',' + Math.round(((n >> 8) & 255)*f) + ',' + Math.round((n & 255)*f) + ')'; }
 function hash(n){ let x = Math.sin(n*127.1 + 311.7)*43758.5453; return x - Math.floor(x); }
 function render(){
   const ctx = vctx, W = view.width, H = view.height;
@@ -2159,7 +2219,15 @@ function render(){
   // Tiefensortierte Objekte
   const items = [];
   for(const t of TUNNELS){ const z = t.from - base; if(!inT && z > ZN && z < Math.min(2500, SICHT*1.2)) items.push({z, t:'portal', tn:t}); }
-  S.cross.forEach(X => { if(X && X.state === 'run'){ const z = X.front - base; if(z > ZN && z < Math.min(3000, NIGHT ? 3000 : SICHT*1.1)) items.push({z, t:'onc'}); } });
+  const ocAll = S.oc.slice();
+  S.cross.forEach(X => { if(X && X.state === 'run') ocAll.push({front:X.front, len:76, kind:'avg', seed:3}); });
+  for(const T of ocAll){
+    const zf = T.front - base, zb = zf + T.len, zmax = Math.min(3000, NIGHT ? 3000 : SICHT*1.1);
+    if(zb <= ZN || zf > zmax) continue;
+    const z0 = Math.max(0.8, zf), z1 = Math.min(zb, z0 + 1200, zmax);   // Seitenwand bis dicht an den Führerstand (Vorbeifahrt)
+    for(let zz = z0; zz < z1; zz += 18) items.push({z:zz, t:'ocw', T, z2:Math.min(z1, zz + 18), k:Math.floor((zz - zf)/18)});
+    if(zf > ZN) items.push({z:zf - 0.02, t:'onc', T});
+  }
   for(let k = Math.ceil((base + ZN)/60); ; k++){ const z = k*60 - base; if(z > Math.min(1400, SICHT*1.1) || inT) break; items.push({z, t:'mast'}); }
   for(let k = Math.ceil((base + ZN)/23); ; k++){
     const z = k*23 - base; if(z > Math.min(1100, SICHT*1.1) || inT) break;
@@ -2249,12 +2317,25 @@ function render(){
         ctx.fillStyle = NIGHT ? '#b9bcb6' : '#f4f4f0'; ctx.beginPath(); ctx.moveTo(sx - r*0.7, sy); ctx.lineTo(sx - r*0.7, sy - r*0.3); ctx.arc(sx, sy - r*0.3, r*0.7, Math.PI, 0); ctx.lineTo(sx + r*0.7, sy); ctx.closePath(); ctx.fill();
         ctx.fillStyle = '#111'; ctx.font = '700 ' + Math.round(th*0.3) + 'px "Barlow Condensed","Arial Narrow",sans-serif'; ctx.fillText(len, tl[0] + tw*0.66, sy - r*0.35);
       }
+    } else if(it.t === 'ocw'){
+      // Seitenwand des Gegenzugs (abschnittsweise für die Tiefensortierung)
+      const K = OC_KIND[it.T.kind], dim = NIGHT ? 0.25 : 1;
+      ctx.globalAlpha = (NIGHT ? 0.9 : 1)*vis;
+      let col = K.body;
+      if(it.T.kind === 'gz' && it.k > 1){ const c = ['#2f5d8a','#8a8f94','#c9772b','#3f7a52','#7a2f2a','#c8b02e']; col = c[Math.floor(hash(it.T.seed + Math.floor(it.k/1.4))*c.length)]; }
+      wall(z, it.z2, -2.85, 0.45, it.T.kind === 'gz' && it.k > 1 ? 3.1 : 3.7, NIGHT ? shade(col, dim) : col);
+      wall(z, it.z2, -2.85, 0.2, 0.45, '#1b1d1e');
+      if(K.band && !(it.T.kind === 'gz')) wall(z, it.z2, -2.85, 1.25, 1.45, NIGHT ? shade(K.band, dim) : K.band);
+      if(K.win){ wall(z, it.z2, -2.85, 2.05, 3.0, NIGHT ? '#3a3a2c' : K.win); }
+      ctx.globalAlpha = 1;
     } else if(it.t === 'onc'){
+      const K = OC_KIND[it.T.kind];
       const a = P(z, -5.55, 3.7), b = P(z, -2.85, 0.45), w = b[0] - a[0], h = b[1] - a[1];
-      ctx.fillStyle = NIGHT ? '#3a3420' : '#e3b51f'; rr(ctx, a[0], a[1], w, h, w*0.12); ctx.fill();
-      ctx.fillStyle = '#b8322a'; ctx.fillRect(a[0], a[1] + h*0.72, w, h*0.1);
+      ctx.fillStyle = NIGHT ? shade(K.front, 0.3) : K.front; rr(ctx, a[0], a[1], w, h, w*0.12); ctx.fill();
+      if(K.band){ ctx.fillStyle = K.band; ctx.fillRect(a[0], a[1] + h*0.72, w, h*0.1); }
       ctx.fillStyle = '#1f2a33'; ctx.fillRect(a[0] + w*0.1, a[1] + h*0.1, w*0.8, h*0.36);
-      for(const lx of [-5.15, -3.25]){ const q = P(z, lx, 1.0); ctx.save(); ctx.fillStyle = '#fffbe8'; ctx.shadowColor = '#fffbe8'; ctx.shadowBlur = NIGHT ? 18*u : 8*u; ctx.beginPath(); ctx.arc(q[0], q[1], Math.max(1.4*u, 0.13*s), 0, 7); ctx.fill(); ctx.restore(); }
+      // Spitzensignal Zg 1: drei weiße Lichter in A-Form
+      for(const [lx, lh] of [[-5.15, 1.0], [-3.25, 1.0], [-4.2, 3.45]]){ const q = P(z, lx, lh); ctx.save(); ctx.fillStyle = '#fffbe8'; ctx.shadowColor = '#fffbe8'; ctx.shadowBlur = NIGHT ? 18*u : 8*u; ctx.beginPath(); ctx.arc(q[0], q[1], Math.max(1.4*u, 0.13*s), 0, 7); ctx.fill(); ctx.restore(); }
     } else if(it.t === 'pax'){
       const g = P(z, it.x, 0.76), hd = P(z, it.x, 0.76 + it.hh), w = Math.max(1, 0.42*s);
       const cols = NIGHT ? ['#3a3f4a','#4a3a36','#33433a','#47423a','#3d3a48'] : ['#2f5d8a','#a6463b','#3f7a52','#c9a227','#6b4f8a'];
@@ -2537,7 +2618,7 @@ function updateUI(){
   el.lm55.hidden = AVG;
   el.lm55.classList.toggle('on', L['55']); el.lm70.classList.toggle('on', L['70']); el.lm85.classList.toggle('on', L['85']);
   el.lm1000.classList.toggle('on', L.l1000); el.lm500.classList.toggle('on', L.l500);
-  el.lmBef.classList.toggle('on', L.bef); $('lmSand').classList.toggle('on', L.sand); $('lmPzb').classList.toggle('on', L.pzb);
+  el.lmBef.classList.toggle('on', L.bef); $('lmSand').classList.toggle('on', L.sand);
   {
     const D = S.door, b = $('bDoor'), Pi = D.station >= 0 ? S.pax[D.station] : null;
     const here = STATIONS.findIndex((st, k) => !st.first && S.pax[k].state === 'pending' && S.st[k].done);
@@ -2551,7 +2632,10 @@ function updateUI(){
   }
   $('bFdl').classList.toggle('alert', !!((S.fdlNeed && !S.fdlNeed.ok) || (S.stoer && !S.stoer.reported && lern) || (S.pzbF && !S.pzbF.reported && (S.pzbF.kind === 'dark' || S.pzbOff))));
   { const b = $('bStoer'); b.classList.toggle('on', S.pzbOff); b.classList.toggle('alert', !!(lern && S.pzbF && S.pzbF.kind === 'zb' && S.pzbF.zbN >= 2 && !S.pzbOff)); b.setAttribute('aria-pressed', S.pzbOff ? 'true' : 'false'); }
-  document.querySelector('.lamps').classList.toggle('avg', AVG);
+  if($('i60').dataset.v !== String(AVG)){
+    $('i60').dataset.v = String(AVG); $('i60').classList.toggle('avg', AVG);
+    $('bBefT').innerHTML = (AVG ? 'Indusi' : 'PZB') + '<br>Befehl'; $('bFreiT').innerHTML = (AVG ? 'Indusi' : 'PZB') + '<br>Frei';
+  }
   el.sifa.classList.toggle('on', S.sifa.t >= 30 && blink);
   const sb = $('sifaBar'), sp = Math.min(1, S.sifa.t/30);
   sb.firstChild.style.width = (sp*100) + '%';
@@ -2824,7 +2908,7 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-window.__arcs = () => ARCS;
+window.__arcs = () => ARCS; window.__ocz = () => OCZ;
 window.__sim = { hornOn, hornOff, get BUE(){ return BUE; }, pressStoer, pzbDead, get NE1(){ return NE1; }, get GG(){ return GG; }, get HM(){ return HM; }, get NE6(){ return NE6; }, get OBJS(){ return OBJS; }, kmAt, get BW(){ return BW; }, get DIST(){ return DIST; }, get TUNNELS(){ return TUNNELS; }, get FP(){ return FP; }, fpState, fmtClock, pressDoor, pressFdl, befreienVerbot, pzbActive, lmLen, get MAGNETS(){ return MAGNETS; }, get AVG(){ return AVG; }, setVehicle(v){ VEHICLE = v; }, get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
 })();
 </script>
