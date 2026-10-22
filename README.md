@@ -1,6 +1,6 @@
 # Führerstand DS 301
 
-Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuch der DB), PZB 90 und Sifa auf einer fiktiven Übungsstrecke. Läuft im Browser auf Android, iOS und am PC – ohne Installation, ohne Build.
+Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuch der DB), PZB 90 und Sifa in 15 Übungsszenarien auf fiktiven Strecken. Läuft im Browser auf Android, iOS und am PC – ohne Installation, ohne Build.
 
 ## Inhalt
 
@@ -10,9 +10,27 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 - **Sifa:** 30-s-Zyklus mit Leuchtmelder, Summer und Zwangsbremsung
 - **Auswertung:** Signalverstöße, Geschwindigkeitsüberschreitungen, ausgelassene Halte, Zwangsbremsungen
 
-## Strecke
+## Szenarien
 
-RB 3807 Lindenau – Bergheim – Waldheim – Tannau (≈ 20 km), danach Rangierfahrt ins Abstellgleis bis vor die Ra 10.
+| Nr. | Stufe | Szenario | Schwerpunkt |
+|---|---|---|---|
+| 1 | Leicht | Erste Fahrt | Anfahren, Lf 6/Lf 7, Zs 3, Sifa, Haltetafel |
+| 2 | Leicht | Halt erwarten | Ks 2, 1000 Hz/Wachsam, 500-Hz-Prüfung, Halt vor Hp 0 |
+| 3 | Leicht | H/V-Signale | Hp 0/1/2, Vr 0/1/2, Vorsignal am Mast |
+| 4 | Leicht | Geschwindigkeitswechsel | Lf 6/Lf 7, Zs 3/Zs 3v, Ks 1 blinkend |
+| 5 | Leicht | Rangierfahrt | 25 km/h, Sh 0/Sh 1, Ra 10 |
+| 6 | Mittel | Ersatzsignal Zs 1 | Halt vor gestörtem Signal, Befehl 40 |
+| 7 | Mittel | Vorsichtsignal Zs 7 | Fahrt auf Sicht, stehender Zug im Gleis |
+| 8 | Mittel | Gegengleis Zs 8 | Zs 8, Weichenbereich 40 km/h |
+| 9 | Mittel | Dichter Zugverkehr | Zugfolge im Blockabstand, häufig Ks 2 |
+| 10 | Mittel | Nebel | 300 m Sicht |
+| 11 | Schwer | Schwerer Güterzug | 550 m, Zugart U, schwache Bremse |
+| 12 | Schwer | Schnellfahrt | Zugart O, 160 km/h |
+| 13 | Schwer | Störungen im Betrieb | Zs 7, Zs 1, Zs 8 und Zugfolge kombiniert |
+| 14 | Schwer | Nachtfahrt | nur Signallichter weit sichtbar |
+| 15 | Schwer | Abschlussfahrt | Gesamtstrecke mit Rangierfahrt, ohne Lernhilfe |
+
+Bestandene Szenarien werden im Browser gespeichert (localStorage).
 
 ## Bedienung
 
