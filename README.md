@@ -1,10 +1,11 @@
 # Führerstand DS 301
 
-Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuch der DB), PZB 90 und Sifa in 15 Übungsszenarien auf fiktiven Strecken. Läuft im Browser auf Android, iOS und am PC – ohne Installation, ohne Build.
+Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuch der DB), PZB 90 und Sifa in 16 Übungsszenarien auf fiktiven Strecken und 5 Szenarien auf der AVG-Linie S4 nach Buchfahrplan. Läuft im Browser auf Android, iOS und am PC – ohne Installation, ohne Build.
 
 ## Inhalt
 
-- **Signalsysteme:** Ks (Ks 1, Ks 1 blinkend, Ks 2, Hp 0, Zs 3, Zs 3v), H/V (Hp 0/1/2, Vr 0/1/2, Ne 2), Lf 6/Lf 7, Ne 5, Sh 0/Sh 1, Ra 10, Ersatzsignale Zs 1, Zs 7, Zs 8
+- **Signalsysteme:** Ks (Ks 1, Ks 1 blinkend, Ks 2, Hp 0, Zs 3, Zs 3v), H/V (Hp 0/1/2, Vr 0/1/2, Ne 2), Lf 6/Lf 7, Ne 3 (Vorsignalbaken), Ne 5, Ne 6 (Haltepunkttafel), Sh 0/Sh 1, Ra 10, Ersatzsignale Zs 1, Zs 7, Zs 8, Hektometertafeln alle 100 m
+- **Gegengleis:** Mit Zs 8 fährt der Zug über die Weichenverbindung auf das Gegengleis (Weichenbereich 40 km/h), dort wirken die Gleismagnete des Regelgleises nicht; vor der nächsten Betriebsstelle zurück auf das Regelgleis
 - **Signallogik:** selbsttätiger Streckenblock mit vorausfahrendem Zug, Ausfahrt nach Haltezeit, gestörte Signale mit Ersatzsignal durch den Fdl
 - **PZB 90 nach Ril 483 und AVG-Schulungsunterlage Modul 17:**
   - Gleismagnete 1000/500/2000 Hz, Doppelgleismagnet 1000/2000 Hz am Mehrabschnittssignal, 500 Hz vor Zs 3 bis Kennziffer 3
@@ -17,6 +18,9 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
   - Fahrzeugwahl: Regelfahrzeug oder AVG-Stadtbahn (PZB 90 Version AVG: Zugart O fest, 100 km/h, Frühhalt VÜ 3 / Spähalt VÜ 2)
 - **Sifa:** 30-s-Zyklus mit Leuchtmelder, Summer und Zwangsbremsung
 - **Fahrgastbetrieb:** zusätzliche Haltepunkte, Türen freigeben und schließen, Fahrgastwechsel mit wartenden Reisenden, Traktionssperre bei offenen Türen, Ansage „Nächster Halt“
+- **Fahrplan:** Buchfahrplan je Zug mit Ankunft/Abfahrt, Blockstellen und Geschwindigkeitswechseln, Uhr und Verspätung im Streckenbild, Fehler bei vorzeitiger Abfahrt, Pünktlichkeitsauswertung
+- **Signalabstände nach DS 301:** Vorsignal im Bremswegabstand (Streckenbuch: 1000/700/400 m), Ne 2 unmittelbar davor, Ne 3 250/175/100 m vor dem Vorsignal, Ne 6 im Bremswegabstand vor dem Bahnsteig, verkürzter Vorsignalabstand mit weißem Zusatzlicht, Lf 6 im Bremswegabstand vor Lf 7, 500 Hz ca. 250 m vor dem Hauptsignal, Durchrutschweg 200 m
+- **S4 nach Buchfahrplan:** Strecke Grötzingen – Bretten – Eppingen – Heilbronn – Öhringen mit Original-Kilometrierung, Geschwindigkeiten aus Spalte 2, Tunneln und Zugkreuzungen
 - **Auswertung:** Signalverstöße, Geschwindigkeitsüberschreitungen, ausgelassene Halte, Zwangsbremsungen
 
 ## Szenarien
@@ -30,7 +34,7 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 | 5 | Leicht | Rangierfahrt | 25 km/h, Sh 0/Sh 1, Ra 10 |
 | 6 | Mittel | Ersatzsignal Zs 1 | Halt vor gestörtem Signal, Befehl 40 |
 | 7 | Mittel | Vorsichtsignal Zs 7 | Fahrt auf Sicht, stehender Zug im Gleis |
-| 8 | Mittel | Gegengleis Zs 8 | Zs 8, Weichenbereich 40 km/h |
+| 8 | Mittel | Gegengleis Zs 8 | Zs 8, Fahrt auf dem Gegengleis und zurück, Weichenbereich 40 km/h |
 | 9 | Mittel | Dichter Zugverkehr | Zugfolge im Blockabstand, häufig Ks 2 |
 | 10 | Mittel | Nebel | 300 m Sicht |
 | 11 | Schwer | Schwerer Güterzug | 550 m, Zugart U, schwache Bremse |
@@ -38,6 +42,12 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 | 13 | Schwer | Störungen im Betrieb | Zs 7, Zs 1, Zs 8 und Zugfolge kombiniert |
 | 14 | Schwer | Nachtfahrt | nur Signallichter weit sichtbar |
 | 15 | Schwer | Abschlussfahrt | Gesamtstrecke mit Rangierfahrt, ohne Lernhilfe |
+| 16 | Schwer | S-Bahn-Takt | Ks-Block alle 700 m, Halt alle 1,4 km, S-Bahn voraus, Taktfahrplan |
+| 17 | S4 | S4 Grötzingen – Bretten | nach Buchfahrplan, Jöhlinger Tunnel |
+| 18 | S4 | S4 Bretten – Eppingen | Brettener/Gölshauser/Sulzfelder Tunnel, Zs 3 „6“, Kreuzung Flehingen |
+| 19 | S4 | S4 Eppingen – Heilbronn | Km-Sprung 43,4 = 140,0, Zwischensignale Schwaigern/Leingarten |
+| 20 | S4 | S4 Heilbronn – Öhringen | Innenstadt (BOStrab), Weinsberger Tunnel, Kreuzungen Weinsberg/Eschenau |
+| 21 | S4 | S4 Gesamtstrecke | Grötzingen Oberausstraße – Öhringen-Cappel, ca. 91 km, 60 Halte |
 
 Bestandene Szenarien werden im Browser gespeichert (localStorage).
 
