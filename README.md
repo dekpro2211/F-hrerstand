@@ -18,6 +18,27 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 - Druckluft: Kompressor schaltet bei 8 bar ein und bei 10 bar ab, jede Bremsung verbraucht Luft
 - Geräusche (Web Audio, nach dem Vorbild eines Drehstrom-Triebwagens nachgebildet): Hubantrieb des Stromabnehmers, Hauptschalter, Lüfter, Kompressor mit Abblasen, Pulswechselrichter mit gestuften Taktfrequenzen („Singen“ beim Anfahren und elektrischen Bremsen), Getriebe, Rollgeräusch, Fahrtwind, lauter im Tunnel, Achsstöße an Weichen und Bahnübergängen, Bremsluft und Lösen, Bremsenquietschen kurz vor dem Halt, Türwarnton und Türen, Zweiklang-Signalhorn, Vorbeifahrt von Gegenzügen
 
+## Straßenbahn Karlsruhe (Szenarien 31–35)
+
+Stadtlinien 1–5 mit der Haltestellenfolge aus dem KVV-Liniennetzplan (Stand 2023). Abstände, Gleislage, Kreuzungen, Weichen und Abschnitte (Rasengleis / Straßenraum) sind angenommen. Fahrzeug Straßenbahn (37 m, 70 km/h), keine PZB, Fahren auf Sicht nach BOStrab, Glocke statt Pfeife.
+
+| Nr. | Linie | Strecke |
+|---|---|---|
+| 31 | 1 | Neureut-Heide – Kunstakademie – Stadtbahntunnel (Europaplatz – Durlacher Tor) – Durlacher Allee – Durlach Turmberg |
+| 32 | 2 | Knielingen Nord – Mühlburger Tor – Europaplatz – Südweststadt – Hauptbahnhof – Tunnel (Kongresszentrum – Durlacher Tor) – Durlach – Wolfartsweier Nord |
+| 33 | 3 | Europaplatz – Karlstor – Hauptbahnhof – Tivoli – Rüppurrer Tor – Kronenplatz – Durlacher Tor – Hauptfriedhof – Rintheim |
+| 34 | 4 | Oberreut Badeniaplatz – Weinbrennerplatz – Europaplatz – Kriegsstraße – Durlacher Tor – Hauptfriedhof – Waldstadt Europäische Schule |
+| 35 | 5 | Rheinhafen – Entenfang – Kühler Krug – Kriegsstraße – Rüppurrer Tor – Ostendstraße – Durlacher Allee – Durlach Bf |
+
+## Tram-Train (Szenario 23, Beispielstrecke)
+
+- **EBO-Abschnitt** mit Ks-Signalen, PZB und Lf, dann **Systemwechsel 15 kV ~ / 750 V =**: El 1v (Ankündigung), El 1 (Hauptschalter aus), Systemtrennstelle ohne Spannung, El 2 (Hauptschalter wieder ein). Mit eingeschaltetem Hauptschalter in die Trennstelle → Fehler und Schutzabschaltung; Liegenbleiben in der Trennstelle beendet die Fahrt
+- **So 2** – Ende der Zugsicherung, ab hier **BOStrab**: Rasengleis mit Alleebäumen und Fahrbahnen, Straßenbahn in der Straße mit Autoverkehr, Häuserzeilen
+- **Fahrsignale** F 0 / F 1 / F 4 mit Anforderungsanzeige „A“ (St 9); an der Haltlinie warten, bis F 1 kommt – der Querverkehr fährt solange
+- **Weichensignale** W 11 (verschlossen) und W 1 (nicht verschlossen, höchstens 15 km/h), **G-Signale** G 1a / G 2a / G 4, **Läutetafel Sh 4** (Glocke statt Pfeife), Haltestellen mit Sh 7
+- **Stadtbahntunnel** mit Rampe, H-/V-Signalen, Ausfahrsignal nach Haltezeit, H 2 (40 km/h) und unterirdischen Haltestellen
+- Der genaue Ablauf des Systemwechsels ist an die DB-Signale El 1/El 2 angelehnt und vereinfacht
+
 ## Inhalt
 
 - **Signalsysteme:** Ks (Ks 1, Ks 1 blinkend, Ks 2, Hp 0, Zs 3, Zs 3v), H/V (Hp 0/1/2, Vr 0/1/2, Ne 2), Lf 6/Lf 7, Ne 1 (Trapeztafel), Ne 3 (Vorsignalbaken), Ne 4 (Schachbretttafel an links stehenden Hauptsignalen der S4), Bü 4 (Pfeiftafel vor Bahnübergängen der S4), Ne 5, Ne 6 (Haltepunkttafel), Sh 0/Sh 1, Ra 10, Ersatzsignale Zs 1, Zs 7, Zs 8, Hektometertafeln alle 100 m, Bezeichnungstafeln an den Tunnelportalen (Name, Tunnelsymbol, Länge)
@@ -70,6 +91,7 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 | 18 | S4 | S4 Bretten – Eppingen | Brettener/Gölshauser/Sulzfelder Tunnel, Zs 3 „6“, Kreuzung Flehingen |
 | 19 | S4 | S4 Eppingen – Heilbronn | Km-Sprung 43,4 = 140,0, Zwischensignale Schwaigern/Leingarten |
 | 20 | S4 | S4 Heilbronn – Öhringen | Innenstadt (BOStrab), Weinsberger Tunnel, Kreuzungen Weinsberg/Eschenau |
+| 23 | Tram-Train | Systemwechsel und Innenstadt | El 1v/El 1/El 2, So 2, F-/W-/G-Signale, Sh 4, Stadtbahntunnel (fiktive Strecke) |
 | 21 | S4 | S4 Gesamtstrecke | Grötzingen Oberausstraße – Öhringen-Cappel, ca. 91 km, 60 Halte |
 
 Bestandene Szenarien werden im Browser gespeichert (localStorage).
@@ -86,7 +108,7 @@ Bestandene Szenarien werden im Browser gespeichert (localStorage).
 | `Leertaste` | Sifa |
 | `F` | Fahrdienstleiter verständigen |
 | `X` | PZB-Störschalter (nur im Stillstand) |
-| `H` (halten) | Pfeife |
+| `H` (halten) | Pfeife (im BOStrab-Abschnitt Glocke) |
 | `T` | Türen freigeben / schließen |
 | `M` | Motor starten / abstellen (Aufrüsten) |
 | `←` `→` / `A` `D` | Umschauen in der 3D-Kabine, `C` zentriert |

@@ -183,7 +183,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
 .veh .seg button{font-size:.8rem;padding:4px 10px}
 .lvl-h{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:var(--muted);margin:0 0 6px}
 .lvl-h i{width:9px;height:9px;border-radius:50%;display:block}
-.lvl-1 i{background:var(--go)}.lvl-2 i{background:var(--signal)}.lvl-3 i{background:var(--stop)}.lvl-4 i{background:var(--blue)}
+.lvl-1 i{background:var(--go)}.lvl-2 i{background:var(--signal)}.lvl-3 i{background:var(--stop)}.lvl-4 i{background:var(--blue)}.lvl-5 i{background:#e3b51f}.lvl-6 i{background:#d0281f}
 .sc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:6px}
 .sc{appearance:none;text-align:left;background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:8px 9px;color:var(--fg);cursor:pointer;display:grid;gap:4px;font:inherit;align-content:start}
 .sc:hover{border-color:var(--muted)}
@@ -347,6 +347,8 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
         <ul>
           <li>Hebel: ziehen oder <kbd>▲</kbd>/<kbd>▼</kbd> bzw. <kbd>W</kbd>/<kbd>S</kbd>. Oben Fahrstufen F1–F8, unten Bremsstufen B1–B7 und SB (Schnellbremsung).</li>
           <li><kbd>Q</kbd> Wachsam · <kbd>E</kbd> Frei · <kbd>B</kbd> Befehl (halten) · <kbd>Leertaste</kbd> Sifa · <kbd>F</kbd> Fdl · <kbd>X</kbd> PZB-Störschalter · <kbd>H</kbd> Pfeife (halten) · <kbd>T</kbd> Türen · <kbd>M</kbd> Motor (Aufrüsten) · <kbd>P</kbd> Pause · Umschauen (3D): im Bild ziehen oder <kbd>←</kbd>/<kbd>→</kbd> bzw. <kbd>A</kbd>/<kbd>D</kbd> halten, Doppeltipp oder <kbd>C</kbd> zentriert</li>
+          <li>Straßenbahn Karlsruhe (Szenarien 31–35, Linien 1–5): Haltestellenfolge nach dem KVV-Liniennetzplan 2023, Abstände, Kreuzungen und Weichen angenommen; keine PZB, Fahren auf Sicht nach BOStrab, im Stadtbahntunnel H-/V-Signale mit Abfahrt nach 20 s Haltezeit.</li>
+          <li>Tram-Train (Szenario 23): bei El 1v Fahrschalter auf 0, vor El 1 Hauptschalter aus (<kbd>M</kbd> während der Fahrt), nach El 2 wieder ein – dann 750 V Gleichspannung. Ab So 2 BOStrab: Fahrsignal F 0 Halt, F 1 Fahrt frei, F 4 Halt erwarten, „A“ = Fahrtanforderung angenommen; W 1–3 (Weiche nicht verschlossen) höchstens 15 km/h, W 11–13 verschlossen; Sh 4 Läutetafel: <kbd>H</kbd> läutet die Glocke; G 1a kündigt an, G 2a/G 4 gelten ab dem Signal; im Stadtbahntunnel H-/V-Signale.</li>
           <li>„Fahrplan“ zeigt den Buchfahrplan mit Ankunft und Abfahrt (½ = 30 s). Nicht vor der Abfahrtszeit abfahren – vorzeitige Abfahrt ist ein Fehler. Uhr und Verspätung stehen unten rechts im Streckenbild.</li>
           <li>An jedem Bahnhof und Haltepunkt: an der Haltetafel halten, Türen freigeben, Fahrgastwechsel abwarten, Türen schließen. Mit offenen Türen ist die Traktion gesperrt.</li>
           <li>„Szenarien“ öffnet die Auswahl: 17 Übungsfahrten in drei Stufen und 5 Fahrten auf der S4. Bestandene Szenarien werden in diesem Browser gespeichert.</li>
@@ -475,7 +477,7 @@ const ZUGART = {
   M:{vmax:125,v1000:70,t1000:29,v500a:50,v500e:35,lamp:'70'},
   U:{vmax:105,v1000:55,t1000:38,v500a:40,v500e:25,lamp:'55'}
 };
-const LVL = {1:'Leicht', 2:'Mittel', 3:'Schwer', 4:'S4 nach Buchfahrplan (AVG)'};
+const LVL = {1:'Leicht', 2:'Mittel', 3:'Schwer', 4:'S4 nach Buchfahrplan (AVG)', 5:'Tram-Train (AVG, EBO und BOStrab)', 6:'Straßenbahn Karlsruhe (Linien 1–5)'};
 const SCEN = [
  {id:1, kurven:[[4660,5657,6,"RLR"]], nr:'RB 3801', clock:'06:12:00', fp:{regel:[[0,60],[210,240],[390,420],[600,600]], avg:[[0,60],[210,240],[390,420],[600,600]]}, lvl:1, title:'Erste Fahrt', goal:'PZB-Funktionsprüfung (Wachsam und Frei gleichzeitig), Startprogramm befreien, Lf 6 mit Wachsam bestätigen (Prüfabschnitt über 95 km/h), Zs 3, Sifa, Halt an der Haltetafel.',
   zug:'M', lineV:100, lern:true, test:true,
@@ -589,7 +591,24 @@ const SCEN = [
   halts:[{name:'Birkenweg',pos:1800},{name:'Fichtenhain',pos:6900}],
   stations:[{name:'Ahornfeld',from:-240,to:20,stop:0,first:true},{name:'Eichstetten',from:4780,to:5025,stop:5000},{name:'Grünhaid',from:10280,to:10525,stop:10500}],
   main:[{id:'A',sys:'ks',pos:80},{id:'B',sys:'ks',pos:3000,block:true},{id:'C',sys:'ks',pos:4400,zs3:6},{id:'D',sys:'ks',pos:5400,cond:{st:1,t:25}},{id:'E',sys:'hv',pos:8300,block:true},{id:'F',sys:'hv',pos:9900,hp2:true}],
-  pzbFaults:[{pos:2400, kind:'dark'}, {pos:7600, kind:'zb'}], end:10800}
+  pzbFaults:[{pos:2400, kind:'dark'}, {pos:7600, kind:'zb'}], end:10800},
+ {id:23, lvl:5, avgOnly:true, nr:'S 4 TT', clock:'07:12:00', fp:{avg:[[0,60],[210,240],[390,420],[510,540],[690,720],[900,930],[1080,1110],[1260,1260]]}, title:'Tram-Train: Systemwechsel und Innenstadt',
+  goal:'Beispielstrecke (fiktiv): EBO-Strecke mit PZB, Systemwechsel 15 kV ~ / 750 V = (El 1v, El 1, El 2: Hauptschalter aus und wieder ein), Ende der Zugsicherung (So 2), BOStrab: Rasengleis mit G-Signalen, Kreuzungen mit Fahrsignalen F 0/F 1/F 4 und Anforderung (A), Weichensignale W 11/W 1 (15 km/h), Läutetafel Sh 4, Straßenbahn in der Straße, Stadtbahntunnel mit H-/V-Signalen und unterirdischen Haltestellen.',
+  zug:'O', lineV:80, lern:true, bremsweg:700, platLen:85,
+  halts:[{name:'Ebersheim Nord',pos:1700},{name:'Gleisdreieck',pos:3300},{name:'Ostpark',pos:4300},{name:'Lindenplatz',pos:5750},{name:'Rathaus',pos:6750},{name:'Schlossplatz (U)',pos:9300}],
+  stations:[{name:'Bf Ebersheim',from:-100,to:20,stop:0,first:true},{name:'Marktplatz (U)',from:8215,to:8325,stop:8300,hp:true}],
+  main:[{id:'A',sys:'ks',pos:80},{id:'B',sys:'ks',pos:1300,block:true},{id:'C',sys:'ks',pos:2200},
+    {id:'T1',sys:'hv',pos:7560,bo:true},{id:'T2',sys:'hv',pos:8400,bo:true,cond:{st:1,t:25}},{id:'T3',sys:'hv',pos:9000,bo:true,hp2:true}],
+  dist:[{for:'T1',sys:'hv',pos:7300,fixed:true,bo:true},{for:'T2',sys:'hv',pos:8150,fixed:true,bo:true},{for:'T3',sys:'hv',pos:8750,fixed:true,bo:true}],
+  lf:[{k:'lf7',pos:2200,v:7},{k:'lf6',pos:4900,v:5,g:true,nomag:true,fixed:true},{k:'lf7',pos:5100,v:5,g:true,nomag:true},{k:'lf7',pos:7250,v:6,g:true,nomag:true}],
+  kurven:[[900,1350,6,'R']],
+  tunnels:[{name:'Stadtbahntunnel',from:7500,to:9500,city:true}],
+  syswechsel:{el1v:2300, el1:2550, s0:2570, s1:2630, el2:2650}, so2:2780,
+  boz:[[2800,5150,'rasen'],[5150,9600,'strasse']],
+  fsig:[{id:'Parkstraße',pos:4650},{id:'Lindenstraße',pos:5450},{id:'Marktstraße',pos:6400},{id:'Rathausplatz',pos:7050}],
+  wsig:[{pos:3780,w:'w11'},{pos:6150,w:'w1'}],
+  sh4:[{sign:5950,pos:6010}],
+  ocz:[[-1e9,2300],[2900,7300]], ocAvg:true, end:9450}
 ];
 // ---------------- S4 nach Buchfahrplan (AVG, Heft „GeH AVG“, S. 47–54) ----------------
 // Kilometrierung wie im Heft: A km 0,8 → 43,4 steigend · B km 140,0 → 119,3 fallend ·
@@ -859,10 +878,95 @@ SCEN.push(
   makeS4(20, 'S4 Heilbronn – Öhringen', 'Heilbronn Hbf Vorplatz', 'Bft Cappel Hp', {fp:{avg:[[0,60],[120,150],[210,240],[300,330],[390,420],[480,510],[570,600],[720,750],[870,900],[990,1020],[1230,1260],[1350,1380],[1500,1530],[1620,1650],[1740,1770],[1890,1920],[2040,2070],[2340,2370],[2490,2520],[2640,2670],[2790,2820],[2970,3000],[3120,3150],[3270,3270]]}, clock:'08:40:00', goal:'Innenstadt Heilbronn (BOStrab), Abzw Pfühlpark, Weinsberger Tunnel, Kreuzungen in Weinsberg und Eschenau, kurzer Bahnsteig Wieslensdorf.'}),
   makeS4(21, 'S4 Gesamtstrecke', 'Bft Gz-Oberausst', 'Bft Cappel Hp', {fp:{avg:[[0,60],[210,240],[450,510],[570,630],[780,810],[870,900],[1080,1110],[1260,1290],[1410,1470],[1560,1620],[1710,1740],[1830,1860],[1950,1980],[2070,2100],[2220,2280],[2430,2490],[2670,2700],[2790,2820],[3150,3210],[3390,3420],[3660,3690],[3780,3810],[3930,3960],[4200,4230],[4320,4470],[4680,4710],[4860,4920],[5010,5070],[5160,5220],[5400,5460],[5520,5550],[5640,5670],[5760,5790],[5940,5970],[6090,6120],[6210,6240],[6360,6390],[6450,6480],[6540,6570],[6630,6660],[6720,6750],[6810,6840],[6900,6930],[7050,7080],[7200,7230],[7320,7350],[7560,7590],[7680,7710],[7830,7860],[7950,7980],[8070,8100],[8220,8250],[8370,8400],[8670,8700],[8820,8850],[8970,9000],[9120,9150],[9300,9330],[9450,9480],[9600,9600]]}, clock:'06:58:00', lern:false, goal:'Grötzingen Oberausstraße bis Öhringen-Cappel am Stück, rund 91 km und über 60 Halte. Ohne Lernhilfe.'})
 );
-let AVG = false, VEHICLE = 'regel';
+
+// ---------------- Straßenbahn Karlsruhe: Linien 1–5 (Haltestellenfolge nach KVV-Liniennetzplan 2023, Abstände und Gleislage angenommen) ----------------
+// Haltestelle: [Name, Art des folgenden Abschnitts ('rasen' besonderer Bahnkörper 70 km/h, 'strasse' Straßenraum 50 km/h), Optionen]
+// Optionen: u – unterirdische Haltestelle (Stadtbahntunnel), w – Weichensignal hinter der Haltestelle, sh4 – Läutetafel vor einem Fußgängerüberweg im folgenden Abschnitt
+function makeTram(id, nr, title, goal, clock, list, fp){
+  const P = []; let pos = 0;
+  list.forEach((st, i) => {
+    if(i){ const pv = list[i - 1], kd = pv[2] && pv[2].u && st[2] && st[2].u ? 'u' : pv[1], b = kd === 'u' ? 620 : kd === 'rasen' ? 600 : 440;
+      pos += Math.round(b*(0.78 + 0.44*hash(id*131 + i))/10)*10; }
+    P.push(pos);
+  });
+  const n = list.length, opt = i => list[i][2] || {}, isU = i => !!opt(i).u, kindAt = i => (i < n - 1 && isU(i) && isU(i + 1)) ? 'u' : list[i][1];
+  const vOf = k => k === 'rasen' ? 7 : k === 'u' ? 6 : 5;
+  const stations = [{name:list[0][0], from:-70, to:20, stop:0, first:true}], halts = [], main = [], dist = [], lf = [], fsig = [], wsig = [], sh4 = [], bends = [], tunnels = [], boz = [];
+  // unterirdische Haltestellen als Bahnhofseinträge (für das Ausfahrsignal nach Haltezeit), alle anderen als Haltestellen
+  for(let i = 1; i < n; i++){
+    if(isU(i)){ stations.push({name:list[i][0], from:P[i] - 70, to:P[i] + 20, stop:P[i], hp:true}); }
+    else halts.push({name:list[i][0], pos:P[i]});
+  }
+  // Tunnelabschnitte
+  for(let i = 0; i < n; i++){
+    if(!isU(i) || (i > 0 && isU(i - 1))) continue;
+    let j = i; while(j + 1 < n && isU(j + 1)) j++;
+    const from = i > 0 ? Math.round((P[i - 1] + P[i])/2) : -200, to = j + 1 < n ? Math.round((P[j] + P[j + 1])/2) : P[j] + 400;
+    tunnels.push({name:'Stadtbahntunnel', from, to, city:true});
+    // Einfahrsignal hinter der Rampe, Ausfahrsignal an jeder unterirdischen Haltestelle (Abfahrt nach Haltezeit)
+    let k = main.length;
+    main.push({id:'U' + (k + 1), sys:'hv', pos:from + 40, bo:true}); dist.push({for:'U' + (k + 1), sys:'hv', pos:from - 160, fixed:true, bo:true});
+    for(let q = i; q <= j; q++){
+      k = main.length; const si = stations.findIndex(st => st.stop === P[q]);
+      main.push({id:'U' + (k + 1), sys:'hv', pos:P[q] + 55, bo:true, cond:{st:si, t:20}}); dist.push({for:'U' + (k + 1), sys:'hv', pos:P[q] - 140, fixed:true, bo:true});
+    }
+  }
+  // Abschnittsarten (Rasengleis / Straßenraum) und G-Signale
+  let cur = list[0][1], z0 = -500;
+  const lineV = vOf(kindAt(0))*10; let vCur = lineV;
+  for(let i = 0; i < n - 1; i++){
+    const k = list[i][1], x = P[i] + 60;
+    if(k !== cur){ boz.push([z0, x, cur]); z0 = x; cur = k; }
+    const v = vOf(kindAt(i));
+    if(v*10 !== vCur){ const at = (isU(i) || isU(i + 1)) ? Math.round((P[i] + P[i + 1])/2) - 20 : P[i] + 70;
+      if(v*10 < vCur){ lf.push({k:'lf6', pos:at - 130, v, g:true, nomag:true, fixed:true}); lf.push({k:'lf7', pos:at, v, g:true, nomag:true}); }
+      else lf.push({k:'lf7', pos:at, v, g:true, nomag:true});
+      vCur = v*10; }
+  }
+  boz.push([z0, P[n - 1] + 2000, cur]);
+  // Kreuzungen mit Fahrsignal, Weichensignale, Läutetafeln, Bögen
+  for(let i = 0; i < n - 1; i++){
+    const a = P[i], b = P[i + 1], gap = b - a, k = kindAt(i), h = hash(id*977 + i*13);
+    const inT = tunnels.some(t => a + gap/2 > t.from - 40 && a + gap/2 < t.to + 40);
+    if(opt(i).w) wsig.push({pos:a + 45, w:opt(i).w});
+    if(!inT && gap >= 300 && h < 0.62 && !lf.some(l => Math.abs(l.pos - (a + gap*0.52)) < 60)) fsig.push({id:'Kreuzung ' + (fsig.length + 1), pos:Math.round(a + gap*0.52)});
+    if(opt(i).sh4 && !inT){ const sp = Math.round(a + gap*0.3); sh4.push({sign:sp, pos:sp + 60}); }
+    if(gap >= 300){ const dirs = ['L', 'R', 'LR', 'RL', 'R', 'L'][Math.floor(hash(id*53 + i)*6)]; bends.push([a + 45, b - 95, k === 'u' ? 60 : vOf(k)*10 + 10, dirs]); }
+  }
+  return {id, lvl:6, tram:true, nr, clock, title, goal, zug:'M', lineV, lern:true, bremsweg:400, platLen:65, fp:fp ? {tram:fp} : undefined,
+    stations, halts, main, dist, lf, tunnels, boz, fsig, wsig, sh4, bends, ocz:[[-1e9, 1e9]], ocKind:'tram', end:P[n - 1] + 160, line:true};
+}
+const KA = {
+  1:[['Neureut-Heide','rasen'],['Heidehof','rasen'],['Duale Hochschule','rasen'],['Lilienthalstraße','rasen'],['Synagoge','strasse'],['Kunstakademie/Hochschule','strasse',{w:'w11'}],
+     ['Europaplatz/Postgalerie (U)','u',{u:1}],['Marktplatz (U)','u',{u:1,w:'w11'}],['Kronenplatz (U)','u',{u:1}],['Durlacher Tor/KIT-Campus Süd (U)','rasen',{u:1}],
+     ['Gottesauer Platz/BGV','rasen'],['Tullastraße/Alter Schlachthof','rasen'],['Weinweg','rasen'],['Untermühlstraße','strasse',{w:'w11'}],['Auer Straße','strasse',{w:'w1'}],['Friedrichschule','strasse',{sh4:1}],['Schlossplatz','strasse'],['Turmberg','strasse']],
+  2:[['Knielingen Nord','rasen'],['Egon-Eiermann-Allee','rasen'],['Pionierstraße','rasen'],['Sudetenstraße','rasen'],['Siemensallee','rasen'],['Neureuter Straße','rasen'],['Feierabendweg','rasen'],['Hertzstraße','strasse'],
+     ['Kußmaulstraße/Städt. Klinikum','strasse'],['Moltkestraße/Städt. Klinikum','strasse'],['Yorckstraße','strasse'],['Mühlburger Tor','strasse',{w:'w11'}],['Europaplatz/Postgalerie','strasse',{w:'w11'}],['Karlstor/Bundesgerichtshof','strasse',{sh4:1}],
+     ['Otto-Sachs-Straße','strasse'],['Arbeitsagentur','strasse'],['ZKM','strasse'],['Welfenstraße','strasse'],['Barbarossaplatz','strasse'],['Ebertstraße','strasse'],['Hauptbahnhof','strasse',{w:'w11'}],['Poststraße','strasse'],['Augartenstraße','strasse'],
+     ['Kongresszentrum (U)','u',{u:1}],['Ettlinger Tor/Staatstheater (U)','u',{u:1}],['Marktplatz (U)','u',{u:1}],['Kronenplatz (U)','u',{u:1}],['Durlacher Tor/KIT-Campus Süd (U)','rasen',{u:1}],
+     ['Gottesauer Platz/BGV','rasen'],['Tullastraße/Alter Schlachthof','rasen'],['Weinweg','rasen'],['Untermühlstraße','rasen',{w:'w11'}],['Auer Straße','rasen',{w:'w11'}],['Gritznerstraße','rasen'],['Killisfeldstraße','rasen'],['Ellmendinger Straße','rasen'],
+     ['Ostmarkstraße','rasen'],['Schlesier Straße West','rasen'],['Steiermärker Straße','rasen'],['Zündhütle','rasen'],['Wolfartsweier Nord','rasen']],
+  3:[['Europaplatz/Postgalerie','strasse'],['Karlstor/Bundesgerichtshof','strasse',{w:'w11'}],['Mathystraße','strasse'],['Kolpingplatz','strasse'],['Ebertstraße','strasse',{w:'w11'}],['Hauptbahnhof','strasse'],['Poststraße','strasse'],['Tivoli','strasse',{w:'w1'}],
+     ['Werderstraße','strasse'],['Rüppurrer Tor','strasse',{w:'w11'}],['Kronenplatz','strasse',{sh4:1}],['Durlacher Tor/KIT-Campus Süd','strasse',{w:'w11'}],['Karl-Wilhelm-Platz','rasen'],['Hauptfriedhof','rasen',{w:'w11'}],['Dunantstraße','rasen'],['Forststraße','rasen'],['Rintheim','rasen']],
+  4:[['Badeniaplatz','rasen'],['Wilhelm-Leuschner-Straße','rasen'],['Oberreut Zentrum','rasen'],['Albert-Braun-Straße','rasen'],['Hardecksiedlung','rasen'],['Bannwaldallee','rasen'],['Europahalle/Europabad','rasen'],['Landesbausparkasse','strasse'],
+     ['Weinbrennerplatz','strasse',{w:'w11'}],['Sophienstraße','strasse'],['Schillerstraße','strasse'],['Mühlburger Tor','strasse',{w:'w11'}],['Europaplatz/Postgalerie','strasse'],['Karlstor/Bundesgerichtshof','strasse',{w:'w11'}],['Ettlinger Tor/Staatstheater','strasse'],
+     ['Rüppurrer Tor','strasse',{sh4:1}],['Durlacher Tor/KIT-Campus Süd','strasse',{w:'w11'}],['Karl-Wilhelm-Platz','rasen'],['Hauptfriedhof','rasen',{w:'w11'}],['Hirtenweg/Technologiepark','rasen'],['Sinsheimer Straße','rasen'],['Fächerbad','rasen'],['Im Eichbäumle','rasen'],
+     ['Glogauer Straße','rasen'],['Waldstadt Zentrum','rasen'],['Jägerhaus','rasen'],['Elbinger Straße Ost','rasen'],['Osteroder Straße','rasen'],['Europäische Schule','rasen']],
+  5:[['Rheinhafen','strasse'],['Lameyplatz','strasse',{w:'w11'}],['Entenfang','strasse'],['Mühlburger Feld','rasen'],['Kühler Krug','rasen'],['Hübschstraße','strasse'],['Weinbrennerplatz','strasse',{w:'w11'}],['Lessingstraße','strasse'],['Otto-Sachs-Straße','strasse'],
+     ['Karlstor/Bundesgerichtshof','strasse'],['Ettlinger Tor/Staatstheater','strasse'],['Rüppurrer Tor','strasse',{w:'w11'}],['Ostendstraße','strasse'],['Wolfartsweierer Straße','rasen'],['Weinweg','rasen'],['Untermühlstraße','rasen',{w:'w1'}],['Durlach Bf','rasen']]
+};
+SCEN.push(
+  makeTram(31, 'Linie 1', 'Linie 1: Neureut-Heide – Durlach Turmberg', 'Straßenbahn nach BOStrab: Neureut, Stadtbahntunnel unter der Kaiserstraße (Europaplatz – Durlacher Tor), Durlacher Allee auf Rasengleis, Pfinztalstraße in Durlach bis zum Turmberg.', '06:04:00', KA[1], [[0,60],[120,150],[210,240],[330,360],[450,480],[540,570],[630,690],[780,840],[930,990],[1050,1080],[1140,1170],[1260,1290],[1350,1380],[1470,1500],[1560,1590],[1680,1710],[1770,1800],[1860,1860]]),
+  makeTram(32, 'Linie 2', 'Linie 2: Knielingen Nord – Wolfartsweier Nord', 'Längste Stadtlinie: Knielingen, Mühlburger Tor, Südweststadt, Hauptbahnhof, Tunnel ab Kongresszentrum unter Ettlinger Tor und Kaiserstraße, Durlacher Allee, Durlach und Wolfartsweier.', '06:11:00', KA[2], [[0,60],[120,150],[210,240],[330,360],[450,480],[570,600],[690,720],[780,810],[870,900],[960,990],[1050,1080],[1140,1170],[1230,1260],[1350,1380],[1440,1470],[1530,1560],[1620,1650],[1710,1740],[1800,1830],[1890,1920],[1980,2010],[2070,2100],[2160,2190],[2250,2310],[2370,2400],[2460,2520],[2610,2670],[2730,2760],[2820,2850],[2940,2970],[3030,3060],[3150,3180],[3270,3300],[3390,3420],[3480,3510],[3570,3600],[3690,3720],[3780,3810],[3900,3930],[3990,4020],[4110,4110]]),
+  makeTram(33, 'Linie 3', 'Linie 3: Europaplatz – Rintheim', 'Karlstraße, Hauptbahnhof, Tivoli, Rüppurrer Tor und Kronenplatz an der Oberfläche, Hauptfriedhof und Rintheim.', '06:21:00', KA[3], [[0,60],[120,150],[210,240],[300,330],[390,420],[480,510],[570,600],[660,690],[780,810],[870,900],[960,990],[1050,1080],[1140,1170],[1260,1290],[1380,1410],[1500,1530],[1620,1620]]),
+  makeTram(34, 'Linie 4', 'Linie 4: Oberreut – Waldstadt', 'Von Oberreut über Weinbrennerplatz, Europaplatz und Kriegsstraße zum Durlacher Tor, dann über den Hauptfriedhof in die Waldstadt bis Europäische Schule.', '06:32:00', KA[4], [[0,60],[150,180],[270,300],[360,390],[450,480],[570,600],[690,720],[780,810],[870,900],[960,990],[1050,1080],[1140,1170],[1230,1260],[1320,1350],[1410,1440],[1500,1530],[1590,1620],[1680,1710],[1800,1830],[1920,1950],[2040,2070],[2160,2190],[2280,2310],[2370,2400],[2460,2490],[2550,2580],[2670,2700],[2790,2820],[2880,2880]]),
+  makeTram(35, 'Linie 5', 'Linie 5: Rheinhafen – Durlach Bf', 'Rheinhafen, Entenfang, Kühler Krug, Kriegsstraße mit Ettlinger Tor und Rüppurrer Tor, Oststadt und Durlacher Allee bis Durlach Bahnhof.', '06:45:00', KA[5], [[0,60],[120,150],[210,240],[300,330],[390,420],[510,540],[600,630],[690,720],[780,810],[870,900],[960,990],[1080,1110],[1170,1200],[1260,1290],[1380,1410],[1470,1500],[1590,1590]])
+);
+let AVG = false, TRAM = false, VEHICLE = 'regel';
 try{ VEHICLE = localStorage.getItem('fst-veh') === 'avg' ? 'avg' : 'regel'; }catch(e){}
 let BW = 1000, RANG_AFTER = null, FREIGHT = false, FP = null, CLOCK0 = 0, TUNNELS = [], INFOS = [];
 let GG = [], HM = [], NE6 = [], NE1 = [], KMSEG = [], INLUPE = false, ARCS = [], BUE = [], OCZ = [], AREAS = [], BRANCH = [];
+let FSIG = [], WSIG = [], SYSW = null, BOZ = [];   // Tram-Train: Fahrsignale, Weichensignale, Systemwechsel, BOStrab-Abschnitte
 const G3X = 9.25, G4X = -8.7;   // Gleis 3 rechts hinter dem Inselbahnsteig, Gleis 4 links neben dem Gegengleis
 let SC, MAIN, DIST, STATIONS, LF, MAGNETS, OBJS, LSIG, RA10_POS, END_POS, TRAIN_LEN, VEH_VMAX, ACC_F, BRK_F, TAU, SICHT, LSICHT, NIGHT;
 const idx = id => MAIN.findIndex(m => m.id === id);
@@ -877,16 +981,18 @@ function loadScenario(id){
   STATIONS = base.concat(halts).sort((a, b) => a.stop - b.stop);
   if(STATIONS.length) STATIONS[STATIONS.length - 1].last = true;
   TUNNELS = cp(SC.tunnels); INFOS = cp(SC.infos);
+  FSIG = cp(SC.fsig); WSIG = cp(SC.wsig); SYSW = SC.syswechsel ? Object.assign({}, SC.syswechsel) : null; BOZ = cp(SC.boz);
   MAIN.forEach(m => { if(m.cond && m.cond.cross !== undefined){ const k = STATIONS.findIndex(st => st.name === m.cond.cross); if(k < 0) delete m.cond; else m.cond.crossSt = k; } });
   const remap = k => STATIONS.findIndex(st => st.orig === k);
   MAIN.forEach(m => { if(m.cond && m.cond.st !== undefined) m.cond.st = remap(m.cond.st); if(m.when && m.when.st !== undefined) m.when.st = remap(m.when.st); });
   RANG_AFTER = SC.rangier ? (SC.rangier.after >= 0 ? remap(SC.rangier.after) : -1) : null;
   FREIGHT = !!SC.freight;
-  const fpk = ((VEHICLE === 'avg' || SC.avgOnly) && !SC.dbOnly) ? 'avg' : 'regel';
+  TRAM = !!SC.tram;
+  const fpk = TRAM ? 'tram' : ((VEHICLE === 'avg' || SC.avgOnly) && !SC.dbOnly) ? 'avg' : 'regel';
   FP = SC.fp && SC.fp[fpk] && SC.fp[fpk].length === STATIONS.length ? SC.fp[fpk].map(([a, d]) => ({arr:a, dep:d})) : null;
   CLOCK0 = clockSec(SC.clock || '06:00:00');
-  AVG = (VEHICLE === 'avg' || !!SC.avgOnly) && !SC.dbOnly;
-  const tr = Object.assign({len:150, acc:1, brk:1, vmax:140, tau:1}, SC.train || {}, AVG ? {len:76, acc:1.15, brk:1.15, vmax:100, tau:0.9} : {});
+  AVG = !TRAM && (VEHICLE === 'avg' || !!SC.avgOnly) && !SC.dbOnly;
+  const tr = Object.assign({len:150, acc:1, brk:1, vmax:140, tau:1}, SC.train || {}, AVG ? {len:76, acc:1.15, brk:1.15, vmax:100, tau:0.9} : TRAM ? {len:37, acc:1.3, brk:1.35, vmax:70, tau:0.8} : {});
   TRAIN_LEN = tr.len; VEH_VMAX = tr.vmax; ACC_F = tr.acc; BRK_F = tr.brk; TAU = tr.tau;
   SICHT = SC.sicht || 3000; LSICHT = SC.lightSicht || 3000; NIGHT = !!SC.night;
   LSIG = SC.rangier ? cp(SC.rangier.ls) : []; RA10_POS = SC.rangier ? SC.rangier.ra10 : null; END_POS = SC.end;
@@ -918,6 +1024,7 @@ function loadScenario(id){
   }
   // Zs 3 ohne Bahnhof: Abzweigstelle – Weiche zum abzweigenden Gleis, die Fahrt geht geradeaus
   MAIN.forEach(m => { if(m.wbEnd === null && m.zs3){ BRANCH.push({s0:m.pos + 40, s1:m.pos + 150}); m.wbEnd = m.pos + 160; } });
+  WSIG.forEach(w => BRANCH.push({s0:w.pos + 15, s1:w.pos + 95, w:true}));
   // ---- Signalabstände (DS 301 / Streckenbuch) ----
   // Bremswegabstand: Hauptbahnen 1000 m oder 700 m, Nebenbahnen 700 m oder 400 m (Angabe im Streckenbuch)
   BW = SC.bremsweg || 1000;
@@ -929,7 +1036,8 @@ function loadScenario(id){
     addBends(a, b, v*10, dirs);
   });
   // Bögen auch in den vorhandenen Lf-Langsamfahrabschnitten
-  if(!SC.s4){
+  (SC.bends || []).forEach(([a, b, v, dirs]) => addBends(a, b, v, dirs));
+  if(!SC.s4 && !SC.tram){
     const l7 = LF.filter(l => l.k === 'lf7' && !l.kurve).sort((x, y) => x.pos - y.pos);
     let cur = SC.lineV;
     l7.forEach((l, i) => {
@@ -956,9 +1064,9 @@ function loadScenario(id){
   });
   DIST.sort((a, b) => a.pos - b.pos);
   // Lf 6 im Bremswegabstand vor Lf 7
-  LF.forEach(l => { if(l.k !== 'lf6') return; const n7 = LF.filter(x => x.k === 'lf7' && x.pos > l.pos).sort((a, b) => a.pos - b.pos)[0]; if(n7 && n7.pos - BW > 50) l.pos = n7.pos - BW; });
+  LF.forEach(l => { if(l.k !== 'lf6' || l.fixed) return; const n7 = LF.filter(x => x.k === 'lf7' && x.pos > l.pos).sort((a, b) => a.pos - b.pos)[0]; if(n7 && n7.pos - BW > 50) l.pos = n7.pos - BW; });
   // verkürzter Vorsignalabstand (mehr als 5 % kürzer als der Bremsweg) → weißes Zusatzlicht
-  DIST.forEach(d => { const t = MAIN.find(m => m.id === d.for), from = d.mast ? MAIN.find(m => m.id === d.mast).pos : d.pos; d.abst = t ? Math.round(t.pos - from) : BW; d.short = d.abst < 0.95*BW; });
+  DIST.forEach(d => { const t = MAIN.find(m => m.id === d.for), from = d.mast ? MAIN.find(m => m.id === d.mast).pos : d.pos; d.abst = t ? Math.round(t.pos - from) : BW; d.short = !d.bo && d.abst < 0.95*BW; });
   MAIN.forEach((m, i) => { const n = MAIN[i + 1]; m.vsAbst = (n && m.sys === 'ks' && !DIST.some(d => d.for === n.id)) ? Math.round(n.pos - m.pos) : null; m.shortVs = m.vsAbst !== null && m.vsAbst < 0.95*BW; });
   MAIN.forEach((m,i) => {
     m.mastVr = DIST.findIndex(d => d.mast === m.id);
@@ -989,7 +1097,8 @@ function loadScenario(id){
     const q = SC.s4.p0;
     KMSEG.push({from:-1e9, to:42600 - q, p0:-q, km0:0.8, dir:1}, {from:42600 - q, to:63300 - q, p0:42600 - q, km0:140, dir:-1},
                {from:63300 - q, to:66700 - q, p0:63300 - q, km0:-0.3, dir:1, bo:true}, {from:66700 - q, to:1e9, p0:66700 - q, km0:114.8, dir:-1});
-  } else KMSEG.push({from:-1e9, to:1e9, p0:0, km0:0, dir:1});
+  } else if(BOZ.length){ const b0 = BOZ[0][0]; KMSEG.push({from:-1e9, to:b0, p0:0, km0:0, dir:1}, {from:b0, to:1e9, p0:b0, km0:b0/1000, dir:1, bo:true}); }
+  else KMSEG.push({from:-1e9, to:1e9, p0:0, km0:0, dir:1});
   HM = [];
   KMSEG.forEach(g => {
     if(g.bo) return;                                   // BOStrab-Abschnitt (Innenstadt Heilbronn): keine Hektometertafeln
@@ -1053,7 +1162,8 @@ function loadScenario(id){
     [['Bft Jöhl West', 'Bft Wössing Ost'], ['Gölshausen', 'Bft Gö-Industrie'], ['Bft Epping West', 'Bft Eppingen Pbf']].forEach(([a, b]) => { const x = abs(a), y = abs(b); if(x !== null && y !== null) OCZ.push([x, y]); });
     const lw = abs('Bft Leing West'), bo = KMSEG.find(g => g.bo);
     if(lw !== null && bo) OCZ.push([lw, bo.to]);           // ab Leingarten West zweigleisig, Innenstadt Heilbronn (BOStrab) zweigleisig
-  } else if(!(SC.rangier && RANG_AFTER === -1)) OCZ.push([-1e9, 1e9]);
+  } else if(SC.ocz) SC.ocz.forEach(z => OCZ.push(z.slice()));
+  else if(!(SC.rangier && RANG_AFTER === -1)) OCZ.push([-1e9, 1e9]);
   // S4: nicht technisch gesicherte Bahnübergänge mit Pfeiftafel Bü 4 (Lage angenommen, Abstand 5 × Streckengeschwindigkeit in m, mind. 100 m)
   BUE = [];
   if(SC.s4){
@@ -1077,11 +1187,13 @@ function loadScenario(id){
       }
     }
   }
+  (SC.sh4 || []).forEach(x => BUE.push({pos:x.pos, sign:x.sign, d:x.pos - x.sign, kind:'sh4'}));
   // PZB-Gleismagnete nach Ril 483 / Modul 17
   MAGNETS = [];
   const add = (pos, f, kind, ref, v) => { pos = Math.round(pos); let m = MAGNETS.find(x => x.pos === pos); if(!m){ m = {pos, fs:[]}; MAGNETS.push(m); } m.fs.push({f, kind, ref, v, spd: kind === 'gpa' || kind === 'gue'}); };
-  DIST.forEach((d,j) => add(d.pos, 1000, d.mast ? 'mast' : 'vs', j));
+  DIST.forEach((d,j) => { if(!d.bo) add(d.pos, 1000, d.mast ? 'mast' : 'vs', j); });
   MAIN.forEach((m,i) => {
+    if(m.bo) return;                                        // BOStrab: keine PZB-Gleismagnete
     if(m.sys === 'ks') add(m.pos, 1000, 'ks1000', i);       // Doppelgleismagnet 1000/2000 am Mehrabschnittssignal
     add(m.pos, 2000, 'hs2000', i);
     add(m.pos - 250, 500, 'hs500', i);
@@ -1108,15 +1220,19 @@ function loadScenario(id){
   OBJS = [];
   MAIN.forEach((m,i) => OBJS.push({k:'main', ref:i, pos:m.pos, x:m.left ? -2.1 : 2.6, h:m.sys === 'ks' ? 5.4 : 5.6}));
   DIST.forEach((d,i) => { if(!d.mast) OBJS.push({k:'dist', ref:i, pos:d.pos, x:2.6, h:4.6}); });
-  LF.forEach(l => { if(l.k !== 'fp') OBJS.push({k:l.k, v:l.v, pos:l.pos, x:2.4, h:3.0}); });
+  { let cv = SC.lineV; LF.slice().sort((a, b) => a.pos - b.pos).forEach(l => { if(l.k === 'fp') { cv = l.v*10; return; } OBJS.push({k:l.k, v:l.v, pos:l.pos, x:l.g ? 2.1 : 2.4, h:l.g ? 2.6 : 3.0, g:!!l.g, red:l.k === 'lf7' && l.v*10 < cv}); if(l.k === 'lf7') cv = l.v*10; }); }
   STATIONS.forEach(s => {
-    OBJS.push({k:'ne5', pos:s.stop, x:2.35, h:2.7});
+    if(isBo(s.stop)) OBJS.push({k:'sh7', pos:s.stop, x:2.2, h:2.3}); else OBJS.push({k:'ne5', pos:s.stop, x:2.35, h:2.7});
     OBJS.push({k:'sign', pos:s.from + 45, x:4.6, h:3.1, name:s.name});
   });
   LSIG.forEach((l,i) => OBJS.push({k:'ls', ref:i, pos:l.pos, x:1.95, h:0.55}));
   if(RA10_POS !== null) OBJS.push({k:'ra10', pos:RA10_POS, x:2.2, h:1.9});
   NE1.forEach((n, k) => OBJS.push({k:'ne1', ref:k, pos:n.pos, x:n.gg ? -6.5 : 2.4, h:2.8}));   // am Gegengleis links vom Gleis
-  BUE.forEach((b, k) => OBJS.push({k:'bue4', ref:k, pos:b.sign, x:2.3, h:2.1}));
+  BUE.forEach((b, k) => OBJS.push({k:b.kind === 'sh4' ? 'sh4' : 'bue4', ref:k, pos:b.sign, x:b.kind === 'sh4' ? 2.1 : 2.3, h:2.1}));
+  FSIG.forEach((f, k) => OBJS.push({k:'fsig', ref:k, pos:f.pos, x:2.0, h:3.3}));
+  WSIG.forEach((w, k) => OBJS.push({k:'wsig', ref:k, pos:w.pos, x:2.0, h:2.4}));
+  if(SYSW){ OBJS.push({k:'el1v', pos:SYSW.el1v, x:2.6, h:4.9}, {k:'el1', pos:SYSW.el1, x:2.6, h:4.9}, {k:'el2', pos:SYSW.el2, x:2.6, h:4.9}); }
+  if(SC.so2) OBJS.push({k:'so2', pos:SC.so2, x:2.3, h:2.4});
   OBJS.forEach(o => { if(['main','dist','lf6','lf7','ne5','ls','ra10'].includes(o.k)) o.x += sideX(o.pos); });
   // Ne 3 Vorsignalbaken: 250, 175 und 100 m vor dem Vorsignal, Streifenzahl nimmt in Fahrtrichtung ab (Hauptbahnen)
   DIST.forEach(d => {
@@ -1146,7 +1262,8 @@ const OC_KIND = {
   re:{len:160, vmax:160, body:'#b5122a', front:'#f2f2ee', band:'#b5122a', win:'#1f2a33'},
   ic:{len:300, vmax:160, body:'#eceeed', front:'#eceeed', band:'#d0281f', win:'#1f2a33'},
   gz:{len:480, vmax:100, body:'#5b4636', front:'#c8102e', band:null, win:null},
-  avg:{len:76, vmax:100, body:'#e3b51f', front:'#e3b51f', band:'#b8322a', win:'#1f2a33'}
+  avg:{len:76, vmax:100, body:'#e3b51f', front:'#e3b51f', band:'#b8322a', win:'#1f2a33'},
+  tram:{len:37, vmax:70, body:'#d0281f', front:'#d0281f', band:'#f2f2ee', win:'#1f2a33'}
 };
 function ocRnd(){ S.ocSeed = (S.ocSeed*16807) % 2147483647; return S.ocSeed/2147483647; }
 function ocStep(dt, prev){
@@ -1162,7 +1279,7 @@ function ocStep(dt, prev){
   const P0 = Math.min(S.front + 3200, z[1] - 30);
   if(GG.some(g => g.b1 > S.front - 60 && g.a0 < P0 + 150)) return;               // Gegengleisfahrt: Nachbargleis gesperrt
   if(S.oc.some(T => T.front + T.len > P0 - 400)) return;                          // Abstand zum vorigen Gegenzug
-  let kind = SC.s4 ? 'avg' : (r => r < 0.45 ? 'rb' : r < 0.65 ? 're' : r < 0.9 ? 'gz' : (SC.lineV >= 140 ? 'ic' : 'rb'))(ocRnd());
+  let kind = SC.ocKind ? SC.ocKind : SC.s4 || SC.ocAvg ? 'avg' : (r => r < 0.45 ? 'rb' : r < 0.65 ? 're' : r < 0.9 ? 'gz' : (SC.lineV >= 140 ? 'ic' : 'rb'))(ocRnd());
   if(FREIGHT && kind === 'gz') kind = 'rb';
   const K = OC_KIND[kind];
   let vl = SC.lineV; LF.filter(l => l.k !== 'lf6' && l.pos <= P0).forEach(l => { vl = l.v*10; });
@@ -1209,7 +1326,8 @@ function newState(){
     ra10Err:false,
     pzb:pzbNew(), wt:null, fdlNeed:null, fdlBusy:null, stoer:null, testDone:false, testWarned:false,
     sifa:{t:0}, sifaN:0, errors:[], zbCount:0, over:{t:0, flag:false},
-    hs:{st:'aus', t:0, air:6.4, comp:false, bLast:0, msg:false}, trac:0
+    hs:{st:'aus', t:0, air:6.4, comp:false, bLast:0, msg:false, sys:'ac', arcErr:false, stuckT:0}, trac:0,
+    fs: FSIG.map(() => ({asp:'F0', req:false, t:0, wait:0, gT:0}))
   };
 }
 
@@ -1365,10 +1483,11 @@ const ASPECT_TXT = {
   HP0:'Hp 0 – Halt', HP1:'Hp 1 – Fahrt', HP2:'Hp 2 – Langsamfahrt',
   VR0:'Vr 0 – Halt erwarten', VR1:'Vr 1 – Fahrt erwarten', VR2:'Vr 2 – Langsamfahrt erwarten', DARK:'dunkel'
 };
+const BO_TXT = {HP0:'H 0 – Halt', HP1:'H 1 – Fahrt', HP2:'H 2 – Fahrt mit Geschwindigkeitsbeschränkung (40 km/h)', VR0:'V 0 – Halt erwarten', VR1:'V 1 – Fahrt erwarten', VR2:'V 2 – Fahrt mit Geschwindigkeitsbeschränkung erwarten', DARK:'dunkel'};
 const ERSATZ_TXT = {zs1:'Zs 1 – Ersatzsignal', zs7:'Zs 7 – Vorsichtsignal', zs8:'Zs 8 – Gegengleis-Ersatzsignal'};
 function mainText(i){
   const m = MAIN[i], r = S.sig[i];
-  let t = ASPECT_TXT[r.aspect];
+  let t = (m.bo ? BO_TXT : ASPECT_TXT)[r.aspect];
   if(m.ersatz && r.ersatzOn) t += ' + ' + ERSATZ_TXT[m.ersatz];
   if(r.zs3On) t += ' · Zs 3: ' + m.zs3*10;
   if(r.zs3v) t += ' · Zs 3v: ' + r.zs3v*10;
@@ -1377,7 +1496,7 @@ function mainText(i){
   if(m.left) t += ' · Ne 4: steht links (ungewöhnliche Stelle)';
   return t;
 }
-function distText(j){ const r = S.dsig[j], d = DIST[j]; return ASPECT_TXT[r.aspect] + (r.zs3v ? ' · Zs 3v: ' + r.zs3v*10 : '') + ' · ' + d.abst + ' m bis Hauptsignal' + (d.short ? ' (verkürzt)' : ''); }
+function distText(j){ const r = S.dsig[j], d = DIST[j]; return (d.bo ? BO_TXT : ASPECT_TXT)[r.aspect] + (r.zs3v ? ' · Zs 3v: ' + r.zs3v*10 : '') + ' · ' + d.abst + ' m bis Hauptsignal' + (d.short ? ' (verkürzt)' : ''); }
 
 // ---------------- Geschwindigkeiten ----------------
 function vAllowed(){
@@ -1392,7 +1511,7 @@ function vAllowed(){
 // AVG-Stadtbahn (PZB 90 Version AVG, GT8-100C/D): Zugart O fest, Frühhalt VÜ 3, 85 blinkt die ersten 40 m.
 function pzbNew(){
   const zug = AVG ? 'O' : SC.zug;
-  return {zug, mon:[], hidden:[], m500:null, restr:null, start: AVG ? null : {s0:0}, noData: AVG ? {s0:0} : null,
+  return {zug, mon:[], hidden:[], m500:null, restr:null, start: AVG || TRAM ? null : {s0:0}, noData: AVG && !TRAM ? {s0:0} : null,
     slowT:0, befehl:false, befLamp:false, lim:ZUGART[zug].vmax, pufT:0, pufFlag:false, test:null, lastW:-9, lastF:-9};
 }
 function pzbActive(P){ return P.mon.length > 0 || !!P.m500 || !!P.start; }
@@ -1527,9 +1646,9 @@ function pzbUpdate(dt){
     if(P.pufT > 1.5 && !P.pufFlag){ P.pufFlag = true; error('Ril 483: v-Überwachung ' + Math.round(lim) + ' km/h nicht um mindestens 5 km/h unterfahren'); }
   } else P.pufT = 0;
 }
-function requireWT(name){ if(pzbDead()) return; S.wt = {t:0, name, ok:false}; }
+function requireWT(name){ if(pzbDead() || isBo(S.front)) return; S.wt = {t:0, name, ok:false}; }
 // ---- PZB gestört / Störschalter (Schaublatt PZB 90 AVG, Modul 17 Tag 1) ----
-function pzbDead(){ return S.pzbOff || !!(S.pzbF && S.pzbF.kind === 'dark'); }
+function pzbDead(){ return TRAM || S.pzbOff || !!(S.pzbF && S.pzbF.kind === 'dark'); }
 function pzbClear(){ const P = S.pzb; P.mon = []; P.m500 = null; P.hidden = []; P.restr = null; P.start = null; P.noData = null; P.slowT = 0; P.pufFlag = false; P.befLamp = false; audio.stop('hupe'); S.wt = null; }
 function setPzbRestr(on){ S.restr = S.restr.filter(r => !r.pzbF); if(on) S.restr.push({v:50, src:'PZB gestört', pzbF:true}); }
 function meldeStellen(){ return AVG ? 'BZ (mit Bitte um Vormeldung) und Zü AVG' : 'Fahrzeugdisponent und Betriebszentrale'; }
@@ -1662,12 +1781,16 @@ function pressFdl(){
 }
 
 // ---------------- Aufrüsten: Stromabnehmer, Hauptschalter, Hilfsbetriebe, Druckluft ----------------
+function voltAt(p){ if(!SYSW) return 'ac'; return p < SYSW.s0 ? 'ac' : p > SYSW.s1 ? 'dc' : null; }   // Fahrdrahtspannung am Stromabnehmer (null = Systemtrennstelle)
 function pressMotor(){
   const H = S.hs;
   if(H.st === 'aus'){ H.st = 'start'; H.t = 0; snd.ev('click'); log('Aufrüsten: Steuerstrom ein, Stromabnehmer heben', 'fdl'); }
   else if(H.st === 'ein'){
-    if(S.v > 0.3){ log('Motor nur im Stillstand abstellen', 'fdl'); return; }
+    if(S.v > 0.3 || (SYSW && S.front > SYSW.el1v - 50 && S.front < SYSW.el2 + 30)){ H.st = 'hsaus'; H.t = 0; snd.ev('hsOff'); log('Hauptschalter aus – Stromabnehmer bleibt am Fahrdraht', 'fdl'); return; }
     H.st = 'aus'; H.t = 0; snd.ev('hsAus'); log('Hauptschalter aus, Stromabnehmer gesenkt – Fahrzeug abgerüstet', 'fdl');
+  } else if(H.st === 'hsaus'){
+    if(!voltAt(S.front - 10)){ snd.ev('click'); log('Keine Fahrdrahtspannung – Hauptschalter lässt sich nicht einschalten', 'fdl'); return; }
+    H.st = 'hsein'; H.t = 0; snd.ev('click');
   }
 }
 function hsStep(dt){
@@ -1676,7 +1799,17 @@ function hsStep(dt){
     if(t0 < 0.3 && H.t >= 0.3) snd.ev('panto');
     if(t0 < 2.9 && H.t >= 2.9) log('Stromabnehmer am Fahrdraht – Fahrdrahtspannung vorhanden', 'fdl');
     if(t0 < 3.4 && H.t >= 3.4){ snd.ev('hsEin'); log('Hauptschalter ein', 'fdl'); }
-    if(H.t >= 4.4){ H.st = 'ein'; log('Fahrzeug aufgerüstet – Lüfter laufen' + (H.air < 8 ? ', Kompressor füllt den Hauptluftbehälter' : ''), 'fdl'); }
+    if(H.t >= 4.4){ H.st = 'ein'; H.sys = voltAt(S.front - 10) || H.sys; log('Fahrzeug aufgerüstet – Lüfter laufen' + (H.air < 8 ? ', Kompressor füllt den Hauptluftbehälter' : ''), 'fdl'); }
+  }
+  if(H.st === 'hsein' && H.t >= 0.6){
+    H.st = 'ein'; snd.ev('hsEin');
+    const sy = voltAt(S.front - 10);
+    if(sy && sy !== H.sys){ H.sys = sy; log('Hauptschalter ein – Fahrzeug auf ' + (sy === 'dc' ? '750 V Gleichspannung' : '15 kV 16,7 Hz') + ' umgeschaltet', 'fdl'); }
+    else log('Hauptschalter ein', 'fdl');
+  }
+  if(H.st === 'ein' && !voltAt(S.front - 10)){
+    H.st = 'hsaus'; H.t = 0; snd.ev('arc');
+    if(!H.arcErr){ H.arcErr = true; error('Mit eingeschaltetem Hauptschalter in die Systemtrennstelle gefahren – Überschlag, Schutzabschaltung'); }
   }
   // Druckluft: Kompressor schaltet bei 8 bar ein und bei 10 bar ab; jede Bremsung verbraucht Luft
   if(H.st === 'ein'){ if(H.air < 8) H.comp = true; if(H.air >= 10) H.comp = false; } else H.comp = false;
@@ -1777,23 +1910,25 @@ function step(dt){
   for(const n of NE6) if(crossed(n.pos)) log('Ne 6 – Haltepunkt ' + n.name + ' ist zu erwarten');
   BUE.forEach((b, k) => {
     const q = S.bue[k]; if(q.done) return;
-    if(crossed(b.sign) && lern) log('Bü 4 – Pfeiftafel: etwa 3 Sekunden pfeifen (Taste H)');
-    if(S.horn && fr >= b.sign - 30 && fr < b.pos){ q.acc += dt; if(!q.ok && q.acc >= 2.5){ q.ok = true; if(lern) log('Gepfiffen – Bahnübergang in ' + fmtM(b.pos - fr)); } }
-    if(crossed(b.pos)){ q.done = true; if(!q.ok) error('Bü 4: vor dem Bahnübergang nicht etwa 3 Sekunden gepfiffen'); }
+    const sh = b.kind === 'sh4';
+    if(crossed(b.sign) && lern) log(sh ? 'Sh 4 – Läutetafel: Glocke betätigen (Taste H)' : 'Bü 4 – Pfeiftafel: etwa 3 Sekunden pfeifen (Taste H)');
+    if(S.horn && fr >= b.sign - 30 && fr < b.pos){ q.acc += dt; if(!q.ok && q.acc >= (sh ? 1 : 2.5)){ q.ok = true; if(lern) log((sh ? 'Geläutet – Fußgängerüberweg in ' : 'Gepfiffen – Bahnübergang in ') + fmtM(b.pos - fr)); } }
+    if(crossed(b.pos)){ q.done = true; if(!q.ok) error(sh ? 'Sh 4: an der Läutetafel nicht geläutet' : 'Bü 4: vor dem Bahnübergang nicht etwa 3 Sekunden gepfiffen'); }
   });
   DIST.forEach((d,j) => {
     if(d.mast || !crossed(d.pos) || onGG(d.pos)) return;
     const r = S.dsig[j], a = r.aspect;
     if(a === 'VR0' || a === 'VR2' || a === 'KS2' || (a === 'KS1B' && r.zs3v <= 9)) requireWT('Vorsignal ' + d.for + ' (' + ASPECT_TXT[a].split(' – ')[0] + ')');
-    if(d.short && lern && a !== 'VR1' && a !== 'KS1') log('Verkürzter Vorsignalabstand: ' + d.abst + ' m statt ' + BW + ' m – weißes Zusatzlicht, früher bremsen', 'pzb');
+    if(d.short && !d.bo && lern && a !== 'VR1' && a !== 'KS1') log('Verkürzter Vorsignalabstand: ' + d.abst + ' m statt ' + BW + ' m – weißes Zusatzlicht, früher bremsen', 'pzb');
     if(lern) log('Vorsignal ' + d.for + ': ' + distText(j));
   });
   for(const l of LF){
     if(!crossed(l.pos)) continue;
-    if(l.k === 'lf6'){ log('Lf 6: ' + l.v*10 + ' km/h ab dem nächsten Lf 7'); if(l.v <= 9) requireWT('Lf 6 (Kennziffer ' + l.v + ')'); }
+    if(l.k === 'lf6' && l.g) log('G 1a: ' + l.v*10 + ' km/h ab dem nächsten G 2a');
+    else if(l.k === 'lf6'){ log('Lf 6: ' + l.v*10 + ' km/h ab dem nächsten Lf 7'); if(l.v <= 9) requireWT('Lf 6 (Kennziffer ' + l.v + ')'); }
     else {
       const nv = l.v*10;
-      const src = l.src || (l.k === 'fp' ? 'Fahrplan' : 'Lf 7');
+      const src = l.src || (l.k === 'fp' ? 'Fahrplan' : l.g ? (nv < S.lineV ? 'G 2a' : 'G 4') : 'Lf 7');
       if(nv < S.lineV){ S.lineV = nv; S.pendingLine = null; if(lern || l.k !== 'fp' || l.src) log(src + ': ' + nv + ' km/h ab hier'); }
       else if(nv > S.lineV){ S.pendingLine = {v:nv, at:l.pos}; if(lern || l.k !== 'fp' || l.src) log(src + ': ' + nv + ' km/h, sobald der Zugschluss vorbei ist'); }
     }
@@ -1816,6 +1951,35 @@ function step(dt){
       if(X.t > 6){ X.v = Math.min(15, X.v + 0.9*dt); X.front -= X.v*dt; }
       if(X.front + 76 < m.pos - 40){ X.state = 'passed'; log('Gegenzug durchgefahren – Fahrstraße ab ' + m.id + ' wird eingestellt', 'fdl'); }
     }
+  });
+  // Tram-Train: Systemwechsel (El 1v, El 1, Systemtrennstelle, El 2) und Ende der Zugsicherung
+  if(SYSW){
+    if(crossed(SYSW.el1v)) log('El 1v – Ausschaltsignal erwarten: Fahrschalter auf 0, vor El 1 Hauptschalter aus (Taste M)', 'fdl');
+    if(crossed(SYSW.el1)){
+      if(S.hs.st === 'ein'){ error('El 1: Hauptschalter nicht ausgeschaltet'); S.hs.st = 'hsaus'; S.hs.t = 0; snd.ev('arc'); }
+      else log('El 1 – Hauptschalter aus, antriebslos durch die Systemtrennstelle', 'fdl');
+    }
+    if(crossed(SYSW.el2)) log('El 2 – Einschalten erlaubt: Hauptschalter ein (Taste M) – Fahrleitung jetzt 750 V Gleichspannung', 'fdl');
+    if(S.v === 0 && !voltAt(fr - 10) && fr > SYSW.s0){ S.hs.stuckT += dt; if(S.hs.stuckT > 6){ finish('In der Systemtrennstelle liegen geblieben – ohne Fahrdrahtspannung, Hilfsfahrzeug nötig'); return; } }
+  }
+  if(SC.so2 && crossed(SC.so2)) log('So 2 – Ende der Zugsicherung: ab hier BOStrab, Fahren auf Sicht, keine PZB-Gleismagnete', 'fdl');
+  if(BOZ.length && crossed(BOZ[0][0])) log('Beginn BOStrab-Strecke: Fahrsignale, Weichensignale und G-Signale beachten', 'fdl');
+  // Fahrsignale mit Anforderung (St 9 „A“): nach der Wartezeit F 1, nach der Vorbeifahrt wieder F 0
+  FSIG.forEach((f, k) => {
+    const q = S.fs[k];
+    if(!q.req && fr > f.pos - 220 && fr < f.pos && S.door.state === 'zu' && (S.v > 1 || fr > f.pos - 60)){ q.req = true; q.t = 0; q.wait = 3 + Math.round(hash(k*31 + SC.id)*11); if(lern) log('Fahrsignal ' + f.id + ': Fahrtanforderung angenommen (A leuchtet)'); }
+    if(q.req){
+      q.t += dt;
+      if(q.asp === 'F0' && q.t >= q.wait){ q.asp = 'F1'; q.gT = 0; }
+      else if(q.asp === 'F1'){ q.gT += dt; if(q.gT > 22 && fr < f.pos - S.v*S.v/2 - 25){ q.asp = 'F4'; q.gT = 0; } }
+      else if(q.asp === 'F4'){ q.gT += dt; if(q.gT > 2.5){ q.asp = 'F0'; q.req = false; } }
+    }
+    if(crossed(f.pos)){ if(q.asp === 'F0') error('Fahrsignal ' + f.id + ': F 0 überfahren – an der Haltlinie halten'); else if(lern) log('Fahrsignal ' + f.id + ' mit ' + (q.asp === 'F1' ? 'F 1' : 'F 4') + ' passiert'); }
+    if(q.req && fr - TRAIN_LEN > f.pos + 15){ q.asp = 'F0'; q.req = false; }
+  });
+  WSIG.forEach(w => {
+    if(crossed(w.pos) && lern) log(wsigText(w));
+    if(/^w[123]$/.test(w.w) && crossed(w.pos + 8)) S.restr.push({v:15, endRear:w.pos + 40, src:'W ' + w.w.slice(1) + ' – Weiche nicht verschlossen'});
   });
   LSIG.forEach((l,i) => {
     if(!crossed(l.pos)) return;
@@ -1889,14 +2053,14 @@ function onMainPass(i){
         const g = m.ersatz === 'zs8' && GG.find(x => x.sig === i);
         if(g){ S.gg = g; log('Weichenverbindung: Fahrt auf das Gegengleis bis km ' + kmAt(g.b1).toFixed(1).replace('.', ',') + (g.nst ? ' (vor ' + g.nst + ')' : '')); }
       }
-    } else { error('Signal ' + m.id + ': Halt zeigendes Signal überfahren (Hp 0)'); S.dweg = {id:m.id, pos:m.pos}; }
+    } else { error('Signal ' + m.id + ': Halt zeigendes Signal überfahren (' + (m.bo ? 'H 0' : 'Hp 0') + ')'); S.dweg = {id:m.id, pos:m.pos}; }
     return;
   }
   if(r.aspect === 'KS2' || (r.aspect === 'KS1B' && r.zs3v <= 9)) requireWT('Signal ' + m.id + ' (' + ASPECT_TXT[r.aspect].split(' – ')[0] + ')');
   if(m.mastVr >= 0){ const va = S.dsig[m.mastVr].aspect; if(va === 'VR0' || va === 'VR2') requireWT('Vorsignal am Signal ' + m.id + ' (' + ASPECT_TXT[va].split(' – ')[0] + ')'); }
   const we = m.wbEnd === null ? m.pos + 160 : m.wbEnd;
   if(r.zs3On) S.restr.push({v:m.zs3*10, endRear:we, src:'Zs 3 am Signal ' + m.id});
-  if(r.aspect === 'HP2') S.restr.push({v:40, endRear:we, src:'Hp 2 am Signal ' + m.id});
+  if(r.aspect === 'HP2') S.restr.push({v:40, endRear:we, src:(m.bo ? 'H 2' : 'Hp 2') + ' am Signal ' + m.id});
   if(lern && (r.zs3On || r.aspect === 'HP2')) log('Anschließender Weichenbereich ' + Math.round(we - m.pos) + ' m – bis der Zugschluss die letzte Weiche verlassen hat', 'fdl');
   if(lern) log('Signal ' + m.id + ': ' + mainText(i));
 }
@@ -2083,6 +2247,7 @@ const snd = {
     if(bt > this.btLast + 0.05) this.ev('air', Math.min(1, (bt - this.btLast)*1.5));
     else if(bt < 0.01 && this.btLast > 0.05) this.ev('release');
     this.btLast = bt;
+    if(this.bell && S.horn && t - (this.lastDing || 0) > 0.2){ this.lastDing = t; this.ev('ding'); }
   },
   burst(type, f, q, dur, vol, delay, buf){
     const c = this.c, t = c.currentTime + (delay || 0), x = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain();
@@ -2106,6 +2271,9 @@ const snd = {
       case 'pantoDown': this.tone('sawtooth', 115, 70, 2.0, 0.025, 0.3, 0.2); this.burst('lowpass', 500, 1, 0.15, 0.25, 2.3); break;
       case 'hsEin': this.burst('lowpass', 150, 1.2, 0.4, 1.0); this.burst('highpass', 2500, 0.7, 0.05, 0.4); this.tone('sine', 75, 40, 0.35, 0.45); break;
       case 'hsAus': this.burst('lowpass', 190, 1, 0.3, 0.8); this.burst('highpass', 1800, 0.6, 0.55, 0.14, 0.04); this.ev('pantoDown'); break;
+      case 'hsOff': this.burst('lowpass', 190, 1, 0.3, 0.8); this.burst('highpass', 1800, 0.6, 0.45, 0.12, 0.04); break;
+      case 'arc': this.burst('highpass', 2800, 0.6, 0.45, 0.6); this.burst('lowpass', 160, 1, 0.3, 0.9); this.burst('bandpass', 900, 2, 0.25, 0.3, 0.05); break;
+      case 'ding': { const c = this.c, t = c.currentTime; for(const [f, v, d] of [[1240, 0.08, 0.7], [3130, 0.035, 0.4], [2050, 0.03, 0.5]]){ const o = c.createOscillator(), g = c.createGain(); o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g); g.connect(this.m); o.start(t); o.stop(t + d + 0.05); } break; }
       case 'abblasen': this.burst('highpass', 2300, 0.6, 1.0, 0.2); break;
       case 'air': this.burst('highpass', 1700, 0.5, 0.4, 0.05 + 0.12*(x || 0.5)); break;
       case 'release': this.burst('highpass', 1100, 0.5, 1.5, 0.15); break;
@@ -2121,7 +2289,7 @@ const snd = {
         this.burst('lowpass', 120, 1, 0.5, 0.8, 0, this.bb); break; }
     }
   },
-  horn(on){ if(!this.c) return; this.set(this.L.horn.gain, on && audio.on ? 0.06 : 0, on ? 0.02 : 0.06); }
+  horn(on){ if(!this.c) return; this.bell = !!(on && isBo(S.front)); this.set(this.L.horn.gain, on && audio.on && !this.bell ? 0.06 : 0, on ? 0.02 : 0.06); }
 };
 // Weichen und Bahnübergänge: Stöße je Achse
 function sndJoints(prev, fr){
@@ -2189,7 +2357,7 @@ function drawVr(ctx, a, s, kurz){
 }
 function glyph(ctx, o, s, t){
   const blink = (t % 1) < 0.55;
-  if(ONLYLIGHT && ['lf6','lf7','ne5','ra10','sign','ne3','ne6','ne1','bue4'].includes(o.k)) return;
+  if(ONLYLIGHT && ['lf6','lf7','ne5','ra10','sign','ne3','ne6','ne1','bue4','sh7','sh4','el1v','el1','el2','so2'].includes(o.k)) return;
   ctx.save(); ctx.scale(s, s);
   if(o.k === 'main'){
     const m = MAIN[o.ref], r = S.sig[o.ref], a = r.aspect;
@@ -2234,7 +2402,7 @@ function glyph(ctx, o, s, t){
     if(s > 3) txt(ctx, String(o.v), 0, -0.1, 0.4, '#111');
   } else if(o.k === 'lf7'){
     ctx.fillStyle = '#111'; ctx.fillRect(-0.36, -0.46, 0.72, 0.92);
-    ctx.fillStyle = '#f4f4f0'; ctx.fillRect(-0.32, -0.42, 0.64, 0.84);
+    ctx.fillStyle = o.g && o.red ? '#f2c230' : '#f4f4f0'; ctx.fillRect(-0.32, -0.42, 0.64, 0.84);   // G 2a gelb, G 4 / Lf 7 weiß
     if(s > 3) txt(ctx, String(o.v), 0, 0.02, 0.6, '#111');
   } else if(o.k === 'ne5'){
     ctx.fillStyle = '#111'; ctx.fillRect(-0.3, -0.3, 0.6, 0.6);
@@ -2288,6 +2456,43 @@ function glyph(ctx, o, s, t){
     ctx.save(); ctx.clip(); ctx.strokeStyle = '#111'; ctx.lineWidth = 0.1;
     for(const c of [-0.3, 0, 0.3]){ ctx.beginPath(); ctx.moveTo(c - 0.17, 0.3); ctx.lineTo(c + 0.17, -0.3); ctx.stroke(); }
     ctx.restore();
+  } else if(o.k === 'sh7'){
+    // Sh 7 Haltestellenzeichen/Haltepunkt: schwarze Tafel mit weißem H
+    ctx.fillStyle = '#111'; ctx.fillRect(-0.24, -0.3, 0.48, 0.6); ctx.fillStyle = '#f4f4f0'; ctx.fillRect(-0.21, -0.27, 0.42, 0.54); ctx.fillStyle = '#111'; ctx.fillRect(-0.18, -0.24, 0.36, 0.48);
+    if(s > 3) txt(ctx, 'H', 0, 0.02, 0.4, '#f4f4f0');
+  } else if(o.k === 'sh4'){
+    // Sh 4 Läutetafel: weiße Tafel mit schwarzem L
+    ctx.fillStyle = '#111'; ctx.fillRect(-0.24, -0.3, 0.48, 0.6); ctx.fillStyle = '#f4f4f0'; ctx.fillRect(-0.21, -0.27, 0.42, 0.54);
+    if(s > 3) txt(ctx, 'L', 0, 0.02, 0.44, '#111');
+  } else if(o.k === 'fsig'){
+    // Fahrsignal (BOStrab): weißer Balken waagerecht F 0, senkrecht F 1, Punkt F 4; darüber Anforderungsanzeige „A“ (St 9)
+    const q = S.fs[o.ref], wl = (fn) => { ctx.save(); ctx.shadowColor = C.white; ctx.shadowBlur = Math.max(6, Math.min(24, 0.12*s)); ctx.fillStyle = C.white; fn(); ctx.restore(); };
+    box(ctx, -0.17, -0.68, 0.34, 0.3, s); box(ctx, -0.3, -0.34, 0.6, 0.68, s);
+    if(q.req){ if(s > 4) txt(ctx, 'A', 0, -0.52, 0.24, C.white, true); else lamp(ctx, 0, -0.53, 0.06, C.white, true, s); }
+    if(q.asp === 'F0') wl(() => ctx.fillRect(-0.21, -0.045, 0.42, 0.09));
+    else if(q.asp === 'F1') wl(() => ctx.fillRect(-0.045, -0.21, 0.09, 0.42));
+    else wl(() => { ctx.beginPath(); ctx.arc(0, 0, 0.075, 0, 7); ctx.fill(); });
+  } else if(o.k === 'wsig'){
+    // Weichensignal: leuchtender Winkel (W 1–3 nicht verschlossen, 15 km/h), mit Grundstrich W 11–13 (verschlossen)
+    const w = WSIG[o.ref].w, n = +w.slice(1), dir = n % 10;
+    box(ctx, -0.25, -0.25, 0.5, 0.5, s);
+    ctx.save(); ctx.rotate(dir === 2 ? Math.PI/2 : dir === 3 ? -Math.PI/2 : 0); ctx.strokeStyle = C.white; ctx.lineWidth = 0.055; ctx.shadowColor = C.white; ctx.shadowBlur = Math.max(5, Math.min(20, 0.1*s));
+    ctx.beginPath(); ctx.moveTo(-0.13, 0.04); ctx.lineTo(0, -0.1); ctx.lineTo(0.13, 0.04); ctx.stroke();
+    if(n >= 10){ ctx.beginPath(); ctx.moveTo(-0.14, 0.14); ctx.lineTo(0.14, 0.14); ctx.stroke(); }
+    ctx.restore();
+  } else if(o.k === 'el1v' || o.k === 'el1' || o.k === 'el2'){
+    // Fahrleitungssignale: blaue, auf der Spitze stehende Tafel mit weißem Rand – El 1v zwei Quadrate, El 1 unterbrochenes U, El 2 geschlossenes U
+    ctx.beginPath(); ctx.moveTo(0, -0.42); ctx.lineTo(0.42, 0); ctx.lineTo(0, 0.42); ctx.lineTo(-0.42, 0); ctx.closePath(); ctx.fillStyle = '#f4f4f0'; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(0, -0.37); ctx.lineTo(0.37, 0); ctx.lineTo(0, 0.37); ctx.lineTo(-0.37, 0); ctx.closePath(); ctx.fillStyle = '#1f4fa8'; ctx.fill();
+    ctx.fillStyle = '#f4f4f0'; ctx.strokeStyle = '#f4f4f0'; ctx.lineWidth = 0.065; ctx.lineCap = 'butt';
+    if(o.k === 'el1v'){ ctx.fillRect(-0.18, -0.06, 0.12, 0.12); ctx.fillRect(0.06, -0.06, 0.12, 0.12); }
+    else if(o.k === 'el2'){ ctx.beginPath(); ctx.moveTo(-0.12, -0.16); ctx.lineTo(-0.12, 0.03); ctx.arc(0, 0.03, 0.12, Math.PI, 0, true); ctx.lineTo(0.12, -0.16); ctx.stroke(); }
+    else { ctx.beginPath(); ctx.moveTo(-0.12, -0.16); ctx.lineTo(-0.12, 0.03); ctx.arc(0, 0.03, 0.12, Math.PI, Math.PI*0.62, true); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0.12, -0.16); ctx.lineTo(0.12, 0.03); ctx.arc(0, 0.03, 0.12, 0, Math.PI*0.38, false); ctx.stroke(); }
+  } else if(o.k === 'so2'){
+    // So 2 Ende der Zugsicherung: weiße Tafel mit zwei schwarzen Punkten und rotem Schrägstreifen
+    ctx.fillStyle = '#111'; ctx.fillRect(-0.26, -0.26, 0.52, 0.52); ctx.fillStyle = '#f4f4f0'; ctx.fillRect(-0.24, -0.24, 0.48, 0.48);
+    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(0, -0.1, 0.055, 0, 7); ctx.arc(0, 0.1, 0.055, 0, 7); ctx.fill();
+    ctx.save(); ctx.beginPath(); ctx.rect(-0.24, -0.24, 0.48, 0.48); ctx.clip(); ctx.strokeStyle = '#d0281f'; ctx.lineWidth = 0.08; ctx.beginPath(); ctx.moveTo(-0.3, 0.3); ctx.lineTo(0.3, -0.3); ctx.stroke(); ctx.restore();
   } else if(o.k === 'sign'){
     ctx.fillStyle = '#1d4f91'; ctx.fillRect(-1.2, -0.26, 2.4, 0.52);
     if(s > 6) txt(ctx, o.name, 0, 0.01, 0.34, '#fff');
@@ -2714,7 +2919,7 @@ function drawCab(ctx, W, H, u){
   // Leuchtmelder
   const H0 = S.hs, lamps = [
     ['HS', H0.st === 'ein' ? '#45d37b' : '#e2483d', true],
-    ['SA', '#f2c230', H0.st === 'ein' || (H0.st === 'start' && H0.t > 2.9)],
+    ['SA', '#f2c230', H0.st === 'ein' || H0.st === 'hsaus' || H0.st === 'hsein' || (H0.st === 'start' && H0.t > 2.9)],
     ['Kp', '#f4f6ff', H0.comp],
     ['Tür', '#f2c230', S.door.state !== 'zu'],
     ['Sifa', '#f4f6ff', S.sifa.t >= 30 && (S.t % 0.6) < 0.4]
@@ -2744,18 +2949,23 @@ function bounds(o){
   }
   if(o.k === 'dist'){ const d = DIST[o.ref]; return d.sys === 'ks' ? [-0.34, MAIN[d.target].zs3 ? 1.9 : 1.35] : [-0.55, 1.6]; }
   if(o.k === 'ls') return [-0.24, 0.24];
+  if(o.k === 'fsig') return [-0.7, 0.36];
+  if(o.k === 'wsig') return [-0.27, 0.27];
+  if(o.k === 'sh7' || o.k === 'sh4') return [-0.32, 0.32];
+  if(o.k === 'el1v' || o.k === 'el1' || o.k === 'el2') return [-0.45, 0.45];
+  if(o.k === 'so2') return [-0.28, 0.28];
   if(o.k === 'ra10') return [-0.34, 0.32];
   if(o.k === 'ne6') return [-0.3, 0.3];
   if(o.k === 'bue4') return [-0.42, 0.42];
   if(o.k === 'ne1') return [-0.3, NE1[o.ref].gg ? 0.9 : 0.6];
   return [-0.46, 0.46];
 }
-function isLight(o){ return o.k === 'main' || o.k === 'dist' || o.k === 'ls'; }
+function isLight(o){ return o.k === 'main' || o.k === 'dist' || o.k === 'ls' || o.k === 'fsig' || o.k === 'wsig'; }
 function visible(o, d){ return d <= (isLight(o) ? LSICHT : SICHT); }
 function nextObj(){
   let best = null;
   for(const o of OBJS){
-    if(!['main','dist','lf6','lf7','ls','ra10','ne6','ne1','bue4'].includes(o.k)) continue;
+    if(!['main','dist','lf6','lf7','ls','ra10','ne6','ne1','bue4','sh4','fsig','wsig','el1v','el1','el2','so2'].includes(o.k)) continue;
     if(o.k === 'bue4' && OBJS.some(x => (x.k === 'main' || x.k === 'dist') && x.pos > o.pos && x.pos - o.pos < 400)) continue;
     if(o.k === 'ne1' && NE1[o.ref].gg && !(S.gg && NE1[o.ref].ret === S.gg)) continue;   // Tafeln am Gegengleis nur auf der Gegengleisfahrt
     if(o.k === 'ne6' && OBJS.some(x => (x.k === 'main' || x.k === 'dist') && x.pos > o.pos && x.pos - o.pos < 400)) continue;   // Signal danach hat Vorrang in der Lupe
@@ -2764,11 +2974,19 @@ function nextObj(){
   }
   return best;
 }
+function wsigText(w){ const n = +w.w.slice(1), d = ['geradeaus', 'rechts', 'links'][(n % 10) - 1]; return 'W ' + n + ' – Weiche ' + d + (n >= 10 ? ', verschlossen: zulässige Geschwindigkeit' : ', nicht verschlossen: höchstens 15 km/h'); }
 function objName(o){
   if(o.k === 'main') return 'Signal ' + MAIN[o.ref].id;
   if(o.k === 'dist') return 'Vorsignal ' + DIST[o.ref].for;
-  if(o.k === 'lf6') return 'Lf 6';
-  if(o.k === 'lf7') return 'Lf 7';
+  if(o.k === 'lf6') return o.g ? 'G 1a' : 'Lf 6';
+  if(o.k === 'lf7') return o.g ? (o.red ? 'G 2a' : 'G 4') : 'Lf 7';
+  if(o.k === 'fsig') return 'Fahrsignal ' + FSIG[o.ref].id;
+  if(o.k === 'wsig') return 'Weichensignal';
+  if(o.k === 'el1v') return 'El 1v';
+  if(o.k === 'el1') return 'El 1';
+  if(o.k === 'el2') return 'El 2';
+  if(o.k === 'so2') return 'So 2';
+  if(o.k === 'sh4') return 'Sh 4';
   if(o.k === 'ls') return 'Ls-Signal';
   if(o.k === 'ra10') return 'Ra 10';
   if(o.k === 'ne6') return 'Ne 6';
@@ -2779,8 +2997,15 @@ function objName(o){
 function objText(o){
   if(o.k === 'main') return mainText(o.ref);
   if(o.k === 'dist') return distText(o.ref);
-  if(o.k === 'lf6') return 'Lf 6 – ' + o.v*10 + ' km/h angekündigt';
-  if(o.k === 'lf7') return 'Lf 7 – ' + o.v*10 + ' km/h';
+  if(o.k === 'lf6') return (o.g ? 'G 1a – ' : 'Lf 6 – ') + o.v*10 + ' km/h angekündigt';
+  if(o.k === 'lf7') return (o.g ? (o.red ? 'G 2a – ' : 'G 4 – ') : 'Lf 7 – ') + o.v*10 + ' km/h';
+  if(o.k === 'fsig'){ const q = S.fs[o.ref]; return ({F0:'F 0 – Halt', F1:'F 1 – Fahrt frei geradeaus', F4:'F 4 – Halt erwarten'})[q.asp] + (q.req ? ' · A: Fahrtanforderung angenommen' : ''); }
+  if(o.k === 'wsig') return wsigText(WSIG[o.ref]);
+  if(o.k === 'el1v') return 'El 1v – Ausschaltsignal erwarten: Fahrschalter auf 0';
+  if(o.k === 'el1') return 'El 1 – Ausschaltsignal: Hauptschalter aus (Systemtrennstelle 15 kV / 750 V)';
+  if(o.k === 'el2') return 'El 2 – Einschaltsignal: Hauptschalter darf wieder ein';
+  if(o.k === 'so2') return 'So 2 – Ende der Zugsicherung: Fahren auf Sicht nach BOStrab';
+  if(o.k === 'sh4') return 'Sh 4 – Läutetafel: Glocke betätigen (Taste H)';
   if(o.k === 'ls') return S.ls[o.ref].sh1 ? 'Sh 1 – Fahrverbot aufgehoben' : 'Sh 0 – Halt! Fahrverbot';
   if(o.k === 'ra10') return 'Ra 10 – Rangierhalttafel';
   if(o.k === 'ne6') return 'Ne 6 – Haltepunkt ' + o.name + ' zu erwarten';
@@ -2791,6 +3016,7 @@ function objText(o){
 // Betriebszustand nach Schaublatt PZB 90 (AVG) für die Lernhilfe
 function pzbZustand(){
   const P = S.pzb;
+  if(TRAM) return '';
   if(S.pzbOff) return 'PZB aus (Störschalter)';
   if(S.pzbF && S.pzbF.kind === 'dark') return 'PZB gestört';
   if(P.test || S.zwang) return '';
@@ -2941,7 +3167,9 @@ function updateUI(){
   const P = S.pzb, Z = ZUGART[P.zug], blink = (S.t % 1) < 0.5;
   // Leuchtmelder nach I60R / EBI Cab 500 (Modul 17, Tag 1 und 2)
   const L = {'55':false, '70':false, '85':false, l1000:false, l500:false, bef:false, sand:false, pzb:false};
-  if(P.test){
+  if(TRAM){
+    // Straßenbahn: keine PZB – alle Leuchtmelder dunkel
+  } else if(P.test){
     const seq = ['pzb', '85', '70', '55', 'l1000', 'l500', 'bef', 'sand'], k = Math.floor(P.test.t/0.35);
     if(k < seq.length) L[seq[k]] = true; else seq.forEach(x => { L[x] = true; });
   } else if(S.pzbOff){
@@ -2968,8 +3196,8 @@ function updateUI(){
   el.lmBef.classList.toggle('on', L.bef); $('lmSand').classList.toggle('on', L.sand);
   {
     const H = S.hs, b = $('bMot'), st = H.st;
-    $('bMotT').textContent = st === 'aus' ? 'Motor starten' : st === 'start' ? (H.t < 2.9 ? 'Stromabnehmer …' : 'Hauptschalter …') : 'Motor abstellen';
-    b.className = 'dbtn mot' + (st === 'ein' ? ' on' : st === 'start' ? ' busy' : (lern ? ' need' : ''));
+    $('bMotT').textContent = st === 'aus' ? 'Motor starten' : st === 'start' ? (H.t < 2.9 ? 'Stromabnehmer …' : 'Hauptschalter …') : st === 'hsaus' ? 'HS einschalten' : st === 'hsein' ? 'Hauptschalter …' : (S.v > 0.3 || (SYSW && S.front > SYSW.el1v - 50 && S.front < SYSW.el2 + 30)) ? 'HS ausschalten' : 'Motor abstellen';
+    b.className = 'dbtn mot' + (st === 'ein' ? ' on' : st === 'start' || st === 'hsein' ? ' busy' : st === 'hsaus' ? ' busy' + (lern && voltAt(S.front - 10) ? ' need' : '') : (lern ? ' need' : ''));
   }
   {
     const D = S.door, b = $('bDoor'), Pi = D.station >= 0 ? S.pax[D.station] : null;
@@ -3003,6 +3231,7 @@ function updateUI(){
   else if(S.pzbF && S.pzbF.kind === 'dark') d = 'PZB-Fahrzeugeinrichtung gestört · max. 50 km/h';
   else if(S.zwang) d = (S.zwang.kind === 'pzb' ? 'S · ' : 'ZB · ') + S.zwang.reason;
   else if(pzbActive(P)) d = 'v-Überwachung ' + Math.round(P.lim) + ' km/h' + (P.mon.some(m => !m.ack) ? ' · WACHSAM!' : '');
+  else if(TRAM) d = 'Straßenbahn (BOStrab) · ' + leverLabel(S.lever);
   else d = (S.mode === 'rangier' ? 'Rangierfahrt' : 'Zugfahrt') + ' · Zugart ' + P.zug + (AVG ? ' fest' : '') + ' · ' + leverLabel(S.lever);
   el.digi.textContent = d; el.digi.classList.toggle('alarm', !!S.zwang);
   // Fahrplan
@@ -3153,8 +3382,8 @@ document.querySelectorAll('#vehSeg button').forEach(b => b.addEventListener('cli
 }));
 let menuOpen = false;
 function scTags(sc){
-  const t = [sc.avgOnly ? 'AVG-Stadtbahn' : VEHICLE === 'avg' && !sc.dbOnly ? 'Stadtbahn O' : 'Zugart ' + sc.zug];
-  if(sc.line) t.push(sc.halts.length + 1 + ' Halte · ' + (sc.end/1000).toFixed(0) + ' km');
+  const t = [sc.tram ? 'Straßenbahn' : sc.avgOnly ? 'AVG-Stadtbahn' : VEHICLE === 'avg' && !sc.dbOnly ? 'Stadtbahn O' : 'Zugart ' + sc.zug];
+  if(sc.line) t.push(sc.halts.length + (sc.tram ? sc.stations.length : 1) + ' Halte · ' + (sc.end/1000).toFixed(0) + ' km');
   if(sc.dbOnly && VEHICLE === 'avg') t.push('nur Regelfahrzeug');
   if(sc.test) t.push('Funktionsprüfung');
   if(sc.fp) t.push('Fahrplan ' + sc.nr);
@@ -3174,7 +3403,7 @@ function buildMenu(){
     ? 'PZB 90 Version AVG (GT8-100C/D, I60R) nach Schaublatt: Zugart O fest, höchstens 100 km/h, Frühhalt (VÜ 3, 65 km/h), Späthalt (VÜ 2, 45 km/h), nach 500 Hz 15 s unter 30 km/h → 25 km/h. Szenarien 11 und 12 fahren mit Regelfahrzeug.'
     : 'PZB 90 nach Ril 483: Zugart je Szenario, Startprogramm nach dem Aufrüsten (45 km/h, Wechselblinken).';
   const list = $('menuList'); list.textContent = '';
-  [1,2,3,4].forEach(lv => {
+  [1,2,3,4,5,6].forEach(lv => {
     const sec = document.createElement('section');
     const h = document.createElement('h3'); h.className = 'lvl-h lvl-' + lv; h.innerHTML = '<i></i>'; h.append(LVL[lv]);
     const grid = document.createElement('div'); grid.className = 'sc-grid';
@@ -3240,10 +3469,11 @@ function reset(){
   placeHandle();
   lern = SC.lern; $('tLern').setAttribute('aria-pressed', String(lern));
   const names = STATIONS.length > 6 ? STATIONS[0].name + ' – ' + STATIONS[STATIONS.length - 1].name + ' (' + STATIONS.length + ' Halte)' : STATIONS.map(x => x.name).join(' – ');
-  $('sub').textContent = 'Szenario ' + SC.id + ' · ' + SC.title + (names ? ' · ' + names : '') + ' · ' + LVL[SC.lvl] + (AVG ? ' · AVG-Stadtbahn' : '');
+  $('sub').textContent = 'Szenario ' + SC.id + ' · ' + SC.title + (names ? ' · ' + names : '') + ' · ' + LVL[SC.lvl] + (AVG ? ' · AVG-Stadtbahn' : TRAM ? ' · Straßenbahn' : '');
   log(SC.title + ': ' + SC.goal, 'fdl');
   log('Fahrzeug abgerüstet – zuerst Motor starten (Taste M): Stromabnehmer heben, Hauptschalter ein', 'fdl');
   if(S.mode === 'rangier') log('Rangierfahrt, höchstens 25 km/h. Am Lichtsperrsignal auf Sh 1 warten.');
+  else if(TRAM) log('Straßenbahn nach BOStrab: keine PZB, Fahren auf Sicht. Fahrsignale (F 0/F 1/F 4, A), Weichensignale, G-Signale und Läutetafeln beachten, im Tunnel H-/V-Signale. Sifa alle 30 s.');
   else log((AVG ? 'AVG-Stadtbahn, Zugart O fest, höchstens 100 km/h. ' : 'Zugart ' + SC.zug + '. Startprogramm aktiv (45 km/h) – befreien, sobald das Signal Fahrt über 30 km/h zeigt. ') + (SC.test ? 'Vorher PZB-Funktionsprüfung: Wachsam und Frei gleichzeitig. ' : '') + 'Sifa während der Fahrt alle 30 s.');
   { const nx = STATIONS.findIndex(st => !st.first); if(nx >= 0 && !FREIGHT){ S.announced[nx] = true; log('Ansage: Nächster Halt ' + STATIONS[nx].name + ' · ' + S.onboard + ' Fahrgäste an Bord', 'fdl'); } }
 }
@@ -3258,7 +3488,7 @@ openMenu();
 const R3 = (() => {
   const T = window.THREE, view3d = document.getElementById('view3d');
   const R = {ok:false, on:false};
-  const PH = 0.96, RT = 0.45;   // Bahnsteighöhe, Schienenoberkante
+  const PH = 0.96, PHN = PH, RT = 0.45;   // Bahnsteighöhe, Schienenoberkante
   if(!T || !view3d) return R;
   let renderer;
   try{ renderer = new T.WebGLRenderer({canvas:view3d, antialias:true, powerPreference:'high-performance'}); }
@@ -3292,6 +3522,7 @@ const R3 = (() => {
   const grassHill = tex(cnv(256, 256, (g, w, h) => { g.drawImage(grass.image, 0, 0); g.fillStyle = 'rgba(40,60,20,.18)'; g.fillRect(0, 0, w, h); }), [1, 1]);
   const grassFace = tex(grassHill.image, [0.05, 0.05]);
   const asphalt = tex(cnv(128, 128, (g, w, h) => { g.fillStyle = '#5d5b58'; g.fillRect(0, 0, w, h); for(let i = 0; i < 2500; i++){ const v = 70 + rnd()*40; g.fillStyle = 'rgb(' + v + ',' + v + ',' + v + ')'; g.fillRect(rnd()*w, rnd()*h, 1, 1); } g.fillStyle = '#d8d6cf'; g.fillRect(0, 60, 4, 8); }));
+  const hallTex = tex(cnv(128, 128, (g, w, h) => { g.fillStyle = '#d9d4c7'; g.fillRect(0, 0, w, h); g.strokeStyle = 'rgba(90,85,75,.35)'; g.lineWidth = 2; for(let i = 0; i <= 8; i++){ g.beginPath(); g.moveTo(0, i*h/8); g.lineTo(w, i*h/8); g.stroke(); g.beginPath(); g.moveTo(i*w/8, 0); g.lineTo(i*w/8, h); g.stroke(); } }));
   const glowTex = tex(cnv(64, 64, (g, w, h) => { const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.25, 'rgba(255,255,255,.85)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); }));
 
   const stripes = tex(cnv(32, 96, (g, w, h) => { g.fillStyle = '#f2f2ee'; g.fillRect(0, 0, w, h); g.fillStyle = '#d0281f'; g.fillRect(0, h*0.25, w, h*0.18); g.fillRect(0, h*0.62, w, h*0.18); }));
@@ -3315,7 +3546,7 @@ const R3 = (() => {
     plat:new T.MeshLambertMaterial({map:paving}), edge:new T.MeshLambertMaterial({color:0xd9d6cf}), wall:new T.MeshLambertMaterial({color:0x8a8780}), line:new T.MeshBasicMaterial({color:0xf4f4ee}),
     mast:new T.MeshLambertMaterial({color:0x5b6664}), wire:new T.LineBasicMaterial({color:0x2a2f30}), roof:new T.MeshLambertMaterial({color:0x5a6063, side:T.DoubleSide}),
     tunnel:new T.MeshBasicMaterial({color:0x2b2a27, side:T.DoubleSide}), tlamp:new T.MeshBasicMaterial({color:0xffd890}), portal:new T.MeshLambertMaterial({color:0x9a958a}),
-    hill:new T.MeshLambertMaterial({map:grassHill}), hillFace:new T.MeshLambertMaterial({map:grassFace}), road:new T.MeshLambertMaterial({color:0x5c5a56}), magnet:new T.MeshLambertMaterial({color:0xe3b417}), trough:new T.MeshLambertMaterial({color:0x95918a}), street:new T.MeshLambertMaterial({map:asphalt}), flat:new T.MeshLambertMaterial({color:0x6a6560}), stripes:new T.MeshLambertMaterial({map:stripes}), checker:new T.MeshLambertMaterial({map:checker}), cabWin:new T.MeshLambertMaterial({color:0x1a242c}), cabBand:new T.MeshLambertMaterial({color:0x2b2f31}), glass:new T.MeshLambertMaterial({color:0x9fc4d6, transparent:true, opacity:0.35}), kreuz:new T.MeshLambertMaterial({transparent:true, alphaTest:0.1, side:T.DoubleSide, map:tex(cnv(128, 128, (g, w, h) => { g.translate(w/2, h/2); for(const r of [0.785, -0.785]){ g.save(); g.rotate(r); g.fillStyle = '#c8102e'; g.fillRect(-62, -10, 124, 20); g.fillStyle = '#fff'; for(const x of [-44, 0, 44]) g.fillRect(x - 9, -8, 18, 16); g.restore(); } }))}),
+    hill:new T.MeshLambertMaterial({map:grassHill}), hillFace:new T.MeshLambertMaterial({map:grassFace}), road:new T.MeshLambertMaterial({color:0x5c5a56}), magnet:new T.MeshLambertMaterial({color:0xe3b417}), lawn:new T.MeshLambertMaterial({map:grassHill, color:0xb8d08c}), hall:new T.MeshLambertMaterial({map:hallTex, side:T.DoubleSide}), hallLight:new T.MeshBasicMaterial({color:0xfff6e0}), trough:new T.MeshLambertMaterial({color:0x95918a}), street:new T.MeshLambertMaterial({map:asphalt}), flat:new T.MeshLambertMaterial({color:0x6a6560}), stripes:new T.MeshLambertMaterial({map:stripes}), checker:new T.MeshLambertMaterial({map:checker}), cabWin:new T.MeshLambertMaterial({color:0x1a242c}), cabBand:new T.MeshLambertMaterial({color:0x2b2f31}), glass:new T.MeshLambertMaterial({color:0x9fc4d6, transparent:true, opacity:0.35}), kreuz:new T.MeshLambertMaterial({transparent:true, alphaTest:0.1, side:T.DoubleSide, map:tex(cnv(128, 128, (g, w, h) => { g.translate(w/2, h/2); for(const r of [0.785, -0.785]){ g.save(); g.rotate(r); g.fillStyle = '#c8102e'; g.fillRect(-62, -10, 124, 20); g.fillStyle = '#fff'; for(const x of [-44, 0, 44]) g.fillRect(x - 9, -8, 18, 16); g.restore(); } }))}),
     trunk:new T.MeshLambertMaterial({color:0x5a4430}), leaf:new T.MeshLambertMaterial({color:0xffffff}), house:new T.MeshLambertMaterial({color:0xffffff}), houseRoof:new T.MeshLambertMaterial({color:0xffffff}),
     post:new T.MeshLambertMaterial({color:0x3d4443}), station:new T.MeshLambertMaterial({map:tex(cnv(512, 160, (g, w, h) => { g.fillStyle = '#e6d9bf'; g.fillRect(0, 0, w, h); g.fillStyle = '#b9ab8e'; g.fillRect(0, h - 14, w, 14); for(let r = 0; r < 2; r++) for(let c = 0; c < 9; c++){ const x = 18 + c*55, y = 22 + r*66; g.fillStyle = '#f4efe4'; g.fillRect(x - 3, y - 3, 30, 44); g.fillStyle = r === 1 && c === 4 ? '#5a3d2b' : '#33414b'; g.fillRect(x, y, 24, r === 1 && c === 4 ? 52 : 38); } }))}), stRoof:new T.MeshLambertMaterial({color:0x8e3b2c})
   };
@@ -3400,16 +3631,21 @@ const R3 = (() => {
     for(const g of GG){ TRK.push({a:g.a0, b:g.a1, fx:s => ggX(g, s), xo:true}, {a:g.b0, b:g.b1, fx:s => ggX(g, s), xo:true}); }
     for(const B of BRANCH){ TRK.push({a:B.s0, b:B.s1 + 500, fx:s => s < B.s1 ? G3X*smooth((s - B.s0)/(B.s1 - B.s0)) : G3X + (s - B.s1)*0.06}); }
     built = {sc:SC, objs:OBJS};
+    if(R.look){ R.look.ty = R.look.yaw = R.look.tp = R.look.pitch = 0; }
   }
   const HILL = [[-40, 0], [-28, 5], [-17, 9.5], [-6, 12], [4, 12], [15, 9.5], [26, 5], [38, 0]];
   // Abschnitte nach BOStrab (Straßenbahn in der Stadt) aufteilen: [von, bis, bo]
+  function boKind(s){ if(!isBo(s)) return null; for(const z of BOZ) if(s >= z[0] && s < z[1]) return z[2]; return 'strasse'; }   // Rasengleis oder Straßenraum
   function boSplit(a, b){
     if(b <= a) return [];
-    const cuts = [a, b]; for(const g of KMSEG) if(g.bo){ if(g.from > a && g.from < b) cuts.push(g.from); if(g.to > a && g.to < b) cuts.push(g.to); }
+    const cuts = [a, b], cut = x => { if(x > a && x < b) cuts.push(x); };
+    for(const g of KMSEG) if(g.bo){ cut(g.from); cut(g.to); }
+    for(const z of BOZ){ cut(z[0]); cut(z[1]); }
     cuts.sort((x, y) => x - y); const out = [];
-    for(let i = 0; i < cuts.length - 1; i++) if(cuts[i + 1] - cuts[i] > 0.01) out.push([cuts[i], cuts[i + 1], isBo((cuts[i] + cuts[i + 1])/2)]);
+    for(let i = 0; i < cuts.length - 1; i++) if(cuts[i + 1] - cuts[i] > 0.01) out.push([cuts[i], cuts[i + 1], boKind((cuts[i] + cuts[i + 1])/2)]);
     return out;
   }
+  const xCross = s => FSIG.some(f => Math.abs(s - (f.pos + 15)) < 17);   // Querstraße an einer Kreuzung
   const inTunnel = s => TUNNELS.some(t => s > t.from - 5 && s < t.to + 5);
   const areaAt = s => AREAS.find(A => s > A.a0 - 20 && s < A.b1 + 20);
   function disposeChunk(c){ c.grp.traverse(x => { if(x.geometry && !Object.values(G).includes(x.geometry)) x.geometry.dispose(); if(x.userData.spr) x.material.dispose(); else if(x.material && x.material.map && x.userData.own){ x.material.map.dispose(); x.material.dispose(); } }); scene.remove(c.grp); DYN = DYN.filter(d => d.chunk !== c); }
@@ -3441,7 +3677,18 @@ const R3 = (() => {
     const slp = [];
     const boIv = boSplit(s0, s1);
     for(const [a, b] of boIv.filter(x => !x[2])) bAdd(M.bal, ribbon(o, a, b, ARCS.some(A => A.s0 < b + 2 && A.s1 > a - 2) ? 4 : 25, () => 0, [[-2.65, 0.19], [-1.55, 0.19]], 0.5));
-    for(const [a, b] of boIv.filter(x => x[2])){ bAdd(M.street, ribbon(o, a, b, 25, () => 0, [[-9.5, RT - 0.02], [5.3, RT - 0.02]], 3, 0.1)); bAdd(M.plat, ribbon(o, a, b, 25, () => 0, [[5.3, RT - 0.02], [5.3, RT + 0.12], [11.8, RT + 0.12]], 3, 0.5)); bAdd(M.plat, ribbon(o, a, b, 25, () => 0, [[-15.3, RT + 0.12], [-9.5, RT + 0.12], [-9.5, RT - 0.02]], 3, 0.5)); }
+    for(const [a, b, kd] of boIv.filter(x => x[2])){
+      const st = ARCS.some(A => A.s0 < b + 2 && A.s1 > a - 2) ? 6 : 25;
+      if(kd === 'rasen'){
+        bAdd(M.lawn, ribbon(o, a, b, st, () => 0, [[-7.0, 0], [-6.6, 0.38], [2.4, 0.38], [2.8, 0]], 4, 0.25));
+        bAdd(M.street, ribbon(o, a, b, st, () => 0, [[4.6, 0.05], [12.2, 0.05]], 3, 0.1)); bAdd(M.plat, ribbon(o, a, b, st, () => 0, [[12.2, 0.05], [12.2, 0.17], [15.4, 0.17]], 3, 0.5));
+        bAdd(M.street, ribbon(o, a, b, st, () => 0, [[-16.8, 0.05], [-9.2, 0.05]], 3, 0.1)); bAdd(M.plat, ribbon(o, a, b, st, () => 0, [[-20, 0.17], [-16.8, 0.17], [-16.8, 0.05]], 3, 0.5));
+        bAdd(M.line, ribbon(o, a, b, st, () => 0, [[8.35, 0.06], [8.45, 0.06]])); bAdd(M.line, ribbon(o, a, b, st, () => 0, [[-13.05, 0.06], [-12.95, 0.06]]));
+      } else {
+        bAdd(M.street, ribbon(o, a, b, st, () => 0, [[-9.5, RT - 0.02], [5.3, RT - 0.02]], 3, 0.1)); bAdd(M.plat, ribbon(o, a, b, st, () => 0, [[5.3, RT - 0.02], [5.3, RT + 0.12], [11.8, RT + 0.12]], 3, 0.5)); bAdd(M.plat, ribbon(o, a, b, st, () => 0, [[-15.3, RT + 0.12], [-9.5, RT + 0.12], [-9.5, RT - 0.02]], 3, 0.5));
+        if(BOZ.length){ bAdd(M.line, ribbon(o, a, b, st, () => 0, [[1.95, RT - 0.012], [2.07, RT - 0.012]])); bAdd(M.line, ribbon(o, a, b, st, () => 0, [[-6.27, RT - 0.012], [-6.15, RT - 0.012]])); }
+      }
+    }
     TRK.forEach((t, ti) => boSplit(Math.max(t.a, s0), Math.min(t.b, s1)).forEach(([a, b, bo]) => {
       if(b - a < 0.5) return;
       const bt = t.main ? 0.25 - ti*0.003 : 0.24 - (ti % 8)*0.003, stp = t.fixed && !ARCS.some(A => A.s0 < b + 2 && A.s1 > a - 2) ? 25 : 4;
@@ -3461,7 +3708,8 @@ const R3 = (() => {
       const s = k*60; if(inTunnel(s)) continue;
       const A = AREAS.find(X => s > X.a0 - 15 && s < X.b1 + 15), B = BRANCH.find(X => s > X.s0 - 15 && s < X.s1 + 520);
       const mast = d => { const p = W(s, d, 3.8); masts.push([p, p[3]]); }, arm = (d0, d1) => { const p = W(s, (d0 + d1)/2, 6.9); arms.push([p, p[3], Math.abs(d1 - d0)]); };
-      if(A){ mast(G3X + 2.6); arm(-0.9, G3X + 2.6); mast(G4X - 2.6); arm(G4X - 2.6, -3.3); }
+      if(isBo(s)){ mast(-2.1); arm(-5.0, 0.8); }
+      else if(A){ mast(G3X + 2.6); arm(-0.9, G3X + 2.6); mast(G4X - 2.6); arm(G4X - 2.6, -3.3); }
       else if(B){ mast(-6.9); arm(-6.9, 0.9); }
       else { mast(3.4); arm(-4.95, 3.45); }
     }
@@ -3475,6 +3723,7 @@ const R3 = (() => {
     // Bahnsteige
     for(const st of STATIONS){
       const a = Math.max(st.from, s0), b = Math.min(st.to, s1); if(b - a < 0.5) continue;
+      const PH = isBo(st.stop) ? 0.55 : PHN, under = inTunnel(st.stop);
       bAdd(M.plat, ribbon(o, a, b, 5, () => 0, [[1.75, PH], [7.5, PH]], 2.9, 0.5));
       bAdd(M.wall, ribbon(o, a, b, 5, () => 0, [[1.75, 0], [1.75, PH - 0.12]]));
       bAdd(M.edge, ribbon(o, a, b, 5, () => 0, [[1.7, PH - 0.12], [1.7, PH], [2.05, PH + 0.004]]));
@@ -3486,12 +3735,12 @@ const R3 = (() => {
       if(!st.hp){
         const ra = Math.max(a, mid - 55), rb = Math.min(b, mid + 55);
         if(rb - ra > 1){ bAdd(M.roof, ribbon(o, ra, rb, 5, () => 0, [[2.5, 4.6], [4.6, 5.0], [6.7, 4.6]])); for(let s = Math.ceil(ra/12)*12; s < rb; s += 12) boxAt(grp, o, s, 4.6, PH + 1.85, 0.22, 3.7, 0.22, M.post); }
-      } else if(st.stop - 40 > a && st.stop - 40 < b){
+      } else if(!under && st.stop - 40 > a && st.stop - 40 < b){
         const ss = st.stop - 40; boxAt(grp, o, ss, 6.0, PH + 2.45, 1.9, 0.1, 3.8, M.roof); boxAt(grp, o, ss, 6.85, PH + 1.2, 0.06, 2.3, 3.6, M.glass);
         for(const dz of [-1.75, 1.75]){ boxAt(grp, o, ss + dz, 6.85, PH + 1.2, 0.1, 2.4, 0.1, M.post); boxAt(grp, o, ss + dz, 6.1, PH + 1.2, 1.5, 2.3, 0.05, M.glass); }
         boxAt(grp, o, ss, 6.6, PH + 0.45, 0.4, 0.06, 2.6, M.post);
       }
-      for(let s = Math.ceil(a/25)*25; s < b; s += 25){ boxAt(grp, o, s, st.hp ? 6.6 : 3.2, PH + 2.25, 0.12, 4.5, 0.12, M.post); }
+      if(!under) for(let s = Math.ceil(a/25)*25; s < b; s += 25){ boxAt(grp, o, s, st.hp ? 6.6 : 3.2, PH + 2.25, 0.12, 4.5, 0.12, M.post); }
     }
     // Empfangsgebäude
     for(const st of STATIONS){
@@ -3505,12 +3754,47 @@ const R3 = (() => {
     // Tunnel
     for(const t of TUNNELS){
       const a = Math.max(t.from, s0), b = Math.min(t.to, s1);
+      const halls = t.city ? STATIONS.filter(st => st.stop > t.from && st.stop < t.to).map(st => [st.from - 8, st.to + 8, st]) : [];
       if(b - a > 0.5){
         const arch = []; for(let k = 0; k <= 12; k++){ const an = Math.PI*k/12; arch.push([-2.1 + 5.8*Math.cos(an), 0.2 + 6.6*Math.sin(an)]); }
-        bAdd(M.tunnel, ribbon(o, a, b, 6, () => 0, arch.reverse()));
-        bAdd(M.tunnel, ribbon(o, a, b, 25, () => 0, [[-7.9, 0.01], [3.7, 0.01]]));
-        bAdd(M.hill, ribbon(o, a, b, 6, () => 0, HILL, 3.9, 0.05));
-        for(let s = Math.ceil(a/25)*25; s < b; s += 25){ boxAt(grp, o, s, -6.6, 3.9, 0.2, 0.25, 0.8, M.tlamp); boxAt(grp, o, s, 2.4, 3.9, 0.2, 0.25, 0.8, M.tlamp); }
+        arch.reverse();
+        // Röhre außerhalb der Haltestellenhallen
+        let x = a; const pieces = [];
+        for(const [h0, h1] of halls){ if(h1 < x || h0 > b) continue; if(h0 > x) pieces.push([x, Math.min(b, h0)]); x = Math.max(x, h1); }
+        if(b - x > 0.3) pieces.push([x, b]);
+        for(const [pa, pb] of pieces){
+          bAdd(M.tunnel, ribbon(o, pa, pb, 6, () => 0, arch));
+          bAdd(M.tunnel, ribbon(o, pa, pb, 25, () => 0, [[-7.9, 0.01], [3.7, 0.01]]));
+          for(let s = Math.ceil(pa/25)*25; s < pb; s += 25){ boxAt(grp, o, s, -6.6, 3.9, 0.2, 0.25, 0.8, M.tlamp); boxAt(grp, o, s, 2.4, 3.9, 0.2, 0.25, 0.8, M.tlamp); }
+        }
+        if(!t.city) bAdd(M.hill, ribbon(o, a, b, 6, () => 0, HILL, 3.9, 0.05));
+        else bAdd(M.plat, ribbon(o, a, b, 25, () => 0, [[-10.5, 7.6], [8.8, 7.6]], 4, 0.25));    // Straßendecke über dem Tunnel
+        // unterirdische Haltestellen: Halle mit Wänden, Decke, Lichtbändern und Stationsschildern
+        for(const [h0, h1, st] of halls){
+          const ha = Math.max(h0, s0), hb = Math.min(h1, s1); if(hb - ha < 0.3) continue;
+          bAdd(M.hall, ribbon(o, ha, hb, 25, () => 0, [[-7.9, 0], [-7.9, 7.2], [8.6, 7.2], [8.6, 0]], 4, 0.25));
+          bAdd(M.tunnel, ribbon(o, ha, hb, 25, () => 0, [[-7.9, 0.01], [8.6, 0.01]]));
+          for(let s = Math.ceil(ha/5)*5; s < hb; s += 5){ boxAt(grp, o, s, -3.2, 7.1, 0.35, 0.06, 3.6, M.hallLight); boxAt(grp, o, s, 4.8, 7.1, 0.35, 0.06, 3.6, M.hallLight); }
+          for(const sp of [h0, h1]) if(sp >= s0 && sp < s1){
+            const q = W(sp, 0, 0), sh = new T.Shape(); sh.moveTo(-7.9, 0); sh.lineTo(-7.9, 0.2); sh.absarc(-2.1, 0.2, 5.8, Math.PI, 0, true); sh.lineTo(3.7, 0); sh.lineTo(8.6, 0); sh.lineTo(8.6, 7.2); sh.lineTo(-7.9, 7.2); sh.lineTo(-7.9, 0);
+            bXf(M.hall, new T.ExtrudeGeometry(sh, {depth:0.3, bevelEnabled:false}), q[0] - o[0], 0, q[2] - o[2], -q[3], 1, 1, 1, true);
+          }
+          for(let sp = Math.ceil((st.from + 8)/30)*30; sp < st.to; sp += 30){
+            if(sp < s0 || sp >= s1) continue;
+            const nb = cnv(512, 80, (g, w, h) => { g.fillStyle = '#0d3b78'; g.fillRect(0, 0, w, h); g.fillStyle = '#fff'; g.font = '700 48px Barlow Condensed, Arial Narrow, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(st.name.replace(' (U)', ''), w/2, h/2 + 2, w - 20); });
+            const nm = new T.Mesh(new T.PlaneGeometry(4.6, 0.72), new T.MeshLambertMaterial({map:tex(nb)})); nm.userData.own = true; const q = W(sp, 8.55, 3.2); nm.position.set(q[0] - o[0], 3.2, q[2] - o[2]); nm.rotation.y = -q[3] - Math.PI/2; grp.add(nm);
+          }
+        }
+      }
+      if(t.city){
+        // Rampe mit Stützwänden und Portal des Stadtbahntunnels
+        for(let i = 0; i < 10; i++){ const sp = t.from - 70 + i*7 + 3.5, h = 0.8 + i*0.8; if(sp < s0 || sp >= s1) continue; boxAt(grp, o, sp, 5.8, h/2, 0.5, h, 7, M.portal); boxAt(grp, o, sp, -10.0, h/2, 0.5, h, 7, M.portal); }
+        if(t.from >= s0 && t.from < s1){
+          const q = W(t.from, 0, 0), fr = new T.Shape(); fr.moveTo(-12, 0); fr.lineTo(-7.9, 0); fr.lineTo(-7.9, 0.2); fr.absarc(-2.1, 0.2, 5.8, Math.PI, 0, true); fr.lineTo(3.7, 0); fr.lineTo(9, 0); fr.lineTo(9, 8.6); fr.lineTo(-12, 8.6); fr.lineTo(-12, 0);
+          bXf(M.portal, new T.ExtrudeGeometry(fr, {depth:1.5, bevelEnabled:false}), q[0] - o[0], 0, q[2] - o[2], -q[3], 1, 1, 1, true);
+          boxAt(grp, o, t.from - 0.3, -1.5, 8.9, 21.5, 0.6, 2.2, M.wall);
+        }
+        continue;
       }
       for(const [sp, dir] of [[t.from, 1], [t.to, -1]]){
         if(sp < s0 || sp >= s1) continue;
@@ -3528,8 +3812,15 @@ const R3 = (() => {
       }
     }
     // Bahnübergänge
+    const zebra = (sp, d0, d1, y) => { for(let d = d0; d < d1; d += 1.0) boxAt(grp, o, sp, d + 0.25, y, 0.5, 0.008, 4, M.line); };
+    for(const f of FSIG){
+      const xs = f.pos + 15;
+      if(xs >= s0 && xs < s1){ boxAt(grp, o, xs, -2, 0.216, 100, 0.432, 11, M.street); zebra(xs - 9.5, -9.5, 5.3, 0.436); }
+      if(f.pos >= s0 && f.pos < s1) boxAt(grp, o, f.pos - 0.6, -2.1, 0.436, 8.6, 0.008, 0.35, M.line);
+    }
     for(const bu of BUE){
       if(bu.pos < s0 || bu.pos >= s1) continue;
+      if(bu.kind === 'sh4'){ zebra(bu.pos, -9.5, 5.3, RT - 0.01); continue; }
       boxAt(grp, o, bu.pos, -2, 0.235, 90, 0.47, 7, M.road);
       for(const [ds, d] of [[-5, 4.6], [5, -9]]){
         const q = W(bu.pos + ds, d, 2.6); bXf(M.kreuz, G.plane, q[0] - o[0], 2.6, q[2] - o[2], -q[3] + (ds > 0 ? Math.PI : 0), 1.25, 1.25, 1);
@@ -3559,6 +3850,10 @@ const R3 = (() => {
         trees.push([p, hgt]); (cf ? conif : crowns).push([p, hgt, hash(k*3 + side)]);
       }
     }
+    for(let k = Math.ceil(s0/16); k*16 < s1; k++){
+      const s = k*16; if(boKind(s) !== 'rasen' || inTunnel(s) || xCross(s) || STATIONS.some(x => s > x.from - 5 && s < x.to + 5)) continue;
+      for(const d of [13.8, -18.4]){ const hgt = 8 + hash(k*3 + d)*4, p = W(s, d, 0); trees.push([p, hgt]); crowns.push([p, hgt, hash(k*5 + d)]); }
+    }
     if(trees.length){ const im = new T.InstancedMesh(G.cyl, M.trunk, trees.length); trees.forEach(([p, h], i) => place(im, i, o, [p[0], h*0.2, p[2]], 0, 0.22, h*0.4, 0.22)); im.frustumCulled = false; grp.add(im); }
     if(conif.length){ const im = new T.InstancedMesh(G.cone, M.leaf, conif.length); conif.forEach(([p, h, r], i) => { place(im, i, o, [p[0], h*0.58, p[2]], 0, h*0.24, h*0.85, h*0.24); im.setColorAt(i, col.setHSL(0.3 + r*0.05, 0.38, 0.17 + r*0.07)); }); im.frustumCulled = false; grp.add(im); }
     if(crowns.length){ const im = new T.InstancedMesh(G.ball, M.leaf, crowns.length); crowns.forEach(([p, h, r], i) => { place(im, i, o, [p[0], h*0.62, p[2]], r*3, h*0.3, h*0.34, h*0.3); im.setColorAt(i, col.setHSL(0.22 + r*0.08, 0.42, 0.22 + r*0.1)); }); im.frustumCulled = false; grp.add(im); }
@@ -3573,9 +3868,9 @@ const R3 = (() => {
     }
     // Stadt: geschlossene Häuserzeilen beiderseits der Straße
     for(let k = Math.ceil(s0/24); k*24 < s1; k++){
-      const s = k*24; if(!isBo(s)) continue;
+      const s = k*24, kd = boKind(s); if(!kd || xCross(s)) continue;
       for(const side of [-1, 1]){
-        const r = hash(k*5 + side*7), d = side > 0 ? 13 + r*3 : -(17 + r*3), h = 9 + Math.floor(hash(k*11 + side)*4)*3.2, p = W(s, d, 0);
+        const r = hash(k*5 + side*7), d = kd === 'rasen' ? (side > 0 ? 22 + r*4 : -(27 + r*4)) : (side > 0 ? 13 + r*3 : -(17 + r*3)), h = 9 + Math.floor(hash(k*11 + side)*4)*3.2, p = W(s, d, 0);
         bXf(CW[Math.floor(r*CW.length) % CW.length], G.box, p[0] - o[0], h/2, p[2] - o[2], -p[3], 10, h, 23.4);
         bXf(M.flat, G.box, p[0] - o[0], h + 0.25, p[2] - o[2], -p[3], 10.4, 0.5, 23.6);
       }
@@ -3607,16 +3902,16 @@ const R3 = (() => {
     scene.add(grp); CH.set(ci, c); return c;
   }
   function addObj(c, grp, o, ob){
-    const dyn = ob.k === 'main' || ob.k === 'dist' || ob.k === 'ls';
+    const dyn = ob.k === 'main' || ob.k === 'dist' || ob.k === 'ls' || ob.k === 'fsig';
     const G0 = glyphCanvas(ob, dyn ? 150 : 170); drawGlyph(G0, ob);
-    const t = tex(G0.c), mat = dyn ? new T.MeshBasicMaterial({map:t, transparent:true}) : new T.MeshLambertMaterial({map:t, transparent:true, alphaTest:0.05});
+    const t = tex(G0.c), mat = dyn || ob.k === 'wsig' ? new T.MeshBasicMaterial({map:t, transparent:true}) : new T.MeshLambertMaterial({map:t, transparent:true, alphaTest:0.05});
     const w = G0.hw*2, h = G0.bb - G0.bt, pl = new T.Mesh(new T.PlaneGeometry(w, h), mat); pl.userData.own = true;
-    const yo = ob.k === 'ne5' || ob.k === 'sign' ? PH - 0.76 : 0, yc = ob.h + yo - (G0.bt + G0.bb)/2, p = W(ob.pos, ob.x, yc);
+    const yo = ob.k === 'ne5' || ob.k === 'sign' ? (isBo(ob.pos) ? 0.55 : PH) - 0.76 : 0, yc = ob.h + yo - (G0.bt + G0.bb)/2, p = W(ob.pos, ob.x, yc);
     pl.position.set(p[0] - o[0], yc, p[2] - o[2]); pl.rotation.y = -p[3]; grp.add(pl);
     // Rückseite grau
     bXf(M.post, G.plane, pl.position.x - Math.sin(p[3])*0.02, yc, pl.position.z + Math.cos(p[3])*0.02, -p[3] + Math.PI, w*0.9, h*0.9, 1);
     // Mast bzw. Pfosten
-    const base = yo ? PH : 0, top = ob.h + yo - G0.bb + 0.02;
+    const base = yo ? 0.76 + yo : 0, top = ob.h + yo - G0.bb + 0.02;
     if(ob.k !== 'ls' && top > base + 0.1){ const q = W(ob.pos + 0.08, ob.x, (base + top)/2), r = ob.k === 'main' ? 0.12 : 0.05; bXf(M.post, G.cyl, q[0] - o[0], (base + top)/2, q[2] - o[2], 0, r, top - base, r); }
     if(ob.k === 'main'){
       const q = W(ob.pos - 0.14, ob.x, 2.45); bXf(M.stripes, G.plane, q[0] - o[0], 2.45, q[2] - o[2], -q[3], 0.28, 0.9, 1);
@@ -3631,7 +3926,7 @@ const R3 = (() => {
 
   // ---------- Züge ----------
   const trains = new Map();
-  const KCOL = {rb:0xc8102e, re:0xb5122a, ic:0xeceeed, gz:0x5b4636, avg:0xe3b51f, lead:0x9da6a9};
+  const KCOL = {rb:0xc8102e, re:0xb5122a, ic:0xeceeed, gz:0x5b4636, avg:0xe3b51f, tram:0xd0281f, lead:0x9da6a9};
   function trainMesh(kind, cars, carLen, front, back){
     const grp = new T.Group(), mats = {};
     const body = new T.MeshLambertMaterial({color:KCOL[kind]}), win = new T.MeshLambertMaterial({color:0x1f2a33});
@@ -3657,7 +3952,7 @@ const R3 = (() => {
   function updTrain(key, kind, sFront, len, d, dir){
     // dir = −1: Gegenzug (Spitze vorn, Wagen dahinter mit größerer Lage); +1: vorausfahrender Zug (Spitze bei sFront, Schluss hinten)
     let tr = trains.get(key);
-    const carLen = kind === 'avg' ? 19 : kind === 'gz' ? 18 : 25, cars = Math.max(1, Math.min(30, Math.round(len/carLen)));
+    const carLen = kind === 'avg' ? 19 : kind === 'tram' ? 18.5 : kind === 'gz' ? 18 : 25, cars = Math.max(1, Math.min(30, Math.round(len/carLen)));
     if(!tr){ tr = trainMesh(kind, cars, len/cars, dir < 0, dir > 0); trains.set(key, tr); }
     tr.seen = true;
     const cl = len/cars;
@@ -3671,6 +3966,55 @@ const R3 = (() => {
   const paxLeg = mkInst(new T.CylinderGeometry(0.15, 0.12, 1, 6), new T.MeshLambertMaterial({color:0xffffff}));
   const paxHead = mkInst(new T.SphereGeometry(0.12, 8, 6), new T.MeshLambertMaterial({color:0xffffff}));
   const PCOL = [0x2f5d8a, 0xa6463b, 0x3f7a52, 0xc9a227, 0x6b4f8a].map(c => new T.Color(c)), LCOL = [0x2a3140, 0x3b3b3b, 0x4a5a78].map(c => new T.Color(c)), SKIN = [0xe2b993, 0xc89870, 0x8d5f3e].map(c => new T.Color(c));
+
+  // ---------- Straßenverkehr in BOStrab-Abschnitten: Autos auf den Fahrspuren, Querverkehr an Kreuzungen ----------
+  const carCols = [0xb8bcc0, 0x1e2a44, 0x8e1c1c, 0xe8e8e4, 0x2f4f3a, 0x3a3f45, 0xc9a227, 0x5a6f8a, 0x6b2e5a].map(c => new T.MeshLambertMaterial({color:c}));
+  const carGlass = new T.MeshLambertMaterial({color:0x1b232b}), carLW = new T.MeshBasicMaterial({color:0xfff6dc}), carLR = new T.MeshBasicMaterial({color:0xd0201a}), carTyre = new T.MeshLambertMaterial({color:0x151515});
+  function mkCar(i){
+    const g = new T.Group(), L = 3.9 + (i % 3)*0.35, body = new T.Mesh(G.box, carCols[i % carCols.length]); body.scale.set(1.78, 0.7, L); body.position.y = 0.62; g.add(body);
+    const cab = new T.Mesh(G.box, carGlass); cab.scale.set(1.6, 0.58, L*0.52); cab.position.set(0, 1.25, L*0.06); g.add(cab);
+    for(const x of [-0.58, 0.58]){ const hl = new T.Mesh(G.box, carLW); hl.scale.set(0.3, 0.12, 0.05); hl.position.set(x, 0.68, -L/2 - 0.01); g.add(hl); const tl = new T.Mesh(G.box, carLR); tl.scale.set(0.3, 0.12, 0.05); tl.position.set(x, 0.74, L/2 + 0.01); g.add(tl);
+      for(const z of [-L*0.32, L*0.32]){ const w = new T.Mesh(G.box, carTyre); w.scale.set(0.24, 0.62, 0.62); w.position.set(x*1.42, 0.31, z); g.add(w); } }
+    g.visible = false; scene.add(g); return g;
+  }
+  const CARS = [], XCARS = []; let carKey = null, carLast = 0;
+  const laneSet = kd => kd === 'rasen' ? [{d:6.5, dir:1}, {d:10.3, dir:-1}, {d:-11.1, dir:-1}, {d:-14.9, dir:1}] : [{d:3.7, dir:1}, {d:-7.9, dir:-1}];
+  function carSpawn(c, base, ahead){
+    for(let tr = 0; tr < 12; tr++){
+      const s = ahead ? base + 120 + Math.random()*560 : base - 200 + Math.random()*900, kd = boKind(s);
+      if(!kd || inTunnel(s) || TUNNELS.some(t => t.city && s > t.from - 80 && s < t.from)) continue;
+      const ls = laneSet(kd), ln = ls[Math.floor(Math.random()*ls.length)];
+      c.s = s; c.lane = ln; c.vt = 9 + Math.random()*5; c.v = c.vt; c.on = true; return;
+    }
+    c.on = false;
+  }
+  function carsUpdate(base, dt){
+    if(!BOZ.length && !KMSEG.some(g => g.bo)){ CARS.forEach(c => { c.g.visible = false; }); XCARS.forEach(c => { c.g.visible = false; }); return; }
+    if(!CARS.length) for(let i = 0; i < 26; i++) CARS.push({g:mkCar(i), on:false, s:0, v:0, vt:10, lane:null});
+    if(!XCARS.length) for(let i = 0; i < 10; i++) XCARS.push({g:mkCar(i + 3), on:false, s:0, d:0, dir:1});
+    if(carKey !== OBJS){ carKey = OBJS; CARS.forEach(c => carSpawn(c, base, false)); XCARS.forEach(c => { c.on = false; }); }
+    const redAt = k => S.fs[k] && S.fs[k].req && S.fs[k].asp !== 'F1';
+    for(const c of CARS){
+      if(!c.on || c.s < base - 260 || c.s > base + 760 || !boKind(c.s) || inTunnel(c.s)){ carSpawn(c, base, c.lane && c.lane.dir < 0); if(!c.on){ c.g.visible = false; continue; } }
+      const dir = c.lane.dir; let vt = c.vt;
+      FSIG.forEach((f, k) => { if(!redAt(k)) return; const line = f.pos + 15 - dir*9.5, dd = (line - c.s)*dir; if(dd > -0.5 && dd < 35) vt = Math.min(vt, Math.sqrt(Math.max(0, 2*3*(dd - 0.8)))); });
+      for(const o2 of CARS){ if(o2 === c || !o2.on || o2.lane !== c.lane) continue; const gap = (o2.s - c.s)*dir; if(gap > 0 && gap < 10 + c.v) vt = Math.min(vt, gap < 6.5 ? 0 : o2.v); }
+      c.v += Math.max(-6*dt, Math.min(2.5*dt, vt - c.v)); if(c.v < 0) c.v = 0;
+      c.s += dir*c.v*dt;
+      const hide = Math.abs(c.lane.d) < 6 && STATIONS.some(st => c.s > st.from - 12 && c.s < st.to + 12);
+      const p = W(c.s, c.lane.d, 0); c.g.position.set(p[0], 0, p[2]); c.g.rotation.y = -p[3] + (dir < 0 ? Math.PI : 0); c.g.visible = !hide;
+    }
+    // Querverkehr: solange die Bahn an der Haltlinie wartet
+    if(S.t - carLast > 2.4){
+      const k = FSIG.findIndex((f, j) => redAt(j) && Math.abs(f.pos + 15 - base) < 500);
+      if(k >= 0){ const c = XCARS.find(x => !x.on); if(c){ carLast = S.t; c.on = true; c.dir = Math.random() < 0.5 ? 1 : -1; c.s = FSIG[k].pos + 15 - c.dir*2.4; c.d = -c.dir*70; } }
+    }
+    for(const c of XCARS){
+      if(!c.on){ c.g.visible = false; continue; }
+      c.d += c.dir*11*dt; if(Math.abs(c.d) > 72){ c.on = false; c.g.visible = false; continue; }
+      const p = W(c.s, c.d, 0); c.g.position.set(p[0], 0, p[2]); c.g.rotation.y = -p[3] - c.dir*Math.PI/2; c.g.visible = true;
+    }
+  }
 
   // ---------- Führerstand in 3D: Pult, Frontscheibe, Seitenfenster; Kopf drehen zum Umschauen ----------
   const cabG = new T.Group(); scene.add(cabG); cabG.add(camera);
@@ -3783,14 +4127,14 @@ const R3 = (() => {
       else if(fs.nxt >= 0){ l2 = STATIONS[fs.nxt].name; l3 = 'an ' + fmtClock(FP[fs.nxt].arr).slice(0, 5); const d = fs.last === null ? 0 : fs.last; l4 = 'Versp. ' + (d > 0 ? '+' : '') + Math.round(d) + ' s'; dc = d >= 60 ? '#ff8a7a' : d >= 30 ? '#f2c230' : '#45d37b'; }
       font(15, 700); g.fillStyle = '#e6ebe8'; g.fillText(l2.length > 15 ? l2.slice(0, 14) + '…' : l2, 544, 66); font(15); g.fillStyle = '#c3cdc9'; g.fillText(l3, 544, 88); g.fillStyle = dc; g.fillText(l4, 544, 110);
     }
-    font(13); g.fillStyle = S.hs.st === 'ein' ? '#45d37b' : '#ff8a7a'; g.fillText(S.hs.st === 'ein' ? 'HS ein' : S.hs.st === 'start' ? 'Aufrüsten …' : 'HS aus', 544, 134);
+    font(13); g.fillStyle = S.hs.st === 'ein' ? '#45d37b' : '#ff8a7a'; g.fillText((S.hs.st === 'ein' ? 'HS ein' : S.hs.st === 'start' ? 'Aufrüsten …' : 'HS aus') + (SYSW ? ' · ' + (S.hs.sys === 'dc' ? '750 V =' : '15 kV ~') : ''), 544, 134);
     // Leuchtmelder: PZB und Fahrzeug
     const on = id => { const e = document.getElementById(id); return !!(e && e.classList.contains('on')); };
     const lq = (x, y, txt, col, lit) => { g.fillStyle = '#0b0e0f'; g.fillRect(x - 2, y - 2, 40, 34); g.fillStyle = lit ? col : '#30373a'; g.fillRect(x, y, 36, 30); g.fillStyle = lit ? '#111' : '#6b7672'; font(12, 700); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(txt, x + 18, y + 16); };
     lq(678, 12, '85', '#3d8bff', on('lm85')); lq(718, 12, '70', '#3d8bff', on('lm70')); if(!AVG) lq(758, 12, '55', '#3d8bff', on('lm55'));
     lq(678, 50, '1000', '#f2c230', on('lm1000')); lq(718, 50, '500', '#ff4a3a', on('lm500')); lq(758, 50, 'Bef', '#f4f6ff', on('lmBef'));
     const H0 = S.hs, lamp = (x, y, lab, col, lit) => { g.fillStyle = '#0b0e0f'; g.beginPath(); g.arc(x, y, 11, 0, 7); g.fill(); g.save(); if(lit){ g.shadowColor = col; g.shadowBlur = 10; } g.fillStyle = lit ? col : '#30373a'; g.beginPath(); g.arc(x, y, 7.5, 0, 7); g.fill(); g.restore(); g.fillStyle = '#9aa8a3'; font(12); g.textAlign = 'center'; g.textBaseline = 'top'; g.fillText(lab, x, y + 12); };
-    lamp(688, 110, 'HS', H0.st === 'ein' ? '#45d37b' : '#e2483d', true); lamp(716, 110, 'SA', '#f2c230', H0.st === 'ein' || (H0.st === 'start' && H0.t > 2.9));
+    lamp(688, 110, 'HS', H0.st === 'ein' ? '#45d37b' : '#e2483d', true); lamp(716, 110, 'SA', '#f2c230', H0.st === 'ein' || H0.st === 'hsaus' || H0.st === 'hsein' || (H0.st === 'start' && H0.t > 2.9));
     lamp(744, 110, 'Kp', '#f4f6ff', H0.comp); lamp(772, 110, 'Tür', '#f2c230', S.door.state !== 'zu'); lamp(800, 110, 'Sifa', '#f4f6ff', S.sifa.t >= 30 && (S.t % 0.6) < 0.4);
     // Schalterreihe (vorderer Pultteil)
     const sws = [['Licht', true], ['Fernlicht', NIGHT], ['Wischer', false], ['Sanden', false], ['Glocke', false], ['Heizung', true]];
@@ -3849,15 +4193,16 @@ const R3 = (() => {
     let builds = 0;
     for(let k = c0; k <= c1; k++){ if(!CH.has(k)){ if(builds > 0 && k > Math.floor((base + 600)/CHL)) break; buildChunk(k); builds++; } }
     CH.forEach(c => { const near = c.ci*CHL - base < 450; c.detail.forEach(m => { m.visible = near; }); });
+    { const nt = performance.now(), cdt = (S.paused || menuOpen || fpOpen || S.finished) ? 0 : Math.min(0.1, (nt - (R.ct || nt))/1000); R.ct = nt; carsUpdate(base, cdt); }
     // Signale: Signalbild und Lichtpunkt aktualisieren
     for(const D of DYN){
       const dist = D.ob.pos - base;
       if(dist < -50 || dist > 3200) { D.sp.visible = false; continue; }
       const key = D.ob.k === 'main' ? S.sig[D.ob.ref].aspect + (S.sig[D.ob.ref].ersatzOn ? 'E' : '') + (S.sig[D.ob.ref].zs3On ? 'Z' : '') + (D.ob.k === 'main' && MAIN[D.ob.ref].mastVr >= 0 ? S.dsig[MAIN[D.ob.ref].mastVr].aspect : '') + ((S.t % 1) < 0.55 ? 'b' : '')
-                : D.ob.k === 'dist' ? S.dsig[D.ob.ref].aspect + S.dsig[D.ob.ref].zs3v + ((S.t % 1) < 0.55 ? 'b' : '') : String(S.ls[D.ob.ref].sh1);
+                : D.ob.k === 'dist' ? S.dsig[D.ob.ref].aspect + S.dsig[D.ob.ref].zs3v + ((S.t % 1) < 0.55 ? 'b' : '') : D.ob.k === 'fsig' ? S.fs[D.ob.ref].asp + (S.fs[D.ob.ref].req ? 'A' : '') : String(S.ls[D.ob.ref].sh1);
       if(key !== D.last && dist < 1800){ drawGlyph(D.G0, D.ob); D.t.needsUpdate = true; D.last = key; }
-      const asp = D.ob.k === 'main' ? S.sig[D.ob.ref].aspect : D.ob.k === 'dist' ? S.dsig[D.ob.ref].aspect : (S.ls[D.ob.ref].sh1 ? 'X' : 'HP0');
-      const c = D.ob.k === 'ls' ? (asp === 'X' ? 0xf4f6ff : 0xff3b2f) : LIGHT[asp];
+      const asp = D.ob.k === 'main' ? S.sig[D.ob.ref].aspect : D.ob.k === 'dist' ? S.dsig[D.ob.ref].aspect : D.ob.k === 'fsig' ? 'F' : (S.ls[D.ob.ref].sh1 ? 'X' : 'HP0');
+      const c = D.ob.k === 'ls' ? (asp === 'X' ? 0xf4f6ff : 0xff3b2f) : D.ob.k === 'fsig' ? 0xf4f6ff : LIGHT[asp];
       const blinkOff = (asp === 'KS1B') && (S.t % 1) >= 0.55;
       if(!c || blinkOff){ D.sp.visible = false; continue; }
       D.sp.visible = true; D.sp.material.color.setHex(c);
@@ -3878,7 +4223,7 @@ const R3 = (() => {
       const cnt = P.state === 'pending' ? P.on : Math.round(P.on*(1 - Math.max(0, (P.prog - P.off/(P.on + P.off || 1))/(1 - P.off/(P.on + P.off || 1) || 1))));
       if(st.stop - base > 500) return;
       for(let k = 0; k < Math.min(cnt, 30) && n < 90; k++){
-        const h1 = hash(i*97 + k), h2 = hash(i*131 + k*7), s = st.stop - 15 - h1*Math.min(200, TRAIN_LEN + 30);
+        const PH = isBo(st.stop) ? 0.55 : PHN, h1 = hash(i*97 + k), h2 = hash(i*131 + k*7), s = st.stop - 10 - h1*Math.min(200, TRAIN_LEN + 30, st.stop - st.from - 14);
         const d = st.g3 ? 6.9 - h2*1.9 : 2.35 + h2*1.9, q = W(s, d, PH + 0.82);
         const hh = 1.6 + (h1*10 % 1)*0.3, lg = hh*0.47, tr = hh*0.36;
         place(paxLeg, n, [0, 0, 0], [q[0], PH + lg/2, q[2]], 0, 1, lg, 1); paxLeg.setColorAt(n, LCOL[(k + i) % 3]);
@@ -3970,7 +4315,7 @@ function frame(now){
 }
 requestAnimationFrame(frame);
 window.__audioSwap = c => { audio.ctx = c; }; window.__r3 = R3; window.__set3d = set3d; window.__arcs = () => ARCS; window.__ocz = () => OCZ; window.__areas = () => AREAS; window.__branch = () => BRANCH;
-window.__sim = { hornOn, hornOff, get BUE(){ return BUE; }, pressStoer, pzbDead, get NE1(){ return NE1; }, get GG(){ return GG; }, get HM(){ return HM; }, get NE6(){ return NE6; }, get OBJS(){ return OBJS; }, kmAt, get BW(){ return BW; }, get DIST(){ return DIST; }, get TUNNELS(){ return TUNNELS; }, get FP(){ return FP; }, fpState, fmtClock, pressDoor, pressFdl, befreienVerbot, pzbActive, lmLen, get MAGNETS(){ return MAGNETS; }, get AVG(){ return AVG; }, setVehicle(v){ VEHICLE = v; }, get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, pressMotor, snd, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
+window.__sim = { hornOn, hornOff, get BUE(){ return BUE; }, pressStoer, pzbDead, get NE1(){ return NE1; }, get GG(){ return GG; }, get HM(){ return HM; }, get NE6(){ return NE6; }, get OBJS(){ return OBJS; }, kmAt, get BW(){ return BW; }, get DIST(){ return DIST; }, get TUNNELS(){ return TUNNELS; }, get FP(){ return FP; }, fpState, fmtClock, pressDoor, pressFdl, befreienVerbot, pzbActive, lmLen, get MAGNETS(){ return MAGNETS; }, get AVG(){ return AVG; }, setVehicle(v){ VEHICLE = v; }, get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, pressMotor, snd, voltAt, get FSIG(){ return FSIG; }, get WSIG(){ return WSIG; }, get SYSW(){ return SYSW; }, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
 })();
 </script>
 
