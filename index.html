@@ -66,6 +66,12 @@ h1{font-family:var(--f-display);font-weight:700;font-size:1.2rem;letter-spacing:
 .dbtn.busy{border-color:var(--line);background:var(--panel-2);color:var(--muted)}
 .dbtn.need{animation:pulseg .8s steps(2) infinite}
 @keyframes pulseg{50%{background:#24543a}}
+.dbtn.mot{display:inline-flex;align-items:center;gap:6px;border-color:#7a2f2a;background:#2a1513;color:#ffb3aa}
+.dbtn.mot i{width:9px;height:9px;border-radius:50%;background:#e2483d;box-shadow:0 0 6px #e2483d;flex:none}
+.dbtn.mot.on{border-color:#2f7a4e;background:#15291e;color:#9fe8bb}.dbtn.mot.on i{background:#45d37b;box-shadow:0 0 6px #45d37b}
+.dbtn.mot.busy i{background:#f2c230;box-shadow:0 0 6px #f2c230}
+.dbtn.mot.need{animation:pulser .8s steps(2) infinite}
+@keyframes pulser{50%{background:#4a1d19}}
 .dtxt{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .r-zug .lbl{margin-left:auto}
 .chip.fdl.alert{border-color:var(--blue);color:var(--blue);animation:pulseb .8s steps(2) infinite}
@@ -256,6 +262,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
       <button class="chip" id="tMenu">Szenarien</button>
       <button class="chip" id="tFp">Fahrplan</button>
       <button class="chip" id="t3d" aria-pressed="true">3D</button>
+      <button class="chip" id="tCab" aria-pressed="true">Kabine</button>
       <button class="chip" id="tLern" aria-pressed="true">Lernhilfe</button>
       <button class="chip" id="tTon" aria-pressed="true">Ton</button>
       <button class="chip" id="tPause" aria-pressed="false">Pause</button>
@@ -270,7 +277,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
       <span class="lbl">Geschwindigkeit</span>
       <canvas id="tacho" width="240" height="240" aria-label="Tachometer"></canvas>
       <div class="digi" id="digi">–</div>
-      <div class="doors"><button class="dbtn" id="bDoor" aria-label="Türen (Taste T)">Türen freigeben</button><span class="dtxt" id="doorTxt">–</span></div>
+      <div class="doors"><button class="dbtn mot" id="bMot" aria-label="Motor starten oder abstellen (Taste M)" title="Aufrüsten: Stromabnehmer heben, Hauptschalter ein (Taste M)"><i></i><span id="bMotT">Motor starten</span></button><button class="dbtn" id="bDoor" aria-label="Türen (Taste T)">Türen freigeben</button><span class="dtxt" id="doorTxt">–</span></div>
     </div>
 
     <div class="panel p-pzb">
@@ -339,7 +346,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
         <h3>Bedienung</h3>
         <ul>
           <li>Hebel: ziehen oder <kbd>▲</kbd>/<kbd>▼</kbd> bzw. <kbd>W</kbd>/<kbd>S</kbd>. Oben Fahrstufen F1–F8, unten Bremsstufen B1–B7 und SB (Schnellbremsung).</li>
-          <li><kbd>Q</kbd> Wachsam · <kbd>E</kbd> Frei · <kbd>B</kbd> Befehl (halten) · <kbd>Leertaste</kbd> Sifa · <kbd>F</kbd> Fdl · <kbd>X</kbd> PZB-Störschalter · <kbd>H</kbd> Pfeife (halten) · <kbd>T</kbd> Türen · <kbd>P</kbd> Pause</li>
+          <li><kbd>Q</kbd> Wachsam · <kbd>E</kbd> Frei · <kbd>B</kbd> Befehl (halten) · <kbd>Leertaste</kbd> Sifa · <kbd>F</kbd> Fdl · <kbd>X</kbd> PZB-Störschalter · <kbd>H</kbd> Pfeife (halten) · <kbd>T</kbd> Türen · <kbd>M</kbd> Motor (Aufrüsten) · <kbd>P</kbd> Pause · Umschauen (3D): im Bild ziehen oder <kbd>←</kbd>/<kbd>→</kbd> bzw. <kbd>A</kbd>/<kbd>D</kbd> halten, Doppeltipp oder <kbd>C</kbd> zentriert</li>
           <li>„Fahrplan“ zeigt den Buchfahrplan mit Ankunft und Abfahrt (½ = 30 s). Nicht vor der Abfahrtszeit abfahren – vorzeitige Abfahrt ist ein Fehler. Uhr und Verspätung stehen unten rechts im Streckenbild.</li>
           <li>An jedem Bahnhof und Haltepunkt: an der Haltetafel halten, Türen freigeben, Fahrgastwechsel abwarten, Türen schließen. Mit offenen Türen ist die Traktion gesperrt.</li>
           <li>„Szenarien“ öffnet die Auswahl: 17 Übungsfahrten in drei Stufen und 5 Fahrten auf der S4. Bestandene Szenarien werden in diesem Browser gespeichert.</li>
@@ -1145,7 +1152,7 @@ function ocRnd(){ S.ocSeed = (S.ocSeed*16807) % 2147483647; return S.ocSeed/2147
 function ocStep(dt, prev){
   for(const T of S.oc){
     const f0 = T.front; T.front -= T.v*dt;
-    if(f0 > prev && T.front <= S.front && !T.passed){ T.passed = true; audio.beep(120, Math.min(3.5, T.len/Math.max(5, T.v + S.v)), 'sawtooth', .03); }
+    if(f0 > prev && T.front <= S.front && !T.passed){ T.passed = true; if(snd.c) snd.ev('pass', Math.min(4, T.len/Math.max(5, T.v + S.v))); else audio.beep(120, Math.min(3.5, T.len/Math.max(5, T.v + S.v)), 'sawtooth', .03); }
   }
   S.oc = S.oc.filter(T => T.front + T.len > S.front - 150);
   if(!OCZ.length || S.t < S.ocNext) return;
@@ -1201,7 +1208,8 @@ function newState(){
     dsig: DIST.map(() => ({aspect:'VR0', zs3v:0})),
     ra10Err:false,
     pzb:pzbNew(), wt:null, fdlNeed:null, fdlBusy:null, stoer:null, testDone:false, testWarned:false,
-    sifa:{t:0}, sifaN:0, errors:[], zbCount:0, over:{t:0, flag:false}
+    sifa:{t:0}, sifaN:0, errors:[], zbCount:0, over:{t:0, flag:false},
+    hs:{st:'aus', t:0, air:6.4, comp:false, bLast:0, msg:false}, trac:0
   };
 }
 
@@ -1258,7 +1266,7 @@ function pressDoor(){
   if(D.state === 'zu'){
     if(S.v > 0.05){ log('Türfreigabe nur im Stillstand', 'fdl'); return; }
     const i = STATIONS.findIndex((st, k) => !st.first && atPlatform(k));
-    D.state = 'auf'; D.t = 0; D.lockMsg = false; audio.beep(520, .25, 'sine', .03);
+    D.state = 'auf'; D.t = 0; D.lockMsg = false; if(snd.c) snd.ev('doorOpen'); else audio.beep(520, .25, 'sine', .03);
     if(i < 0){ error('Türen außerhalb eines Bahnsteigs freigegeben'); D.station = -1; return; }
     D.station = i;
     if(STATIONS[i].short) log('Bahnsteignutzlänge reicht nicht für die Zuglänge – nur Türen am Bahnsteig freigeben', 'fdl');
@@ -1276,7 +1284,7 @@ function pressDoor(){
   if(D.state === 'auf'){
     const P = D.station >= 0 ? S.pax[D.station] : null;
     if(P && P.state === 'run'){ log('Fahrgäste steigen noch ein und aus – Tür reversiert', 'fdl'); return; }
-    D.state = 'schliessen'; D.t = 0; log('Türen schließen', 'fdl'); audio.beep(980, .35, 'square', .025);
+    D.state = 'schliessen'; D.t = 0; log('Türen schließen', 'fdl'); if(snd.c) snd.ev('doorWarn'); else audio.beep(980, .35, 'square', .025);
   }
 }
 function doorUpdate(dt){
@@ -1653,6 +1661,30 @@ function pressFdl(){
   log('Fdl: Keine Meldung erforderlich', 'fdl');
 }
 
+// ---------------- Aufrüsten: Stromabnehmer, Hauptschalter, Hilfsbetriebe, Druckluft ----------------
+function pressMotor(){
+  const H = S.hs;
+  if(H.st === 'aus'){ H.st = 'start'; H.t = 0; snd.ev('click'); log('Aufrüsten: Steuerstrom ein, Stromabnehmer heben', 'fdl'); }
+  else if(H.st === 'ein'){
+    if(S.v > 0.3){ log('Motor nur im Stillstand abstellen', 'fdl'); return; }
+    H.st = 'aus'; H.t = 0; snd.ev('hsAus'); log('Hauptschalter aus, Stromabnehmer gesenkt – Fahrzeug abgerüstet', 'fdl');
+  }
+}
+function hsStep(dt){
+  const H = S.hs, t0 = H.t; H.t += dt;
+  if(H.st === 'start'){
+    if(t0 < 0.3 && H.t >= 0.3) snd.ev('panto');
+    if(t0 < 2.9 && H.t >= 2.9) log('Stromabnehmer am Fahrdraht – Fahrdrahtspannung vorhanden', 'fdl');
+    if(t0 < 3.4 && H.t >= 3.4){ snd.ev('hsEin'); log('Hauptschalter ein', 'fdl'); }
+    if(H.t >= 4.4){ H.st = 'ein'; log('Fahrzeug aufgerüstet – Lüfter laufen' + (H.air < 8 ? ', Kompressor füllt den Hauptluftbehälter' : ''), 'fdl'); }
+  }
+  // Druckluft: Kompressor schaltet bei 8 bar ein und bei 10 bar ab; jede Bremsung verbraucht Luft
+  if(H.st === 'ein'){ if(H.air < 8) H.comp = true; if(H.air >= 10) H.comp = false; } else H.comp = false;
+  if(H.comp) H.air = Math.min(10, H.air + 0.11*dt);
+  if(S.brake > H.bLast) H.air -= (S.brake - H.bLast)*0.3;
+  H.bLast = S.brake; H.air = Math.max(4.5, H.air - 0.003*dt);
+}
+
 // ---------------- Simulation ----------------
 function brakeTarget(){
   if(S.zwang || S.lever === -8 || S.pzb.test) return 1.25*BRK_F;
@@ -1693,7 +1725,11 @@ function step(dt){
   S.brake += (bt - S.brake) * Math.min(1, dt / ((bt > S.brake ? 1.0 : 2.2) * TAU));
   let trac = 0;
   if(S.door.state !== 'zu' && S.lever > 0 && !S.door.lockMsg){ S.door.lockMsg = true; log('Traktionssperre – Türen nicht geschlossen', 'fdl'); }
-  if(S.lever > 0 && !S.zwang && S.door.state === 'zu' && S.v*3.6 < VEH_VMAX && S.brake < 0.08) trac = (S.lever/8) * Math.min(0.9*ACC_F, 12*ACC_F/Math.max(S.v, 0.1));
+  hsStep(dt);
+  if(S.lever > 0 && S.hs.st !== 'ein' && !S.hs.msg){ S.hs.msg = true; log('Keine Zugkraft – Motor aus: erst Motor starten (Taste M)', 'fdl'); }
+  if(S.lever <= 0) S.hs.msg = false;
+  if(S.lever > 0 && S.hs.st === 'ein' && !S.zwang && S.door.state === 'zu' && S.v*3.6 < VEH_VMAX && S.brake < 0.08) trac = (S.lever/8) * Math.min(0.9*ACC_F, 12*ACC_F/Math.max(S.v, 0.1));
+  S.trac = trac;
   const res = S.v > 0 ? 0.008 + 0.00005*S.v*S.v : 0;
   const wasMoving = S.v > 0;
   S.v = Math.max(0, S.v + (trac - S.brake - res)*dt);
@@ -1702,6 +1738,7 @@ function step(dt){
   S.front += S.v*dt;
   const fr = S.front, rear = fr - TRAIN_LEN, vk = S.v*3.6;
   const crossed = p => prev < p && p <= fr;
+  sndJoints(prev, fr);
 
   // PZB-Störungen laut Szenario
   const PF = SC.pzbFaults || [];
@@ -1949,6 +1986,7 @@ const audio = {
   init(){
     if(!this.ctx){ try{ this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ this.ctx = null; } }
     if(this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(()=>{});
+    if(this.ctx) snd.init();
   },
   start(id, f, type, vol, pulse){
     if(!this.ctx || !this.on || this.n[id]) return;
@@ -1970,6 +2008,141 @@ const audio = {
     o.connect(g); g.connect(this.ctx.destination); o.start(t); o.stop(t + d + .02);
   }
 };
+
+// ---------------- Fahrzeuggeräusche (Web Audio, nach dem Vorbild eines Drehstrom-Triebwagens nachgebildet) ----------------
+const snd = {
+  c:null, m:null, L:{}, nb:null, bb:null, jolt:0, compWas:false, btLast:0, jKey:null, J:[], AX:[], AXM:0,
+  init(){
+    const c = audio.ctx; if(!c || this.c) return; this.c = c;
+    const m = this.m = c.createGain(); m.gain.value = 0;
+    const lim = c.createDynamicsCompressor(); lim.threshold.value = -12; lim.ratio.value = 6; lim.attack.value = 0.005; lim.release.value = 0.2;
+    m.connect(lim); lim.connect(c.destination);
+    const len = c.sampleRate*2, b = c.createBuffer(1, len, c.sampleRate), d = b.getChannelData(0);
+    for(let i = 0; i < len; i++) d[i] = Math.random()*2 - 1;
+    const br = c.createBuffer(1, len, c.sampleRate), e = br.getChannelData(0); let last = 0;
+    for(let i = 0; i < len; i++){ last = (last + 0.02*(Math.random()*2 - 1))/1.02; e[i] = last*3.5; }
+    this.nb = b; this.bb = br;
+    const noise = buf => { const x = c.createBufferSource(); x.buffer = buf || b; x.loop = true; x.start(0, Math.random()*1.9); return x; };
+    const gain = (v, to) => { const g = c.createGain(); g.gain.value = v || 0; g.connect(to || m); return g; };
+    const filt = (type, f, q, to) => { const x = c.createBiquadFilter(); x.type = type; x.frequency.value = f; x.Q.value = q || 0.7; x.connect(to); return x; };
+    const osc = (type, f, to) => { const o = c.createOscillator(); o.type = type; o.frequency.value = f; o.connect(to); o.start(); return o; };
+    const L = this.L;
+    // Rollgeräusch Rad/Schiene, Rumpeln der Drehgestelle, Fahrtwind
+    L.roll = gain(); L.rollF = filt('bandpass', 300, 0.6, L.roll); noise().connect(L.rollF);
+    L.rum = gain(); L.rumF = filt('lowpass', 110, 0.9, L.rum); noise(br).connect(L.rumF);
+    L.wind = gain(); noise().connect(filt('highpass', 1500, 0.5, L.wind));
+    // Antrieb: Pulswechselrichter (gestufte Taktfrequenz), Fahrmotor, Getriebe
+    L.inv = gain(); L.invF = filt('bandpass', 800, 2.5, L.inv); L.invO = osc('sawtooth', 600, L.invF);
+    L.inv2 = gain(); L.inv2O = osc('sine', 1200, L.inv2);
+    L.gear = gain(); L.gearO = osc('sine', 300, L.gear);
+    L.mot = gain(); L.motF = filt('lowpass', 600, 0.8, L.mot); L.motO = osc('triangle', 80, L.motF);
+    // Hilfsbetriebe: Lüfter, Brummen
+    L.aux = gain(); noise().connect(filt('bandpass', 380, 1.3, L.aux));
+    L.hum = gain(); osc('sine', 100, L.hum); osc('sine', 200, gain(0.35, L.hum));
+    // Kompressor: Kolbenschläge
+    L.comp = gain(); const cf = filt('lowpass', 380, 1.2, L.comp); noise(br).connect(cf); osc('sawtooth', 46, gain(0.25, cf));
+    L.compLfo = c.createGain(); L.compLfo.gain.value = 0; L.compLfo.connect(L.comp.gain); osc('square', 10.5, L.compLfo);
+    // Bremsenquietschen
+    L.sq = gain(); L.sqO = osc('sine', 2650, L.sq); const vib = c.createGain(); vib.gain.value = 40; vib.connect(L.sqO.frequency); osc('sine', 5.5, vib);
+    // Signalhorn (Zweiklang)
+    L.horn = gain(); const hf = filt('lowpass', 2800, 0.6, L.horn), hp = filt('peaking', 1100, 1.2, hf); hp.gain.value = 8;
+    osc('sawtooth', 349, hp); osc('sawtooth', 440, gain(0.85, hp)); osc('sawtooth', 351.5, gain(0.4, hp));
+  },
+  set(p, v, tc){ p.setTargetAtTime(v, this.c.currentTime, tc || 0.08); },
+  // je Bild: Lautstärken und Tonhöhen nach Fahrzustand
+  update(){
+    if(!this.c) return;
+    const run = audio.on && !S.paused && !S.finished && !menuOpen && !fpOpen;
+    this.set(this.m.gain, run ? 1 : 0, 0.06);
+    if(!run) return;
+    const L = this.L, set = (p, v, tc) => this.set(p, v, tc), t = this.c.currentTime;
+    const v = S.v, vk = v*3.6, H = S.hs, on = H.st === 'ein';
+    const inT = TUNNELS.some(x => S.front >= x.from && S.front <= x.to), tf = inT ? 1.9 : 1;
+    set(L.roll.gain, 0.16*Math.pow(Math.min(1.3, v/22), 0.8)*tf); set(L.rollF.frequency, 160 + v*9);
+    set(L.rum.gain, 0.55*Math.min(1, v/12)*tf); set(L.rumF.frequency, 55 + v*2.5);
+    set(L.wind.gain, 0.045*Math.min(1.6, Math.pow(v/35, 2))*(inT ? 1.6 : 1));
+    let load = 0;
+    if(on && S.trac > 0) load = S.lever/8;
+    else if(on && S.lever < 0 && S.lever > -8 && v > 1.5 && !S.zwang) load = -S.lever/7*0.6;     // elektrische Bremse
+    const fm = vk*1.9;                                    // Ständerfrequenz (vereinfacht)
+    let fc;
+    if(fm < 18) fc = 620 + 25*Math.sin(t*2.3);             // asynchrone Taktung beim Anfahren
+    else { const R = fm < 32 ? 33 : fm < 48 ? 21 : fm < 66 ? 13 : fm < 95 ? 7 : 3; fc = fm*R; }   // synchrone Taktstufen → typisches „Singen“
+    set(L.invO.frequency, fc, 0.02); set(L.invF.frequency, Math.min(5000, fc), 0.02); set(L.inv2O.frequency, Math.min(6000, fc*2), 0.02);
+    set(L.inv.gain, 0.07*load, 0.06); set(L.inv2.gain, 0.012*load, 0.06);
+    set(L.gearO.frequency, 40 + vk*21); set(L.gear.gain, (on ? 0.008 + 0.028*load : 0.004)*Math.min(1, vk/8));
+    set(L.motO.frequency, 25 + fm*2); set(L.mot.gain, 0.06*load);
+    const aux = on || (H.st === 'start' && H.t > 3.4);
+    set(L.aux.gain, aux ? 0.045 : 0, aux ? 0.9 : 1.4); set(L.hum.gain, aux ? 0.012 : 0, 0.25);
+    const cl = H.comp ? 0.1 : 0;
+    set(L.comp.gain, cl/2, 0.2); set(L.compLfo.gain, cl/2, 0.2);
+    if(this.compWas && !H.comp && on) this.ev('abblasen');
+    this.compWas = H.comp;
+    set(L.sq.gain, S.brake > 0.35 && S.trac === 0 && v > 0.25 && v < 3.5 ? 0.012*Math.min(1, (3.5 - v)/1.5) : 0, 0.12);
+    const bt = brakeTarget();
+    if(bt > this.btLast + 0.05) this.ev('air', Math.min(1, (bt - this.btLast)*1.5));
+    else if(bt < 0.01 && this.btLast > 0.05) this.ev('release');
+    this.btLast = bt;
+  },
+  burst(type, f, q, dur, vol, delay, buf){
+    const c = this.c, t = c.currentTime + (delay || 0), x = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain();
+    x.buffer = buf || this.nb; fl.type = type; fl.frequency.value = f; fl.Q.value = q;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(0.0002, vol), t + Math.min(0.012, dur/4)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    x.connect(fl); fl.connect(g); g.connect(this.m); x.start(t, Math.random()*1.5); x.stop(t + dur + 0.05);
+  },
+  tone(type, f0, f1, dur, vol, delay, att){
+    const c = this.c, t = c.currentTime + (delay || 0), o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.linearRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + (att || 0.01)); g.gain.setValueAtTime(vol, t + Math.max(att || 0.01, dur - 0.15)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(this.m); o.start(t); o.stop(t + dur + 0.05);
+  },
+  ev(name, x){
+    if(!this.c || !audio.on) return;
+    switch(name){
+      case 'click': this.burst('highpass', 3000, 0.7, 0.03, 0.18); break;
+      case 'panto':      // Hubantrieb des Stromabnehmers, Anlegen am Fahrdraht mit kurzem Funken
+        this.tone('sawtooth', 70, 115, 2.4, 0.03, 0, 0.25); this.tone('sine', 140, 230, 2.4, 0.02, 0, 0.25);
+        this.burst('lowpass', 700, 1, 0.2, 0.4, 2.45); this.burst('highpass', 4500, 0.7, 0.3, 0.07, 2.5); break;
+      case 'pantoDown': this.tone('sawtooth', 115, 70, 2.0, 0.025, 0.3, 0.2); this.burst('lowpass', 500, 1, 0.15, 0.25, 2.3); break;
+      case 'hsEin': this.burst('lowpass', 150, 1.2, 0.4, 1.0); this.burst('highpass', 2500, 0.7, 0.05, 0.4); this.tone('sine', 75, 40, 0.35, 0.45); break;
+      case 'hsAus': this.burst('lowpass', 190, 1, 0.3, 0.8); this.burst('highpass', 1800, 0.6, 0.55, 0.14, 0.04); this.ev('pantoDown'); break;
+      case 'abblasen': this.burst('highpass', 2300, 0.6, 1.0, 0.2); break;
+      case 'air': this.burst('highpass', 1700, 0.5, 0.4, 0.05 + 0.12*(x || 0.5)); break;
+      case 'release': this.burst('highpass', 1100, 0.5, 1.5, 0.15); break;
+      case 'clack': { const k = x || 0.5; this.burst('bandpass', 240, 1.4, 0.08, 0.7*k, 0, this.bb); this.burst('bandpass', 900, 1.2, 0.05, 0.35*k); this.burst('highpass', 2600, 0.7, 0.025, 0.2*k); this.jolt = Math.max(this.jolt, k); break; }
+      case 'doorOpen': this.tone('sine', 880, 880, 0.18, 0.04); this.burst('bandpass', 900, 0.7, 1.1, 0.12, 0.15); this.burst('lowpass', 260, 1, 0.15, 0.45, 1.15); break;
+      case 'doorWarn': for(let i = 0; i < 4; i++) this.tone('square', 1050, 1050, 0.17, 0.035, i*0.3);
+        this.burst('bandpass', 850, 0.7, 1.2, 0.11, 1.3); this.burst('lowpass', 240, 1, 0.18, 0.55, 2.6); break;
+      case 'pass': {   // Vorbeifahrt eines Gegenzugs: Druckstoß, dann Rauschen bis zum Zugschluss
+        const d = x || 2, c = this.c, t = c.currentTime, src = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain();
+        src.buffer = this.nb; src.loop = true; fl.type = 'lowpass'; fl.frequency.value = 900; fl.Q.value = 0.5;
+        g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.5, t + 0.08); g.gain.linearRampToValueAtTime(0.22, t + 0.5); g.gain.setValueAtTime(0.22, t + Math.max(0.6, d - 0.3)); g.gain.linearRampToValueAtTime(0.0001, t + d + 0.4);
+        src.connect(fl); fl.connect(g); g.connect(this.m); src.start(t); src.stop(t + d + 0.5);
+        this.burst('lowpass', 120, 1, 0.5, 0.8, 0, this.bb); break; }
+    }
+  },
+  horn(on){ if(!this.c) return; this.set(this.L.horn.gain, on && audio.on ? 0.06 : 0, on ? 0.02 : 0.06); }
+};
+// Weichen und Bahnübergänge: Stöße je Achse
+function sndJoints(prev, fr){
+  if(!snd.c || S.v < 0.4) return;
+  if(snd.jKey !== OBJS){
+    snd.jKey = OBJS; const J = [];
+    for(const A of AREAS){ if(A.a0 > -1e8) J.push(A.a0, A.a0 + 24); if(A.b1 < 1e8) J.push(A.b1 - 24, A.b1); }
+    for(const g of GG) J.push(g.a0, g.a0 + 24, g.b1 - 24, g.b1);
+    for(const B of BRANCH) J.push(B.s0, B.s0 + 24);
+    for(const b of BUE) J.push(b.pos - 3, b.pos + 3);
+    snd.J = J.sort((a, b) => a - b);
+    const cl = AVG ? 19 : 25, n = Math.max(1, Math.min(3, Math.round(TRAIN_LEN/cl))), ax = [];
+    for(let i = 0; i < n; i++) ax.push(i*cl + 2, i*cl + 4.2, i*cl + cl - 4.2, i*cl + cl - 2);
+    snd.AX = ax.filter(a => a < TRAIN_LEN); snd.AXM = Math.max(...snd.AX);
+  }
+  for(const j of snd.J){
+    if(j > fr + 1) break;
+    if(j < prev - snd.AXM - 1) continue;
+    for(const a of snd.AX) if(prev - a < j && j <= fr - a) snd.ev('clack', Math.min(1, S.v/16)*(1 - a/(snd.AXM + 40)));
+  }
+}
 
 // ---------------- Zeichnen: Signalbilder ----------------
 const C = {red:'#ff3b2f', green:'#3dff86', yel:'#ffc21a', white:'#f4f6ff', screen:'#0d0f0f', rim:'#3a3f3e'};
@@ -2469,10 +2642,99 @@ function render(){
   g.addColorStop(0, 'rgba(' + PL.haze + ',0)'); g.addColorStop(0.45, 'rgba(' + PL.haze + ',.55)'); g.addColorStop(1, 'rgba(' + PL.haze + ',0)');
   ctx.fillStyle = g; ctx.fillRect(0, hy - 30*u, W, 90*u);
   }
-  // Führerstandsrahmen
+  // Führerstandsrahmen bzw. Kabine
+  if(cabOn){ const yc = drawCab(ctx, W, H, u); hud(ctx, W, yc, u); return; }
   ctx.fillStyle = PL.frame;
   ctx.fillRect(0, H - 14*u, W, 14*u);
   hud(ctx, W, H, u);
+}
+// ---------------- Kabine: Fensterrahmen, Pult mit Fahr-/Bremshebel, Manometern und Leuchtmeldern ----------------
+let cabOn = true;
+try{ if(localStorage.getItem('fst-cab') === '0') cabOn = false; }catch(e){}
+function drawCab(ctx, W, H, u){
+  const inT = TUNNELS.some(t => S.front >= t.from && S.front <= t.to);
+  const dark = NIGHT ? 0.62 : inT ? 0.5 : 0;           // Abdunkeln bei Nacht und im Tunnel
+  const hd = Math.max(0.16*H, 56*u), yD = H - hd, yE = yD - 0.03*H, hT = Math.max(0.045*H, 13*u);
+  ctx.save();
+  // Spiegelung in der Frontscheibe
+  let g = ctx.createLinearGradient(0, 0, W, H*0.8);
+  g.addColorStop(0.25, 'rgba(255,255,255,0)'); g.addColorStop(0.42, 'rgba(255,255,255,' + (NIGHT ? 0.025 : 0.05) + ')'); g.addColorStop(0.5, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, yE);
+  // Dachkante und Sonnenblende
+  ctx.fillStyle = '#101415';
+  ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(W, 0); ctx.lineTo(W, hT + 0.012*H); ctx.quadraticCurveTo(W/2, hT - 0.01*H, 0, hT + 0.012*H); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = 'rgba(22,30,34,.55)'; rr(ctx, W*0.055, hT - 2*u, W*0.3, Math.max(0.09*H, 26*u), 5*u); ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.lineWidth = 1.5*u; ctx.stroke();
+  // Fensterpfosten
+  for(const sd of [0, 1]){
+    const x0 = sd ? W : 0, x1 = sd ? W*0.945 : W*0.055, x2 = sd ? W*0.972 : W*0.028;
+    g = ctx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, '#0b0e0f'); g.addColorStop(1, '#20282b');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, 0); ctx.lineTo(x1, 0); ctx.lineTo(x2, yE + 2*u); ctx.lineTo(x0, yE + 2*u); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = u; ctx.beginPath(); ctx.moveTo(x1, 0); ctx.lineTo(x2, yE); ctx.stroke();
+  }
+  // Scheibenwischer in Ruhestellung
+  ctx.lineCap = 'round'; ctx.strokeStyle = '#0a0c0d'; ctx.lineWidth = 3.2*u;
+  ctx.beginPath(); ctx.moveTo(W*0.36, yE + 1*u); ctx.lineTo(W*0.62, yE - 0.035*H); ctx.stroke();
+  ctx.lineWidth = 1.8*u; ctx.strokeStyle = '#1b1f21'; ctx.beginPath(); ctx.moveTo(W*0.4, yE - 0.008*H); ctx.lineTo(W*0.64, yE - 0.043*H); ctx.stroke();
+  // Pult
+  const top = (x) => { const t = x/W - 0.5; return yE + (yD + 0.02*H - yE)*(1 - 4*t*t); };   // Oberkante leicht gewölbt
+  g = ctx.createLinearGradient(0, yE, 0, H); g.addColorStop(0, '#3d464a'); g.addColorStop(0.18, '#2a3135'); g.addColorStop(1, '#15191b');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, H); ctx.lineTo(0, yE); ctx.quadraticCurveTo(W/2, 2*(yD + 0.02*H) - yE, W, yE); ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,.7)'; ctx.lineWidth = 3*u; ctx.beginPath(); ctx.moveTo(0, yE - 1.5*u); ctx.quadraticCurveTo(W/2, 2*(yD + 0.02*H) - yE - 1.5*u, W, yE - 1.5*u); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = 1.2*u; ctx.beginPath(); ctx.moveTo(0, yE + u); ctx.quadraticCurveTo(W/2, 2*(yD + 0.02*H) - yE + u, W, yE + u); ctx.stroke();
+  const y0 = top(W/2) + 0.1*hd, hh = H - y0;
+  const glow = (col, r) => { ctx.shadowColor = col; ctx.shadowBlur = r; };
+  // Fahr-/Bremshebel (Sollwertgeber)
+  { const cx = W*0.17, sy0 = y0 + 0.12*hh, sy1 = H - 0.12*hh, sw = Math.max(7*u, 0.05*hh);
+    ctx.fillStyle = '#202628'; rr(ctx, cx - sw*2.2, sy0 - sw*0.8, sw*4.4, sy1 - sy0 + sw*1.6, 5*u); ctx.fill();
+    ctx.fillStyle = '#07090a'; rr(ctx, cx - sw/2, sy0, sw, sy1 - sy0, sw/2); ctx.fill();
+    ctx.fillStyle = '#8e9f99'; ctx.font = '600 ' + Math.round(Math.max(8*u, 0.09*hh)) + 'px "Barlow Condensed","Arial Narrow",sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    [['F', 8], ['0', 0], ['B', -4], ['SB', -8]].forEach(([l, v]) => ctx.fillText(l, cx - sw*0.9, sy0 + (8 - v)/16*(sy1 - sy0)));
+    const ky = sy0 + (8 - S.lever)/16*(sy1 - sy0), kr = Math.max(8*u, 0.13*hh);
+    ctx.strokeStyle = '#4b5559'; ctx.lineWidth = sw*0.7; ctx.beginPath(); ctx.moveTo(cx, ky); ctx.lineTo(cx + kr*0.25, ky - kr*1.3); ctx.stroke();
+    const kg = ctx.createRadialGradient(cx + kr*0.25 - kr*0.35, ky - kr*1.3 - kr*0.35, kr*0.1, cx + kr*0.25, ky - kr*1.3, kr);
+    kg.addColorStop(0, '#6a7276'); kg.addColorStop(1, '#141819'); ctx.fillStyle = kg; ctx.beginPath(); ctx.arc(cx + kr*0.25, ky - kr*1.3, kr, 0, 7); ctx.fill(); }
+  // Manometer: Hauptluftbehälter und Bremszylinder
+  const gauge = (cx, cy, r, val, max, lab, col) => {
+    ctx.fillStyle = '#0d1011'; ctx.beginPath(); ctx.arc(cx, cy, r*1.12, 0, 7); ctx.fill();
+    ctx.save(); if(dark) glow('rgba(255,230,170,.5)', 8*u);
+    ctx.fillStyle = dark ? '#d8cfb4' : '#ece9df'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.fill(); ctx.restore();
+    ctx.strokeStyle = '#222'; ctx.lineWidth = Math.max(1, r*0.04);
+    const a0 = Math.PI*0.75, a1 = Math.PI*2.25;
+    for(let i = 0; i <= max; i++){ const a = a0 + (a1 - a0)*i/max, l = i % 2 ? 0.12 : 0.2; ctx.beginPath(); ctx.moveTo(cx + Math.cos(a)*r*0.88, cy + Math.sin(a)*r*0.88); ctx.lineTo(cx + Math.cos(a)*r*(0.88 - l), cy + Math.sin(a)*r*(0.88 - l)); ctx.stroke(); }
+    ctx.fillStyle = '#222'; ctx.font = '700 ' + Math.round(r*0.34) + 'px "Barlow Condensed","Arial Narrow",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(lab, cx, cy + r*0.42);
+    const a = a0 + (a1 - a0)*Math.max(0, Math.min(1, val/max));
+    ctx.strokeStyle = col; ctx.lineWidth = Math.max(1.5, r*0.08); ctx.beginPath(); ctx.moveTo(cx - Math.cos(a)*r*0.15, cy - Math.sin(a)*r*0.15); ctx.lineTo(cx + Math.cos(a)*r*0.78, cy + Math.sin(a)*r*0.78); ctx.stroke();
+    ctx.fillStyle = '#222'; ctx.beginPath(); ctx.arc(cx, cy, r*0.08, 0, 7); ctx.fill();
+  };
+  const gr = Math.min(0.3*hh, 0.042*W), gy = y0 + hh*0.48;
+  gauge(W*0.4, gy, gr, S.hs.air, 12, 'HB bar', '#c8261c');
+  gauge(W*0.4 + gr*2.7, gy, gr, Math.min(6, S.brake/Math.max(0.1, BRK_F)*3.2), 6, 'C bar', '#111');
+  // Leuchtmelder
+  const H0 = S.hs, lamps = [
+    ['HS', H0.st === 'ein' ? '#45d37b' : '#e2483d', true],
+    ['SA', '#f2c230', H0.st === 'ein' || (H0.st === 'start' && H0.t > 2.9)],
+    ['Kp', '#f4f6ff', H0.comp],
+    ['Tür', '#f2c230', S.door.state !== 'zu'],
+    ['Sifa', '#f4f6ff', S.sifa.t >= 30 && (S.t % 0.6) < 0.4]
+  ];
+  const lr = Math.max(4*u, Math.min(0.075*hh, 0.011*W)), lx0 = W*0.62, lstep = Math.max(lr*3.8, W*0.05), ly = y0 + hh*0.36;
+  ctx.font = '600 ' + Math.round(Math.min(Math.max(7*u, lr*1.15), lstep*0.32)) + 'px "Barlow Condensed","Arial Narrow",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  lamps.forEach(([lab, col, on], i) => {
+    const x = lx0 + i*lstep;
+    ctx.fillStyle = '#0b0e0f'; ctx.beginPath(); ctx.arc(x, ly, lr*1.3, 0, 7); ctx.fill();
+    ctx.save(); if(on) glow(col, 10*u); ctx.fillStyle = on ? col : '#2a3032'; ctx.beginPath(); ctx.arc(x, ly, lr, 0, 7); ctx.fill(); ctx.restore();
+    ctx.fillStyle = '#9aa8a3'; ctx.fillText(lab, x, ly + lr*1.6);
+  });
+  // Schnellbremstaster
+  { const x = W*0.9, y = y0 + hh*0.45, r = Math.max(7*u, Math.min(0.17*hh, 0.026*W));
+    ctx.fillStyle = '#f2c230'; ctx.beginPath(); ctx.arc(x, y, r*1.35, 0, 7); ctx.fill();
+    const rg = ctx.createRadialGradient(x - r*0.3, y - r*0.3, r*0.1, x, y, r); rg.addColorStop(0, '#ff6a5e'); rg.addColorStop(1, '#8e1810');
+    ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); }
+  if(dark){ ctx.fillStyle = 'rgba(0,0,0,' + dark*0.55 + ')'; ctx.beginPath(); ctx.moveTo(0, H); ctx.lineTo(0, yE - 3*u); ctx.quadraticCurveTo(W/2, 2*(yD + 0.02*H) - yE - 3*u, W, yE - 3*u); ctx.lineTo(W, H); ctx.closePath(); ctx.fill(); ctx.fillRect(0, 0, W, hT + 0.012*H); }
+  ctx.restore();
+  return yE;
 }
 function bounds(o){
   if(o.k === 'main'){
@@ -2541,7 +2803,7 @@ function pzbZustand(){
   return '';
 }
 function fmtM(d){ return Math.round(d).toLocaleString('de-DE') + ' m'; }
-function hud(ctx, W, H, u){
+function hud(ctx, W, H, u, noFp){
   const n = nextObj();
   const pw = 112*u, ph = 172*u, px = W - pw - 10*u, py = 10*u;
   ctx.fillStyle = '#0c100f'; rr(ctx, px, py, pw, ph, 8*u); ctx.fill();
@@ -2589,7 +2851,7 @@ function hud(ctx, W, H, u){
     ctx.fillStyle = S.sifa.t >= 32.5 ? '#fff' : '#2a2000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(msg, W/2, H*0.58 + 15*u);
   }
-  if(FP){
+  if(FP && !noFp){
     const fs = fpState();
     let l2 = '', l3 = '', dcol = '#e6ebe8';
     if(fs.cur >= 0 && !STATIONS[fs.cur].last){
@@ -2603,7 +2865,7 @@ function hud(ctx, W, H, u){
       l3 = 'Verspätung ' + fmtDelay(d); dcol = d >= 60 ? '#ff8a7a' : d >= 30 ? '#f2c230' : '#45d37b';
     }
     ctx.font = '700 ' + Math.round(12*u) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
-    const bw = Math.max(ctx.measureText(l2).width, 70*u) + 18*u, bh = 50*u, bx = W - bw - 10*u, by = H - bh - 22*u;
+    const bw = Math.max(ctx.measureText(l2).width, 70*u) + 18*u, bh = 50*u, by = H - bh - 22*u, bx = by < 188*u ? 10*u : W - bw - 10*u;
     ctx.fillStyle = 'rgba(12,16,15,.82)'; rr(ctx, bx, by, bw, bh, 6*u); ctx.fill();
     ctx.textAlign = 'left'; ctx.textBaseline = 'top';
     ctx.font = Math.round(14*u) + 'px "Share Tech Mono",monospace'; ctx.fillStyle = '#e6ebe8';
@@ -2705,6 +2967,11 @@ function updateUI(){
   el.lm1000.classList.toggle('on', L.l1000); el.lm500.classList.toggle('on', L.l500);
   el.lmBef.classList.toggle('on', L.bef); $('lmSand').classList.toggle('on', L.sand);
   {
+    const H = S.hs, b = $('bMot'), st = H.st;
+    $('bMotT').textContent = st === 'aus' ? 'Motor starten' : st === 'start' ? (H.t < 2.9 ? 'Stromabnehmer …' : 'Hauptschalter …') : 'Motor abstellen';
+    b.className = 'dbtn mot' + (st === 'ein' ? ' on' : st === 'start' ? ' busy' : (lern ? ' need' : ''));
+  }
+  {
     const D = S.door, b = $('bDoor'), Pi = D.station >= 0 ? S.pax[D.station] : null;
     const here = STATIONS.findIndex((st, k) => !st.first && S.pax[k].state === 'pending' && S.st[k].done);
     let lab = 'Türen freigeben', cls = '';
@@ -2771,8 +3038,9 @@ $('bSifa').addEventListener('click', () => { audio.init(); pressSifa(); });
 $('bFdl').addEventListener('click', () => { audio.init(); pressFdl(); });
 $('bStoer').addEventListener('click', () => { audio.init(); pressStoer(); });
 $('bDoor').addEventListener('click', () => { audio.init(); pressDoor(); });
-function hornOn(){ if(S.horn) return; S.horn = true; audio.start('horn1', 330, 'sawtooth', .035); audio.start('horn2', 415, 'sawtooth', .028); }
-function hornOff(){ S.horn = false; audio.stop('horn1'); audio.stop('horn2'); }
+$('bMot').addEventListener('click', () => { audio.init(); pressMotor(); });
+function hornOn(){ if(S.horn) return; S.horn = true; if(snd.c) snd.horn(true); else { audio.start('horn1', 330, 'sawtooth', .035); audio.start('horn2', 415, 'sawtooth', .028); } }
+function hornOff(){ S.horn = false; snd.horn(false); audio.stop('horn1'); audio.stop('horn2'); }
 (function(){
   const b = $('bPf');
   const on = e => { e.preventDefault(); audio.init(); hornOn(); b.classList.add('down'); try{ b.setPointerCapture(e.pointerId); }catch(_){} };
@@ -2950,6 +3218,7 @@ document.addEventListener('keydown', e => {
   else if(k === 'x'){ audio.init(); pressStoer(); }
   else if(k === 'h'){ audio.init(); hornOn(); $('bPf').classList.add('down'); }
   else if(k === 't'){ audio.init(); pressDoor(); }
+  else if(k === 'm'){ audio.init(); pressMotor(); }
   else if(k === 'p'){ $('tPause').click(); }
 });
 document.addEventListener('keyup', e => { const k = e.key.toLowerCase(); if(k === 'b'){ befehlOff(); $('bBef').classList.remove('down'); } if(k === 'h'){ hornOff(); $('bPf').classList.remove('down'); } });
@@ -2973,6 +3242,7 @@ function reset(){
   const names = STATIONS.length > 6 ? STATIONS[0].name + ' – ' + STATIONS[STATIONS.length - 1].name + ' (' + STATIONS.length + ' Halte)' : STATIONS.map(x => x.name).join(' – ');
   $('sub').textContent = 'Szenario ' + SC.id + ' · ' + SC.title + (names ? ' · ' + names : '') + ' · ' + LVL[SC.lvl] + (AVG ? ' · AVG-Stadtbahn' : '');
   log(SC.title + ': ' + SC.goal, 'fdl');
+  log('Fahrzeug abgerüstet – zuerst Motor starten (Taste M): Stromabnehmer heben, Hauptschalter ein', 'fdl');
   if(S.mode === 'rangier') log('Rangierfahrt, höchstens 25 km/h. Am Lichtsperrsignal auf Sh 1 warten.');
   else log((AVG ? 'AVG-Stadtbahn, Zugart O fest, höchstens 100 km/h. ' : 'Zugart ' + SC.zug + '. Startprogramm aktiv (45 km/h) – befreien, sobald das Signal Fahrt über 30 km/h zeigt. ') + (SC.test ? 'Vorher PZB-Funktionsprüfung: Wachsam und Frei gleichzeitig. ' : '') + 'Sifa während der Fahrt alle 30 s.');
   { const nx = STATIONS.findIndex(st => !st.first); if(nx >= 0 && !FREIGHT){ S.announced[nx] = true; log('Ansage: Nächster Halt ' + STATIONS[nx].name + ' · ' + S.onboard + ' Fahrgäste an Bord', 'fdl'); } }
@@ -3000,7 +3270,7 @@ const R3 = (() => {
   scene.add(camera);
   const hemi = new T.HemisphereLight(0xe4eef5, 0x6a7350, 0.62); scene.add(hemi);
   const sun = new T.DirectionalLight(0xfff1dc, 0.6); sun.position.set(-0.5, 1, 0.3); scene.add(sun);
-  const head = new T.SpotLight(0xfff2d6, 0, 420, 0.32, 0.55, 1.2); camera.add(head); head.position.set(0, -1.6, 0); head.target.position.set(0, -6, -80); camera.add(head.target);
+  const head = new T.SpotLight(0xfff2d6, 0, 420, 0.32, 0.55, 1.2);
   scene.fog = new T.Fog(0xcbd9df, 300, 5000);
 
   // ---------- Texturen ----------
@@ -3238,6 +3508,7 @@ const R3 = (() => {
       if(b - a > 0.5){
         const arch = []; for(let k = 0; k <= 12; k++){ const an = Math.PI*k/12; arch.push([-2.1 + 5.8*Math.cos(an), 0.2 + 6.6*Math.sin(an)]); }
         bAdd(M.tunnel, ribbon(o, a, b, 6, () => 0, arch.reverse()));
+        bAdd(M.tunnel, ribbon(o, a, b, 25, () => 0, [[-7.9, 0.01], [3.7, 0.01]]));
         bAdd(M.hill, ribbon(o, a, b, 6, () => 0, HILL, 3.9, 0.05));
         for(let s = Math.ceil(a/25)*25; s < b; s += 25){ boxAt(grp, o, s, -6.6, 3.9, 0.2, 0.25, 0.8, M.tlamp); boxAt(grp, o, s, 2.4, 3.9, 0.2, 0.25, 0.8, M.tlamp); }
       }
@@ -3401,8 +3672,137 @@ const R3 = (() => {
   const paxHead = mkInst(new T.SphereGeometry(0.12, 8, 6), new T.MeshLambertMaterial({color:0xffffff}));
   const PCOL = [0x2f5d8a, 0xa6463b, 0x3f7a52, 0xc9a227, 0x6b4f8a].map(c => new T.Color(c)), LCOL = [0x2a3140, 0x3b3b3b, 0x4a5a78].map(c => new T.Color(c)), SKIN = [0xe2b993, 0xc89870, 0x8d5f3e].map(c => new T.Color(c));
 
+  // ---------- Führerstand in 3D: Pult, Frontscheibe, Seitenfenster; Kopf drehen zum Umschauen ----------
+  const cabG = new T.Group(); scene.add(cabG); cabG.add(camera);
+  cabG.add(head); cabG.add(head.target); head.position.set(0, 1.7, -2.6); head.target.position.set(0, -2, -80);
+  const cabLight = new T.PointLight(0xffe8c0, 0, 3.6, 2); cabLight.position.set(0, 3.8, -0.1); cabG.add(cabLight);
+  const look = {yaw:0, pitch:0, ty:0, tp:0, keys:{}};
+  R.look = look;
+  const panelC = document.createElement('canvas'); panelC.width = 1536; panelC.height = 480;
+  const panelT = new T.CanvasTexture(panelC); panelT.anisotropy = 4;
+  const CM = {
+    wall:new T.MeshLambertMaterial({color:0x8f948f}), dark:new T.MeshLambertMaterial({color:0x23292b}), floor:new T.MeshLambertMaterial({color:0x1c1f20}),
+    ceil:new T.MeshLambertMaterial({color:0xb4b7b1}), rubber:new T.MeshLambertMaterial({color:0x0e1011}), lamp:new T.MeshBasicMaterial({color:0xfff4dc}),
+    glass:new T.MeshBasicMaterial({color:0x9fc4d6, transparent:true, opacity:0.07, depthWrite:false, side:T.DoubleSide}),
+    visor:new T.MeshLambertMaterial({color:0x1d2a30, transparent:true, opacity:0.62, side:T.DoubleSide}),
+    knob:new T.MeshLambertMaterial({color:0x15191a}), metal:new T.MeshLambertMaterial({color:0x6d7579}),
+    panel:new T.MeshLambertMaterial({map:panelT, emissive:0xffffff, emissiveMap:panelT, emissiveIntensity:0.12}),
+    door:new T.MeshLambertMaterial({color:0x6f746f}), red:new T.MeshLambertMaterial({color:0xb3261d}), yel:new T.MeshLambertMaterial({color:0xe3b417})
+  };
+  const cab = new T.Group(); cabG.add(cab);
+  const cb = (mat, w, h, d, x, y, z, rx, ry, rz) => { const m = new T.Mesh(G.box, mat); m.scale.set(w, h, d); m.position.set(x, y, z); m.rotation.set(rx || 0, ry || 0, rz || 0); cab.add(m); return m; };
+  const FL = 1.8, CE = 3.95, HW2 = 1.25, WB = 2.65, WT = 3.82, ZB = -1.3, ZT = -1.05, DN = 2.38, ZN = -0.8;   // Boden, Decke, halbe Breite, Frontscheibe unten/oben
+  const OZ0 = -1.0, OZ1 = 0.45, OY0 = 2.65, OY1 = 3.6;                                // Seitenfenster
+  cb(CM.floor, 2.5, 0.06, 2.6, 0, FL, -0.05);
+  cb(CM.ceil, 2.5, 0.06, 2.6, 0, CE, -0.05);
+  cb(CM.lamp, 0.9, 0.02, 0.25, 0, CE - 0.04, 0.2);
+  cb(CM.dark, 2.5, 0.14, 0.14, 0, WT + 0.07, ZT - 0.02);                                   // Kante über der Frontscheibe
+  for(const sx of [-1, 1]){
+    cb(CM.dark, 0.14, 1.13, 0.12, sx*1.19, (WB + WT)/2, (ZB + ZT)/2, Math.atan2(ZT - ZB, WT - WB));    // Fensterpfosten
+    cb(CM.wall, 0.06, OY0 - FL, 2.5, sx*HW2, (FL + OY0)/2, -0.05);                         // Seitenwand unten
+    cb(CM.wall, 0.06, CE - OY1, 2.5, sx*HW2, (OY1 + CE)/2, -0.05);                         // oben
+    cb(CM.wall, 0.06, OY1 - OY0, OZ0 - ZB, sx*HW2, (OY0 + OY1)/2, (ZB + OZ0)/2);           // vor dem Fenster
+    cb(CM.wall, 0.06, OY1 - OY0, 1.2 - OZ1, sx*HW2, (OY0 + OY1)/2, (OZ1 + 1.2)/2);         // hinter dem Fenster
+    // Fensterrahmen, Teilung des Schiebefensters, Glas
+    cb(CM.rubber, 0.08, 0.05, OZ1 - OZ0, sx*(HW2 - 0.01), OY0, (OZ0 + OZ1)/2); cb(CM.rubber, 0.08, 0.05, OZ1 - OZ0, sx*(HW2 - 0.01), OY1, (OZ0 + OZ1)/2);
+    cb(CM.rubber, 0.08, OY1 - OY0, 0.05, sx*(HW2 - 0.01), (OY0 + OY1)/2, OZ0); cb(CM.rubber, 0.08, OY1 - OY0, 0.05, sx*(HW2 - 0.01), (OY0 + OY1)/2, OZ1);
+    cb(CM.rubber, 0.07, OY1 - OY0, 0.035, sx*(HW2 - 0.01), (OY0 + OY1)/2, -0.25);
+    const gl = new T.Mesh(G.plane, CM.glass); gl.scale.set(OZ1 - OZ0, OY1 - OY0, 1); gl.position.set(sx*HW2, (OY0 + OY1)/2, (OZ0 + OZ1)/2); gl.rotation.y = Math.PI/2; cab.add(gl);
+    cb(CM.dark, 0.1, 0.05, 0.6, sx*(HW2 - 0.06), OY0 - 0.04, -0.4);                        // Armauflage
+    // Außenspiegel
+    cb(CM.dark, 0.3, 0.035, 0.035, sx*(HW2 + 0.15), 3.15, -0.95); cb(CM.dark, 0.05, 0.24, 0.16, sx*(HW2 + 0.31), 3.15, -0.95);
+  }
+  // Rückwand mit Tür
+  cb(CM.wall, 2.5, CE - FL, 0.06, 0, (FL + CE)/2, 1.2); cb(CM.door, 0.8, 1.95, 0.03, 0.55, FL + 0.98, 1.17); cb(CM.rubber, 0.4, 0.5, 0.02, 0.55, FL + 1.55, 1.15);
+  // Pult: geneigte Instrumententafel, Front zum Fahrer, Hebel
+  const dTilt = Math.atan2(WB - DN, ZN - ZB), dLen = Math.hypot(WB - DN, ZN - ZB), onP = (cx, cy) => { const f = cy/320; return [(cx/1024 - 0.5)*2.44, WB - f*(WB - DN), ZB + f*(ZN - ZB)]; };
+  const pn = new T.Mesh(G.plane, CM.panel); pn.scale.set(2.44, dLen, 1); pn.position.set(0, (WB + DN)/2, (ZB + ZN)/2); pn.rotation.x = -Math.PI/2 + dTilt; cab.add(pn);
+  cb(CM.dark, 2.5, 0.04, dLen, 0, (WB + DN)/2 - 0.025, (ZB + ZN)/2, -dTilt);
+  cb(CM.dark, 2.5, DN - FL, 0.08, 0, (FL + DN)/2, ZN);
+  cb(CM.rubber, 2.5, 0.03, 0.05, 0, DN, ZN + 0.02);
+  cb(CM.rubber, 2.3, 0.03, 0.06, 0, WB + 0.01, ZB + 0.02);                                // Dichtung unter der Scheibe
+  const lp = onP(268, 150), lev = new T.Group(); lev.position.set(lp[0], lp[1], lp[2]); cab.add(lev);
+  { const sh = new T.Mesh(G.cyl, CM.metal); sh.scale.set(0.016, 0.17, 0.016); sh.position.y = 0.085; lev.add(sh); const kn = new T.Mesh(G.ball, CM.knob); kn.scale.set(0.038, 0.038, 0.038); kn.position.y = 0.18; lev.add(kn); }
+  { const q = onP(925, 140), sb = new T.Mesh(new T.CylinderGeometry(0.04, 0.04, 0.04, 16), CM.red); sb.position.set(q[0], q[1] + 0.02, q[2]); sb.rotation.x = dTilt; cab.add(sb);
+    const ring = new T.Mesh(new T.CylinderGeometry(0.058, 0.058, 0.02, 16), CM.yel); ring.position.set(q[0], q[1] + 0.005, q[2]); ring.rotation.x = dTilt; cab.add(ring); }
+  // Scheibenwischer und Sonnenblende
+  cb(CM.rubber, 0.9, 0.012, 0.012, -0.35, WB + 0.05, ZB + 0.03, 0, 0, 0.16); cb(CM.rubber, 0.9, 0.012, 0.012, 0.6, WB + 0.05, ZB + 0.03, 0, 0, 0.14);
+  { const v = new T.Mesh(G.plane, CM.visor); v.scale.set(0.8, 0.2, 1); v.position.set(-0.62, WT - 0.12, ZT + 0.06); v.rotation.x = -0.25; cab.add(v); }
+  // statische Teile je Material zusammenfassen
+  { const byM = new Map(), keep = [CM.wall, CM.dark, CM.floor, CM.ceil, CM.rubber, CM.lamp, CM.door];
+    cab.children.slice().forEach(ch => { if(!ch.isMesh || !keep.includes(ch.material) || (ch.geometry !== G.box && ch.geometry !== G.plane)) return; ch.updateMatrix(); const g = ch.geometry.clone(); g.applyMatrix4(ch.matrix); if(!byM.has(ch.material)) byM.set(ch.material, []); byM.get(ch.material).push(g); cab.remove(ch); });
+    byM.forEach((list, mat) => { cab.add(new T.Mesh(mergeGeos(list), mat)); list.forEach(g => g.dispose()); }); }
+  cab.visible = false;
+  // Instrumententafel (Textur, etwa 15-mal je Sekunde neu gezeichnet)
+  let panelLast = -1;
+  function drawPanel(){
+    const g = panelC.getContext('2d'), Wc = 1024, Hc = 320, dark = NIGHT || TUNNELS.some(t => S.front >= t.from && S.front <= t.to);
+    g.setTransform(panelC.width/Wc, 0, 0, panelC.height/Hc, 0, 0);
+    g.fillStyle = '#2a3134'; g.fillRect(0, 0, Wc, Hc);
+    g.fillStyle = '#1f2527'; g.fillRect(0, 0, Wc, 6); g.fillStyle = '#262c2f'; g.fillRect(0, 168, Wc, 3);
+    const font = (px, w) => { g.font = (w || 600) + ' ' + px + 'px "Barlow Condensed","Arial Narrow",sans-serif'; };
+    const a0 = Math.PI*0.75, a1 = Math.PI*2.25;
+    // Hebelkulisse
+    g.fillStyle = '#121617'; rr(g, 232, 60, 74, 200, 9); g.fill();
+    g.fillStyle = '#07090a'; rr(g, 262, 72, 12, 176, 6); g.fill();
+    font(15); g.fillStyle = '#9aa8a3'; g.textAlign = 'right'; g.textBaseline = 'middle';
+    [['F', 8], ['0', 0], ['B', -4], ['SB', -8]].forEach(([l, v]) => g.fillText(l, 257, 72 + (8 - v)/16*176));
+    g.textAlign = 'center'; font(17, 700); g.fillStyle = '#e6ebe8'; g.fillText(leverLabel(S.lever), 269, 276);
+    // Tacho mit zulässiger Geschwindigkeit
+    const vk = S.v*3.6, tx = 378, ty = 84, tr = 72, vmax = VEH_VMAX > 120 ? 200 : 140;
+    g.fillStyle = '#0c0f10'; g.beginPath(); g.arc(tx, ty, tr + 7, 0, 7); g.fill();
+    g.fillStyle = '#111516'; g.beginPath(); g.arc(tx, ty, tr, 0, 7); g.fill();
+    g.strokeStyle = '#d9e3df'; g.fillStyle = '#d9e3df'; font(14); g.textAlign = 'center'; g.textBaseline = 'middle';
+    for(let k = 0; k <= vmax; k += 10){ const a = a0 + (a1 - a0)*k/vmax, l = k % 20 ? 6 : 12; g.lineWidth = k % 20 ? 1.5 : 2.5; g.beginPath(); g.moveTo(tx + Math.cos(a)*tr*0.93, ty + Math.sin(a)*tr*0.93); g.lineTo(tx + Math.cos(a)*(tr*0.93 - l), ty + Math.sin(a)*(tr*0.93 - l)); g.stroke(); if(k % 20 === 0) g.fillText(String(k), tx + Math.cos(a)*tr*0.67, ty + Math.sin(a)*tr*0.67); }
+    const va = vAllowed().v, aa = a0 + (a1 - a0)*Math.min(1, va/vmax);
+    g.strokeStyle = '#f2c230'; g.lineWidth = 5; g.beginPath(); g.arc(tx, ty, tr*0.97, aa - 0.05, aa + 0.05); g.stroke();
+    const an = a0 + (a1 - a0)*Math.min(1, vk/vmax);
+    g.strokeStyle = '#ff4a3a'; g.lineWidth = 4; g.beginPath(); g.moveTo(tx, ty); g.lineTo(tx + Math.cos(an)*tr*0.85, ty + Math.sin(an)*tr*0.85); g.stroke();
+    g.fillStyle = '#ff4a3a'; g.beginPath(); g.arc(tx, ty, 6, 0, 7); g.fill();
+    g.fillStyle = '#9fe8bb'; g.font = '21px "Share Tech Mono",monospace'; g.fillText(String(Math.round(vk)), tx, ty + 36);
+    // Manometer
+    const mano = (cx, cy, r, val, max, lab, col) => {
+      g.fillStyle = '#0c0f10'; g.beginPath(); g.arc(cx, cy, r + 5, 0, 7); g.fill();
+      g.fillStyle = dark ? '#d8cfb4' : '#ece9df'; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill();
+      g.strokeStyle = '#222'; g.lineWidth = 1.5;
+      for(let i = 0; i <= max; i++){ const a = a0 + (a1 - a0)*i/max, l = i % 2 ? 4 : 7; g.beginPath(); g.moveTo(cx + Math.cos(a)*r*0.88, cy + Math.sin(a)*r*0.88); g.lineTo(cx + Math.cos(a)*(r*0.88 - l), cy + Math.sin(a)*(r*0.88 - l)); g.stroke(); }
+      g.fillStyle = '#222'; font(12, 700); g.fillText(lab, cx, cy + r*0.45);
+      const a = a0 + (a1 - a0)*Math.max(0, Math.min(1, val/max));
+      g.strokeStyle = col; g.lineWidth = 3; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.cos(a)*r*0.8, cy + Math.sin(a)*r*0.8); g.stroke();
+      g.fillStyle = '#222'; g.beginPath(); g.arc(cx, cy, 3.5, 0, 7); g.fill();
+    };
+    mano(490, 46, 32, S.hs.air, 12, 'HB bar', '#c8261c');
+    mano(490, 122, 32, Math.min(6, S.brake/Math.max(0.1, BRK_F)*3.2), 6, 'C bar', '#111');
+    // Fahrplanbildschirm
+    g.fillStyle = '#05080a'; rr(g, 532, 10, 134, 150, 6); g.fill(); g.fillStyle = '#0b1418'; g.fillRect(538, 16, 122, 138);
+    g.textAlign = 'left'; g.textBaseline = 'top'; g.fillStyle = '#d9e3df'; g.font = '19px "Share Tech Mono",monospace';
+    g.fillText(fmtClock(S.t).slice(0, 8), 544, 20); font(14); g.fillStyle = '#8e9f99'; g.fillText(SC.nr || '', 544, 42);
+    if(FP){
+      const fs = fpState(); let l2 = '', l3 = '', l4 = '', dc = '#45d37b';
+      if(fs.cur >= 0 && !STATIONS[fs.cur].last){ const rest = FP[fs.cur].dep - S.t; l2 = STATIONS[fs.cur].name; l3 = 'ab ' + fmtClock(FP[fs.cur].dep).slice(0, 5); l4 = rest > 0 ? 'in ' + Math.ceil(rest) + ' s' : fmtDelay(-rest); dc = rest > 0 ? '#f2c230' : '#45d37b'; }
+      else if(fs.nxt >= 0){ l2 = STATIONS[fs.nxt].name; l3 = 'an ' + fmtClock(FP[fs.nxt].arr).slice(0, 5); const d = fs.last === null ? 0 : fs.last; l4 = 'Versp. ' + (d > 0 ? '+' : '') + Math.round(d) + ' s'; dc = d >= 60 ? '#ff8a7a' : d >= 30 ? '#f2c230' : '#45d37b'; }
+      font(15, 700); g.fillStyle = '#e6ebe8'; g.fillText(l2.length > 15 ? l2.slice(0, 14) + '…' : l2, 544, 66); font(15); g.fillStyle = '#c3cdc9'; g.fillText(l3, 544, 88); g.fillStyle = dc; g.fillText(l4, 544, 110);
+    }
+    font(13); g.fillStyle = S.hs.st === 'ein' ? '#45d37b' : '#ff8a7a'; g.fillText(S.hs.st === 'ein' ? 'HS ein' : S.hs.st === 'start' ? 'Aufrüsten …' : 'HS aus', 544, 134);
+    // Leuchtmelder: PZB und Fahrzeug
+    const on = id => { const e = document.getElementById(id); return !!(e && e.classList.contains('on')); };
+    const lq = (x, y, txt, col, lit) => { g.fillStyle = '#0b0e0f'; g.fillRect(x - 2, y - 2, 40, 34); g.fillStyle = lit ? col : '#30373a'; g.fillRect(x, y, 36, 30); g.fillStyle = lit ? '#111' : '#6b7672'; font(12, 700); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(txt, x + 18, y + 16); };
+    lq(678, 12, '85', '#3d8bff', on('lm85')); lq(718, 12, '70', '#3d8bff', on('lm70')); if(!AVG) lq(758, 12, '55', '#3d8bff', on('lm55'));
+    lq(678, 50, '1000', '#f2c230', on('lm1000')); lq(718, 50, '500', '#ff4a3a', on('lm500')); lq(758, 50, 'Bef', '#f4f6ff', on('lmBef'));
+    const H0 = S.hs, lamp = (x, y, lab, col, lit) => { g.fillStyle = '#0b0e0f'; g.beginPath(); g.arc(x, y, 11, 0, 7); g.fill(); g.save(); if(lit){ g.shadowColor = col; g.shadowBlur = 10; } g.fillStyle = lit ? col : '#30373a'; g.beginPath(); g.arc(x, y, 7.5, 0, 7); g.fill(); g.restore(); g.fillStyle = '#9aa8a3'; font(12); g.textAlign = 'center'; g.textBaseline = 'top'; g.fillText(lab, x, y + 12); };
+    lamp(688, 110, 'HS', H0.st === 'ein' ? '#45d37b' : '#e2483d', true); lamp(716, 110, 'SA', '#f2c230', H0.st === 'ein' || (H0.st === 'start' && H0.t > 2.9));
+    lamp(744, 110, 'Kp', '#f4f6ff', H0.comp); lamp(772, 110, 'Tür', '#f2c230', S.door.state !== 'zu'); lamp(800, 110, 'Sifa', '#f4f6ff', S.sifa.t >= 30 && (S.t % 0.6) < 0.4);
+    // Schalterreihe (vorderer Pultteil)
+    const sws = [['Licht', true], ['Fernlicht', NIGHT], ['Wischer', false], ['Sanden', false], ['Glocke', false], ['Heizung', true]];
+    sws.forEach(([lab, st], i) => { const x = 380 + i*62, y = 214; g.fillStyle = '#121617'; rr(g, x - 20, y - 22, 40, 44, 5); g.fill(); g.fillStyle = '#4b5559'; rr(g, x - 6, st ? y - 18 : y - 2, 12, 20, 3); g.fill(); g.fillStyle = '#9aa8a3'; font(12); g.textAlign = 'center'; g.textBaseline = 'top'; g.fillText(lab, x, y + 26); });
+    panelT.needsUpdate = true;
+    lev.rotation.x = -S.lever/8*0.5;
+  }
+  R.cabOn = () => cab.visible;
+  R.projCab = (x, y, z) => { const v = new T.Vector3(x, y, z); cabG.localToWorld(v); v.project(camera); return v.z < 1 && v.z > -1 ? [(v.x + 1)/2, (1 - v.y)/2] : null; };
+
   // ---------- je Bild ----------
-  let lastW = 0, lastH = 0, prMax = Math.min(window.devicePixelRatio || 1, 1.5), pr = prMax, ema = 16, slow = 0, fast = 0, lastT = 0;
+  let lastCab = null, lastW = 0, lastH = 0, prMax = Math.min(window.devicePixelRatio || 1, 1.5), pr = prMax, ema = 16, slow = 0, fast = 0, lastT = 0;
   R.frame = function(){
     if(!built || built.sc !== SC || built.objs !== OBJS) rebuild();
     const W0 = view3d.clientWidth, H0 = view3d.clientHeight;
@@ -3411,16 +3811,30 @@ const R3 = (() => {
     if(ema > 40){ slow++; fast = 0; } else if(ema < 20){ fast++; slow = 0; } else { slow = 0; fast = 0; }
     if(slow > 90 && pr > 0.6){ pr = Math.max(0.6, pr - 0.25); slow = 0; lastW = -1; }
     if(fast > 300 && pr < prMax){ pr = Math.min(prMax, pr + 0.25); fast = 0; lastW = -1; }
-    if(W0 !== lastW || H0 !== lastH){ lastW = W0; lastH = H0; renderer.setPixelRatio(pr); renderer.setSize(W0, H0, false); camera.aspect = W0/Math.max(1, H0); camera.fov = Math.max(30, Math.min(52, 2*Math.atan(Math.tan(31*Math.PI/180)/camera.aspect)*180/Math.PI)); camera.updateProjectionMatrix(); }
+    if(W0 !== lastW || H0 !== lastH || cabOn !== lastCab){ lastW = W0; lastH = H0; lastCab = cabOn; renderer.setPixelRatio(pr); renderer.setSize(W0, H0, false); camera.aspect = W0/Math.max(1, H0); const hh = cabOn ? 34 : 31, lo = cabOn ? 38 : 30, hi = cabOn ? 58 : 52; camera.fov = Math.max(lo, Math.min(hi, 2*Math.atan(Math.tan(hh*Math.PI/180)/camera.aspect)*180/Math.PI)); camera.updateProjectionMatrix(); }
     // Kamera im Führerstand
     const base = S.front;
     let lat = sideX(base), dl = (sideX(base + 3) - sideX(base - 3))/6;
     if(S.gg){ lat += ggX(S.gg, base); dl += (ggX(S.gg, base + 3) - ggX(S.gg, base - 3))/6; }
-    const p = W(base, lat, 3.25), hd = p[3] + Math.atan(dl);
-    camera.position.set(p[0], 3.25, p[2]);
-    camera.lookAt(p[0] + Math.sin(hd)*100, 3.25 - 8.2, p[2] - Math.cos(hd)*100);
-    sky.position.copy(camera.position); stars.position.copy(camera.position); hills.position.set(camera.position.x, 60, camera.position.z); clouds.position.set(camera.position.x, 0, camera.position.z);
-    ground.position.set(Math.round(camera.position.x/100)*100, -0.02, Math.round(camera.position.z/100)*100);
+    const p = W(base, lat, 0), hd = p[3] + Math.atan(dl);
+    // leichtes Schwanken des Wagenkastens, Stöße an Weichen
+    const sw = Math.min(1, S.v/22), jo = snd.jolt; snd.jolt *= 0.8;
+    const lat2 = (Math.sin(S.t*1.6) + 0.5*Math.sin(S.t*2.9 + 1))*0.018*sw;
+    cab.visible = cabOn;
+    const eye = cabOn ? 3.12 : 3.25;
+    cabG.position.set(p[0] + Math.cos(hd)*lat2, (Math.sin(S.t*7.1)*0.004 + Math.sin(S.t*12.7)*0.0025)*sw - 0.025*jo, p[2] + Math.sin(hd)*lat2);
+    cabG.rotation.set(0, -hd, (Math.sin(S.t*1.6 + 0.4))*0.004*sw);
+    // Umschauen: Ziehen im Bild, Pfeiltasten links/rechts bzw. A/D, C zentriert
+    const kd = (look.keys.l ? 1 : 0) - (look.keys.r ? 1 : 0);
+    if(kd) look.ty = Math.max(-1.9, Math.min(1.9, look.ty + kd*0.03));
+    look.yaw += (look.ty - look.yaw)*0.25; look.pitch += (look.tp - look.pitch)*0.25;
+    camera.position.set(0, eye, 0);
+    camera.rotation.set(-Math.atan(cabOn ? 0.16 : 0.082) + look.pitch, look.yaw, 0, 'YXZ');
+    const cwp = new T.Vector3(cabG.position.x, cabG.position.y + eye, cabG.position.z);
+    cabLight.intensity = cabOn && (NIGHT || TUNNELS.some(t => base >= t.from && base <= t.to)) ? 0.45 : 0;
+    if(cabOn){ const tq = Math.floor(performance.now()/66); if(tq !== panelLast){ panelLast = tq; drawPanel(); } CM.panel.emissiveIntensity = NIGHT ? 0.6 : 0.14; }
+    sky.position.copy(cwp); stars.position.copy(cwp); hills.position.set(cwp.x, 60, cwp.z); clouds.position.set(cwp.x, 0, cwp.z);
+    ground.position.set(Math.round(cwp.x/100)*100, -0.02, Math.round(cwp.z/100)*100);
     // Licht, Nebel, Nacht
     const fogFar = NIGHT ? 2600 : SICHT < 1000 ? SICHT*1.25 : 5200, fogNear = NIGHT ? 60 : SICHT < 1000 ? 20 : 400;
     scene.fog.near = fogNear; scene.fog.far = fogFar; scene.fog.color.set(NIGHT ? 0x070a10 : SICHT < 1000 ? 0xc9d0d2 : 0xcbd9df);
@@ -3489,10 +3903,11 @@ function overlay3d(){
   if(!W || !H) return;
   ctx.clearRect(0, 0, W, H);
   const u = Math.max(H/450, 0.68*Math.min(window.devicePixelRatio || 1, 2));
-  if(lern){
+  const cab3 = cabOn && R3.cabOn(), clip = cab3 ? R3.projCab(0, 2.72, -1.3) : null, clipY = clip ? clip[1]*H : H;
+  if(lern && Math.abs(R3.look.yaw) < 0.5){
     for(const m of MAGNETS){
       const z = m.pos - S.front; if(z < 4 || z > 150 || !(m.gg ? onGG(m.pos) : !onGG(m.pos))) continue;
-      const mx = (m.gg ? -4.2 : 0) + sideX(m.pos), q = R3.project(m.pos, 1.12 + mx, 0.3); if(!q) continue;
+      const mx = (m.gg ? -4.2 : 0) + sideX(m.pos), q = R3.project(m.pos, 1.12 + mx, 0.3); if(!q || q[1]*H > clipY - 4*u) continue;
       const ml = magLabel(m), f = ml.spd ? 0 : ml.f, fs = Math.max(9*u, Math.min(14*u, 1400*u/(z + 60)));
       ctx.font = '700 ' + Math.round(fs) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
       const label = ml.txt, tw = ctx.measureText(label).width + fs*0.7, x = q[0]*W, y = q[1]*H + fs*0.3;
@@ -3504,6 +3919,8 @@ function overlay3d(){
       ctx.globalAlpha = 1;
     }
   }
+  if(cab3){ hud(ctx, W, clipY, u, true); return; }
+  if(cabOn){ const yc = drawCab(ctx, W, H, u); hud(ctx, W, yc, u); return; }
   ctx.fillStyle = NIGHT ? '#070909' : '#121615';
   ctx.fillRect(0, H - 14*u, W, 14*u);
   hud(ctx, W, H, u);
@@ -3520,6 +3937,24 @@ function set3d(on){
 }
 if(!R3.ok){ $('t3d').disabled = true; $('t3d').title = '3D-Ansicht braucht WebGL'; }
 $('t3d').addEventListener('click', () => set3d(!use3d));
+// Umschauen in der 3D-Ansicht: Ziehen mit Maus oder Finger, Doppeltipp zentriert, Pfeiltasten ←/→ bzw. A/D halten, C zentriert
+{
+  const vw = document.querySelector('.view'); let drag = null, lastTap = 0;
+  vw.addEventListener('pointerdown', e => { if(!use3d || !R3.ok) return; drag = {x:e.clientX, y:e.clientY, id:e.pointerId}; try{ vw.setPointerCapture(e.pointerId); }catch(_){}
+    const now = performance.now(); if(now - lastTap < 320){ R3.look.ty = 0; R3.look.tp = 0; } lastTap = now; });
+  vw.addEventListener('pointermove', e => { if(!drag || e.pointerId !== drag.id) return; const k = 2.2/Math.max(200, vw.clientWidth);
+    R3.look.ty = Math.max(-1.9, Math.min(1.9, R3.look.ty + (e.clientX - drag.x)*k*1.2)); R3.look.tp = Math.max(-0.55, Math.min(0.4, R3.look.tp + (e.clientY - drag.y)*k));
+    drag.x = e.clientX; drag.y = e.clientY; });
+  const end = () => { drag = null; };
+  vw.addEventListener('pointerup', end); vw.addEventListener('pointercancel', end);
+  const lk = (e, down) => { if((e.target.closest && e.target.closest('input,textarea')) || !R3.ok) return; const k = e.key.toLowerCase();
+    if(k === 'arrowleft' || k === 'a'){ R3.look.keys.l = down; e.preventDefault(); }
+    else if(k === 'arrowright' || k === 'd'){ R3.look.keys.r = down; e.preventDefault(); }
+    else if(k === 'c' && down){ R3.look.ty = 0; R3.look.tp = 0; } };
+  document.addEventListener('keydown', e => lk(e, true)); document.addEventListener('keyup', e => lk(e, false));
+}
+$('tCab').setAttribute('aria-pressed', String(cabOn));
+$('tCab').addEventListener('click', () => { cabOn = !cabOn; $('tCab').setAttribute('aria-pressed', String(cabOn)); try{ localStorage.setItem('fst-cab', cabOn ? '1' : '0'); }catch(e){} });
 set3d(use3d);
 new ResizeObserver(resize).observe(view);
 resize();
@@ -3528,13 +3963,14 @@ function frame(now){
   let dt = (now - last)/1000; last = now;
   if(dt > 0.1) dt = 0.1;
   if(!S.paused && !S.finished && !menuOpen && !fpOpen){ const n = Math.max(1, Math.ceil(dt/0.02)); for(let i = 0; i < n && !S.finished; i++) step(dt/n); }
+  snd.update();
   if(use3d){ R3.frame(); overlay3d(); } else render();
   drawTacho(); updateUI();
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-window.__r3 = R3; window.__set3d = set3d; window.__arcs = () => ARCS; window.__ocz = () => OCZ; window.__areas = () => AREAS; window.__branch = () => BRANCH;
-window.__sim = { hornOn, hornOff, get BUE(){ return BUE; }, pressStoer, pzbDead, get NE1(){ return NE1; }, get GG(){ return GG; }, get HM(){ return HM; }, get NE6(){ return NE6; }, get OBJS(){ return OBJS; }, kmAt, get BW(){ return BW; }, get DIST(){ return DIST; }, get TUNNELS(){ return TUNNELS; }, get FP(){ return FP; }, fpState, fmtClock, pressDoor, pressFdl, befreienVerbot, pzbActive, lmLen, get MAGNETS(){ return MAGNETS; }, get AVG(){ return AVG; }, setVehicle(v){ VEHICLE = v; }, get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
+window.__audioSwap = c => { audio.ctx = c; }; window.__r3 = R3; window.__set3d = set3d; window.__arcs = () => ARCS; window.__ocz = () => OCZ; window.__areas = () => AREAS; window.__branch = () => BRANCH;
+window.__sim = { hornOn, hornOff, get BUE(){ return BUE; }, pressStoer, pzbDead, get NE1(){ return NE1; }, get GG(){ return GG; }, get HM(){ return HM; }, get NE6(){ return NE6; }, get OBJS(){ return OBJS; }, kmAt, get BW(){ return BW; }, get DIST(){ return DIST; }, get TUNNELS(){ return TUNNELS; }, get FP(){ return FP; }, fpState, fmtClock, pressDoor, pressFdl, befreienVerbot, pzbActive, lmLen, get MAGNETS(){ return MAGNETS; }, get AVG(){ return AVG; }, setVehicle(v){ VEHICLE = v; }, get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, pressMotor, snd, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
 })();
 </script>
 

@@ -8,6 +8,15 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 - Signale und Tafeln sind dieselben Signalbilder wie in 2D (als Textur), Signallichter leuchten weit sichtbar
 - Die Auflösung passt sich der Leistung des Geräts an
 - **2D-Ansicht:** Schalter „3D“ oben – für ältere Geräte; ohne WebGL startet automatisch 2D
+- **Führerstand in 3D:** Pult mit Tacho (zulässige Geschwindigkeit als gelbe Marke), Manometern (Hauptluftbehälter, Bremszylinder), Fahrplanbildschirm, PZB-Leuchtmeldern, Fahrzeug-Leuchtmeldern (HS, Stromabnehmer, Kompressor, Türen, Sifa), Schalterreihe, beweglichem Fahr-/Bremshebel und Schnellbremstaster; Frontscheibe mit Wischern und Sonnenblende, **Seitenfenster** mit Schiebefenster und Außenspiegeln, Rückwand mit Tür; Pultbeleuchtung bei Nacht und im Tunnel; Wagenkasten schwankt leicht, Stöße an Weichen
+- **Umschauen:** im Bild ziehen (Maus oder Finger), `←`/`→` bzw. `A`/`D` halten; Doppeltipp oder `C` zentriert
+- **2D-Kabine:** in der 2D-Ansicht gezeichneter Fensterrahmen mit Pult; Schalter „Kabine“ blendet die Kabine aus
+
+## Aufrüsten und Geräusche
+
+- Jedes Szenario beginnt abgerüstet: **Motor starten** (Taste `M`) hebt den Stromabnehmer, schaltet den Hauptschalter ein und startet die Hilfsbetriebe – ohne Hauptschalter keine Zugkraft
+- Druckluft: Kompressor schaltet bei 8 bar ein und bei 10 bar ab, jede Bremsung verbraucht Luft
+- Geräusche (Web Audio, nach dem Vorbild eines Drehstrom-Triebwagens nachgebildet): Hubantrieb des Stromabnehmers, Hauptschalter, Lüfter, Kompressor mit Abblasen, Pulswechselrichter mit gestuften Taktfrequenzen („Singen“ beim Anfahren und elektrischen Bremsen), Getriebe, Rollgeräusch, Fahrtwind, lauter im Tunnel, Achsstöße an Weichen und Bahnübergängen, Bremsluft und Lösen, Bremsenquietschen kurz vor dem Halt, Türwarnton und Türen, Zweiklang-Signalhorn, Vorbeifahrt von Gegenzügen
 
 ## Inhalt
 
@@ -79,6 +88,8 @@ Bestandene Szenarien werden im Browser gespeichert (localStorage).
 | `X` | PZB-Störschalter (nur im Stillstand) |
 | `H` (halten) | Pfeife |
 | `T` | Türen freigeben / schließen |
+| `M` | Motor starten / abstellen (Aufrüsten) |
+| `←` `→` / `A` `D` | Umschauen in der 3D-Kabine, `C` zentriert |
 | `P` | Pause |
 
 Auf dem Smartphone werden Hebel und Tasten per Touch bedient.
