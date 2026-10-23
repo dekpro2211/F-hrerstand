@@ -1,6 +1,13 @@
 # Führerstand DS 301
 
-Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuch der DB), PZB 90 und Sifa in 17 Übungsszenarien auf fiktiven Strecken und 5 Szenarien auf der AVG-Linie S4 nach Buchfahrplan. Läuft im Browser auf Android, iOS und am PC – ohne Installation, ohne Build.
+Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuch der DB), PZB 90 und Sifa in 17 Übungsszenarien auf fiktiven Strecken und 5 Szenarien auf der AVG-Linie S4 nach Buchfahrplan. Läuft im Browser auf Android, iOS und am PC – ohne Installation, ohne Build. Streckenbild wahlweise in 3D (WebGL, three.js) oder 2D.
+
+## Streckenbild 3D/2D
+
+- **3D-Ansicht (Standard):** echte räumliche Szene mit three.js – Gleisachse aus den Bögen der Strecke, Schotterbett, Schwellen, Schienen, Weichenverbindungen, Bahnhofsgleise 3/4, Inselbahnsteige mit Dach, Haltepunkte mit Wartehäuschen, Empfangsgebäude, Oberleitung mit Masten, Tunnel mit Portal und Bezeichnungstafel, Bahnübergänge mit Andreaskreuz, Felder, Bäume, Dörfer, Innenstadt Heilbronn als Straßenbahnabschnitt (BOStrab), Gegenzüge, vorausfahrender Zug, wartende Fahrgäste, Nebel, Nacht mit Sternen und Spitzenlicht
+- Signale und Tafeln sind dieselben Signalbilder wie in 2D (als Textur), Signallichter leuchten weit sichtbar
+- Die Auflösung passt sich der Leistung des Geräts an
+- **2D-Ansicht:** Schalter „3D“ oben – für ältere Geräte; ohne WebGL startet automatisch 2D
 
 ## Inhalt
 
@@ -19,6 +26,7 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
   - PZB gestört (Leuchtmelder dunkel) und PZB-Störschalter: 50 km/h bis PZB i. O., Meldung an BZ (mit Bitte um Vormeldung) und Zü AVG, Störschalter nur bei ständiger Zwangsbremsung
   - Leuchtmelderblock wie im GT8 (85, 70, 1000 Hz, 500 Hz, Befehl 40, „Fzg hat gesandet“, Leuchttaster „Indusi Befehl“/„Indusi Frei“; Regelfahrzeug zusätzlich 55), Textanzeigen wie EBI Cab 500, Schaublatt als Tabelle in der Hilfe
 - **Sifa:** 30-s-Zyklus mit Leuchtmelder, Summer und Zwangsbremsung
+- **Bahnhofsgleise:** Einfahr- und Ausfahrweichen, Inselbahnsteig mit Gleis 3, Gleis 4; bei Zs 3/Hp 2 abzweigende Fahrt über Gleis 3, Weichenbereich bis zur letzten Weiche
 - **Gegenverkehr:** Regionalzüge, Güterzüge und IC auf dem Nachbargleis (auf der S4 Stadtbahnen nur in den zweigleisigen Abschnitten), mit Spitzensignal und Vorbeifahrt; bei Gegengleisfahrt gesperrt
 - **Pfeife:** Taste zum Halten; an der Pfeiftafel Bü 4 etwa 3 s pfeifen, sonst Fehler am Bahnübergang
 - **Fahrgastbetrieb:** zusätzliche Haltepunkte, Türen freigeben und schließen, Fahrgastwechsel mit wartenden Reisenden, Traktionssperre bei offenen Türen, Ansage „Nächster Halt“
@@ -77,7 +85,7 @@ Auf dem Smartphone werden Hebel und Tasten per Touch bedient.
 
 ## Starten
 
-`index.html` im Browser öffnen – fertig.
+`index.html` im Browser öffnen – fertig. `three.min.js` muss im selben Ordner liegen (sonst wird es aus dem Netz geladen).
 
 ### GitHub Pages
 
@@ -94,3 +102,5 @@ Vereinfachte Fahrdynamik und PZB-Logik. Ersetzt weder Signalbuch noch Ausbildung
 ## Lizenz
 
 MIT – siehe [LICENSE](LICENSE).
+
+Enthält [three.js](https://threejs.org) r128 (`three.min.js`), © 2010–2021 three.js authors, MIT-Lizenz.

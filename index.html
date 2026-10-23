@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#101413">
-<title>Führerstand DS 301</title>
+<title>Führerstand DS 301 3D</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap">
@@ -37,6 +37,9 @@ h1{font-family:var(--f-display);font-weight:700;font-size:1.2rem;letter-spacing:
 .chip:focus-visible,.btn:focus-visible,.seg button:focus-visible,.lever-track:focus-visible,.step:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 .view{position:relative;max-height:max(240px,calc(100vh - 440px));width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9;max-width:100%}
 .view canvas{width:100%;height:100%;display:block;touch-action:none}
+#view3d{position:absolute;inset:0}
+#view3d[hidden]{display:none}
+#view{position:relative}
 .desk{display:grid;gap:6px;grid-template-columns:repeat(12,minmax(0,1fr));background:var(--desk);border:1px solid var(--line);border-radius:10px;padding:6px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:7px;min-width:0;display:grid;gap:5px;align-content:start}
 .p-tacho{grid-column:span 3}.p-pzb{grid-column:span 4}.p-lever{grid-column:span 2}.p-info{grid-column:span 3}
@@ -252,6 +255,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
     <div class="tools">
       <button class="chip" id="tMenu">Szenarien</button>
       <button class="chip" id="tFp">Fahrplan</button>
+      <button class="chip" id="t3d" aria-pressed="true">3D</button>
       <button class="chip" id="tLern" aria-pressed="true">Lernhilfe</button>
       <button class="chip" id="tTon" aria-pressed="true">Ton</button>
       <button class="chip" id="tPause" aria-pressed="false">Pause</button>
@@ -259,7 +263,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
     </div>
   </header>
 
-  <section class="view" aria-label="Blick auf die Strecke"><canvas id="view"></canvas></section>
+  <section class="view" aria-label="Blick auf die Strecke"><canvas id="view3d" hidden></canvas><canvas id="view"></canvas></section>
 
   <section class="desk" aria-label="Führerpult">
     <div class="panel p-tacho">
@@ -340,6 +344,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
           <li>An jedem Bahnhof und Haltepunkt: an der Haltetafel halten, Türen freigeben, Fahrgastwechsel abwarten, Türen schließen. Mit offenen Türen ist die Traktion gesperrt.</li>
           <li>„Szenarien“ öffnet die Auswahl: 17 Übungsfahrten in drei Stufen und 5 Fahrten auf der S4. Bestandene Szenarien werden in diesem Browser gespeichert.</li>
           <li>Zugart nur im Stillstand wählbar; jedes Szenario setzt seine eigene.</li>
+          <li>„3D“ oben schaltet zwischen räumlichem Streckenbild (WebGL) und der einfachen 2D-Ansicht um – auf älteren Geräten läuft 2D flüssiger. Ohne WebGL bleibt die 2D-Ansicht.</li>
           <li>Die Signal-Lupe oben rechts zeigt das nächste Signal vergrößert. Gelbe Kästen rechts am Gleis sind PZB-Gleismagnete; mit Lernhilfe steht darüber, ob und mit welcher Frequenz sie wirken.</li>
           <li>Die Sifa zählt nur während der Fahrt. Der Balken neben „Sifa“ zeigt die verbleibende Zeit.</li>
         </ul>
@@ -350,6 +355,7 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
           <li><b>Ks 1</b> Fahrt · <b>Ks 1 blinkend</b> Fahrt, Zs 3v beachten · <b>Ks 2</b> Halt erwarten · <b>Hp 0</b> Halt</li>
           <li><b>Hp 1</b> Fahrt · <b>Hp 2</b> Langsamfahrt (40 km/h im Weichenbereich) · <b>Vr 0/1/2</b> Halt / Fahrt / Langsamfahrt erwarten</li>
           <li><b>Zs 3</b> Höchstgeschwindigkeit im anschließenden Weichenbereich, <b>Zs 3v</b> kündigt sie an</li>
+          <li><b>Anschließender Weichenbereich</b>: von Signal bis zur letzten Weiche dahinter. In den Bahnhöfen liegen Einfahr- und Ausfahrweichen, Gleis 3 am Inselbahnsteig und Gleis 4. Zeigt das Einfahr- oder Ausfahrsignal Zs 3 bzw. Hp 2, führt die Fahrstraße abzweigend über Gleis 3; die Beschränkung gilt, bis der Zugschluss die letzte Weiche verlassen hat. Am Blocksignal ohne Weichen (z. B. Zs 1) gibt es keinen Weichenbereich.</li>
           <li><b>Zs 1</b> am Hp 0 ohne schriftlichen Befehl vorbeifahren · <b>Zs 7</b> vorbeifahren, dann auf Sicht (≤ 40) bis zum nächsten Hauptsignal · <b>Zs 8</b> am Hp 0 vorbeifahren und über die Weichenverbindung auf das Gegengleis (Weichenbereich ≤ 40). Die Gleismagnete und Signale des Regelgleises gelten dort nicht; vor der nächsten Betriebsstelle zurück auf das Regelgleis (≤ 40).</li>
           <li><b>Lf 6</b> kündigt <b>Lf 7</b> an · <b>Lf 7</b> gilt ab dem Signal (Erhöhung erst, wenn der Zugschluss vorbei ist). Gleisbögen mit ständiger Geschwindigkeitsbeschränkung: Lf 6 im Bremswegabstand, Lf 7 am Bogenanfang, höheres Lf 7 am Bogenende.</li>
           <li><b>Sh 0</b> Halt! Fahrverbot · <b>Sh 1</b> Fahrverbot aufgehoben · <b>Ra 10</b> nicht darüber hinaus rangieren · <b>Ne 5</b> Haltetafel · <b>Ne 2</b> Vorsignaltafel</li>
@@ -451,6 +457,8 @@ table.fp td.foot{color:var(--muted);font-size:.72rem;padding:8px}
   </div>
 </div>
 
+<script src="three.min.js"></script>
+<script>window.THREE || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>')</script>
 <script>
 (() => {
 'use strict';
@@ -474,7 +482,7 @@ const SCEN = [
   stations:[{name:'Cellen',from:-240,to:20,stop:0,first:true},{name:'Dornheim',from:6780,to:7025,stop:7000}],
   main:[{id:'A',sys:'ks',pos:80},{id:'B',sys:'ks',pos:2600,cond:{stop:30}},{id:'C',sys:'ks',pos:4900},{id:'D',sys:'ks',pos:6400,zs3:6}],
   dist:[{for:'B',sys:'ks',pos:1600}], end:7300},
- {id:3, kurven:[[1310,1992,7,"RRL"],[3120,4180,7,"RLR"],[5300,6009,8,"LR"],[7240,7861,8,"RL"]], nr:'RB 3805', clock:'07:08:00', fp:{regel:[[0,60],[210,240],[510,540],[690,720],[900,900]], avg:[[0,60],[180,210],[450,480],[630,660],[840,840]]}, lvl:1, title:'H/V-Signale', goal:'Hp 0/1/2 und Vr 0/1/2 lesen. Auch Vr 2 ist Warnstellung: 1000 Hz und Wachsam. Vorsignal am Mast, Halt im Bahnhof mit restriktiver Überwachung, danach befreien.',
+ {id:3, kurven:[[1310,1992,7,"RRL"],[3120,4180,7,"RLR"],[5300,6009,8,"LR"],[7240,7861,8,"RL"]], nr:'RB 3805', clock:'07:08:00', fp:{regel:[[0,60],[210,240],[510,540],[720,750],[930,930]], avg:[[0,60],[180,210],[450,480],[630,660],[840,840]]}, lvl:1, title:'H/V-Signale', goal:'Hp 0/1/2 und Vr 0/1/2 lesen. Auch Vr 2 ist Warnstellung: 1000 Hz und Wachsam. Vorsignal am Mast, Halt im Bahnhof mit restriktiver Überwachung, danach befreien.',
   zug:'M', lineV:100, lern:true,
   halts:[{name:'Eschbach Ost',pos:1150},{name:'Kleinbach',pos:6500}],
   stations:[{name:'Eschbach',from:-240,to:20,stop:0,first:true},{name:'Feldkirch',from:4380,to:4625,stop:4600},{name:'Grünau',from:9180,to:9425,stop:9400}],
@@ -534,7 +542,7 @@ const SCEN = [
   main:[{id:'A',sys:'ks',pos:80,zs3:8},{id:'B',sys:'ks',pos:4000},{id:'C',sys:'ks',pos:8000,cond:{time:260}},{id:'D',sys:'ks',pos:12000},{id:'E',sys:'ks',pos:16000},{id:'F',sys:'ks',pos:20500,zs3:6}],
   dist:[{for:'C',sys:'ks',pos:6800},{for:'F',sys:'ks',pos:19300}],
   lf:[{k:'lf6',pos:13000,v:12},{k:'lf7',pos:14200,v:12},{k:'lf7',pos:16500,v:16}], end:22300},
- {id:13, kurven:[[1150,1844,7,"LLL"],[2940,3631,6,"LR"],[4780,5798,8,"RRL"],[7870,8531,8,"RLR"],[11100,11968,8,"LRL"]], nr:'RB 3817', clock:'13:42:00', fp:{regel:[[0,60],[420,450],[720,750],[870,900],[1140,1170],[1350,1350]], avg:[[0,60],[390,420],[690,720],[840,870],[1110,1140],[1320,1320]]}, lvl:3, title:'Störungen im Betrieb', goal:'Zs 7 bei der Ausfahrt, Zs 1 am Blocksignal, ein stehender Zug im Block und Zs 8 zum Gegengleis auf einer Fahrt.',
+ {id:13, kurven:[[1150,1844,7,"LLL"],[2940,3631,6,"LR"],[4780,5798,8,"RRL"],[7870,8531,8,"RLR"],[11100,11968,8,"LRL"]], nr:'RB 3817', clock:'13:42:00', fp:{regel:[[0,60],[420,450],[720,750],[900,930],[1170,1200],[1380,1380]], avg:[[0,60],[390,420],[690,720],[840,870],[1110,1140],[1320,1320]]}, lvl:3, title:'Störungen im Betrieb', goal:'Zs 7 bei der Ausfahrt, Zs 1 am Blocksignal, ein stehender Zug im Block und Zs 8 zum Gegengleis auf einer Fahrt.',
   zug:'M', lineV:100, lern:false,
   halts:[{name:'Bad Ahausen',pos:2700},{name:'Dürrenbach',pos:7700},{name:'Flein',pos:10200}],
   stations:[{name:'Ahausen',from:-240,to:20,stop:0,first:true},{name:'Brühlingen',from:6280,to:6525,stop:6500},{name:'Cleebronn',from:12280,to:12525,stop:12500}],
@@ -847,7 +855,8 @@ SCEN.push(
 let AVG = false, VEHICLE = 'regel';
 try{ VEHICLE = localStorage.getItem('fst-veh') === 'avg' ? 'avg' : 'regel'; }catch(e){}
 let BW = 1000, RANG_AFTER = null, FREIGHT = false, FP = null, CLOCK0 = 0, TUNNELS = [], INFOS = [];
-let GG = [], HM = [], NE6 = [], NE1 = [], KMSEG = [], INLUPE = false, ARCS = [], BUE = [], OCZ = [];
+let GG = [], HM = [], NE6 = [], NE1 = [], KMSEG = [], INLUPE = false, ARCS = [], BUE = [], OCZ = [], AREAS = [], BRANCH = [];
+const G3X = 9.25, G4X = -8.7;   // Gleis 3 rechts hinter dem Inselbahnsteig, Gleis 4 links neben dem Gegengleis
 let SC, MAIN, DIST, STATIONS, LF, MAGNETS, OBJS, LSIG, RA10_POS, END_POS, TRAIN_LEN, VEH_VMAX, ACC_F, BRK_F, TAU, SICHT, LSICHT, NIGHT;
 const idx = id => MAIN.findIndex(m => m.id === id);
 function loadScenario(id){
@@ -874,6 +883,34 @@ function loadScenario(id){
   TRAIN_LEN = tr.len; VEH_VMAX = tr.vmax; ACC_F = tr.acc; BRK_F = tr.brk; TAU = tr.tau;
   SICHT = SC.sicht || 3000; LSICHT = SC.lightSicht || 3000; NIGHT = !!SC.night;
   LSIG = SC.rangier ? cp(SC.rangier.ls) : []; RA10_POS = SC.rangier ? SC.rangier.ra10 : null; END_POS = SC.end;
+  // ---- Bahnhofsgleise und Weichenbereiche ----
+  // Bahnhof = Bahnsteige zwischen Einfahrsignal (E) und Ausfahrsignal (X). Hinter E liegen die Einfahrweichen, hinter X die Ausfahrweichen.
+  // Zeigt E oder X Zs 3 bzw. Hp 2, führt die Fahrstraße abzweigend über Gleis 3 (Inselbahnsteig zwischen Gleis 1 und 3).
+  // Der „anschließende Weichenbereich“ endet an der letzten Weiche – dort endet auch die Zs-3-/Hp-2-/Zs-1-Beschränkung.
+  AREAS = []; BRANCH = [];
+  MAIN.forEach(m => { m.wbEnd = null; });
+  const isDiv = m => !!(m && (m.zs3 || m.hp2));
+  for(let i = -1; i < MAIN.length; i++){
+    const E = i >= 0 ? MAIN[i] : null, X = MAIN[i + 1] || null;
+    const lo = E ? E.pos : -1e9, hi = X ? X.pos : 1e9;
+    const pl = STATIONS.filter(st => st.stop > lo && st.stop < hi);
+    if(!pl.length || pl.every(st => st.hp)) continue;
+    if(E && pl[0].from - E.pos > 1600) continue;
+    const XX = X && X.pos - pl[pl.length - 1].stop <= 1000 ? X : null;
+    if(pl.some(st => st.hp) || (XX === null && X && !pl[pl.length - 1].last)) continue;
+    let a0 = -1e9, a1 = -1e9, b0 = 1e9, b1 = 1e9;
+    if(E){ a0 = E.pos + Math.min(40, (pl[0].from - E.pos)*0.2); a1 = Math.min(a0 + 160, pl[0].from - 15); if(a1 - a0 < 60){ a0 = E.pos + 8; a1 = pl[0].from - 8; } if(a1 - a0 < 50) continue; }
+    if(XX){ b0 = XX.pos + 30; b1 = b0 + 160; const nx = MAIN[i + 2], ns = STATIONS.find(st => st.from > XX.pos); const lim = Math.min(nx ? nx.pos - 40 : 1e9, ns ? ns.from - 30 : 1e9); if(b1 > lim) b1 = Math.max(b0 + 60, lim); }
+    let div = isDiv(E) || isDiv(XX);
+    if(div && E && !isDiv(E)){ if(E.sys === 'ks') E.zs3 = (XX && XX.zs3) || 6; else E.hp2 = true; }
+    if(div && XX && !isDiv(XX)){ if(XX.sys === 'ks') XX.zs3 = (E && E.zs3) || 6; else XX.hp2 = true; }
+    if(E) E.wbEnd = a1 + 10;
+    if(XX) XX.wbEnd = b1 + 10;
+    pl.forEach(st => { st.island = true; st.g3 = div; });
+    AREAS.push({E, X:XX, a0, a1, b0, b1, div});
+  }
+  // Zs 3 ohne Bahnhof: Abzweigstelle – Weiche zum abzweigenden Gleis, die Fahrt geht geradeaus
+  MAIN.forEach(m => { if(m.wbEnd === null && m.zs3){ BRANCH.push({s0:m.pos + 40, s1:m.pos + 150}); m.wbEnd = m.pos + 160; } });
   // ---- Signalabstände (DS 301 / Streckenbuch) ----
   // Bremswegabstand: Hauptbahnen 1000 m oder 700 m, Nebenbahnen 700 m oder 400 m (Angabe im Streckenbuch)
   BW = SC.bremsweg || 1000;
@@ -937,7 +974,7 @@ function loadScenario(id){
     const g = {sig:i, a0:m.pos + 30, a1:m.pos + 110, b0:to - 80, b1:to, nst:nst ? nst.name : ''};
     let v = SC.lineV; LF.filter(l => l.k !== 'lf6' && l.pos < g.b1).sort((a, b) => a.pos - b.pos).forEach(l => { v = l.v*10; });
     if(v > 40){ LF.push({k:'fp', pos:g.b0 - 150, v:4, src:'Weichenbereich Rückkehr Regelgleis'}); LF.push({k:'fp', pos:g.b1, v:v/10, src:'Regelgleis'}); }
-    GG.push(g);
+    GG.push(g); m.wbEnd = g.a1 + 10;
   });
   // Kilometrierung (Hektometertafeln): S4 nach Buchfahrplan mit km-Sprüngen, sonst km = Lage/1000
   KMSEG = [];
@@ -1073,6 +1110,7 @@ function loadScenario(id){
   if(RA10_POS !== null) OBJS.push({k:'ra10', pos:RA10_POS, x:2.2, h:1.9});
   NE1.forEach((n, k) => OBJS.push({k:'ne1', ref:k, pos:n.pos, x:n.gg ? -6.5 : 2.4, h:2.8}));   // am Gegengleis links vom Gleis
   BUE.forEach((b, k) => OBJS.push({k:'bue4', ref:k, pos:b.sign, x:2.3, h:2.1}));
+  OBJS.forEach(o => { if(['main','dist','lf6','lf7','ne5','ls','ra10'].includes(o.k)) o.x += sideX(o.pos); });
   // Ne 3 Vorsignalbaken: 250, 175 und 100 m vor dem Vorsignal, Streifenzahl nimmt in Fahrtrichtung ab (Hauptbahnen)
   DIST.forEach(d => {
     if(d.mast || isBo(d.pos)) return;
@@ -1123,6 +1161,16 @@ function ocStep(dt, prev){
   let vl = SC.lineV; LF.filter(l => l.k !== 'lf6' && l.pos <= P0).forEach(l => { vl = l.v*10; });
   S.oc.push({front:P0, len:K.len, v:Math.min(K.vmax, vl, 160)/3.6*(0.8 + 0.2*ocRnd()), kind, seed:Math.floor(ocRnd()*1000)});
   S.ocNext = S.t + 70 + ocRnd()*150;
+}
+// seitliche Lage auf dem Fahrweg durch Bahnhöfe mit abzweigender Fahrstraße (Gleis 3)
+function sideX(p){
+  for(const A of AREAS){
+    if(!A.div || p <= A.a0 || p >= A.b1) continue;
+    if(p < A.a1) return G3X*smooth((p - A.a0)/(A.a1 - A.a0));
+    if(p > A.b0) return G3X*(1 - smooth((p - A.b0)/(A.b1 - A.b0)));
+    return G3X;
+  }
+  return 0;
 }
 function isBo(p){ return KMSEG.some(g => g.bo && p >= g.from && p < g.to); }
 function kmAt(p){ const g = KMSEG.find(g => p >= g.from && p < g.to) || KMSEG[0]; return g ? g.km0 + g.dir*(p - g.p0)/1000 : p/1000; }
@@ -1799,7 +1847,8 @@ function onMainPass(i){
     if(m.ersatz && r.ersatzOn){
       if(m.ersatz === 'zs7'){ const n = MAIN[i+1]; S.restr.push({v:40, endFront:n ? n.pos : 1e9, src:'Fahrt auf Sicht (Zs 7)'}); log('Signal ' + m.id + ' mit Zs 7 passiert – auf Sicht bis ' + (n ? 'Signal ' + n.id : 'Fahrtende')); }
       else {
-        S.restr.push({v:40, endRear:m.pos + 300, src:(m.ersatz === 'zs1' ? 'Zs 1' : 'Zs 8') + ' Weichenbereich'}); log('Signal ' + m.id + ' mit ' + ERSATZ_TXT[m.ersatz].split(' – ')[0] + ' passiert');
+        const we = m.wbEnd === null ? m.pos : m.wbEnd;
+        S.restr.push({v:40, endRear:we, src:(m.ersatz === 'zs1' ? 'Zs 1' : 'Zs 8') + ' Weichenbereich'}); log('Signal ' + m.id + ' mit ' + ERSATZ_TXT[m.ersatz].split(' – ')[0] + ' passiert' + (m.wbEnd === null ? ' – kein anschließender Weichenbereich' : ' – Weichenbereich ' + Math.round(we - m.pos) + ' m'));
         const g = m.ersatz === 'zs8' && GG.find(x => x.sig === i);
         if(g){ S.gg = g; log('Weichenverbindung: Fahrt auf das Gegengleis bis km ' + kmAt(g.b1).toFixed(1).replace('.', ',') + (g.nst ? ' (vor ' + g.nst + ')' : '')); }
       }
@@ -1808,8 +1857,10 @@ function onMainPass(i){
   }
   if(r.aspect === 'KS2' || (r.aspect === 'KS1B' && r.zs3v <= 9)) requireWT('Signal ' + m.id + ' (' + ASPECT_TXT[r.aspect].split(' – ')[0] + ')');
   if(m.mastVr >= 0){ const va = S.dsig[m.mastVr].aspect; if(va === 'VR0' || va === 'VR2') requireWT('Vorsignal am Signal ' + m.id + ' (' + ASPECT_TXT[va].split(' – ')[0] + ')'); }
-  if(r.zs3On) S.restr.push({v:m.zs3*10, endRear:m.pos + 300, src:'Zs 3 am Signal ' + m.id});
-  if(r.aspect === 'HP2') S.restr.push({v:40, endRear:m.pos + 300, src:'Hp 2 am Signal ' + m.id});
+  const we = m.wbEnd === null ? m.pos + 160 : m.wbEnd;
+  if(r.zs3On) S.restr.push({v:m.zs3*10, endRear:we, src:'Zs 3 am Signal ' + m.id});
+  if(r.aspect === 'HP2') S.restr.push({v:40, endRear:we, src:'Hp 2 am Signal ' + m.id});
+  if(lern && (r.zs3On || r.aspect === 'HP2')) log('Anschließender Weichenbereich ' + Math.round(we - m.pos) + ' m – bis der Zugschluss die letzte Weiche verlassen hat', 'fdl');
   if(lern) log('Signal ' + m.id + ': ' + mainText(i));
 }
 function onStop(){
@@ -2091,8 +2142,8 @@ function render(){
   const ctx = vctx, W = view.width, H = view.height;
   if(!W || !H) return;
   const hy = H*0.42, f = H*0.8, cx = W/2, camH = 3.0, base = S.front;
-  let camX = 0, yaw = 0;
-  if(S.gg){ camX = ggX(S.gg, base); yaw = (ggX(S.gg, base + 3) - ggX(S.gg, base - 3))/6; }
+  let camX = sideX(base), yaw = (sideX(base + 3) - sideX(base - 3))/6;
+  if(S.gg){ camX += ggX(S.gg, base); yaw += (ggX(S.gg, base + 3) - ggX(S.gg, base - 3))/6; }
   // Gleisbögen: seitlicher Versatz der Gleisachse gegenüber der Blickrichtung (Kamera schaut in Gleisrichtung)
   const ZN = 3.5, ZF = 4000;
   const Fa = (a, q) => q <= a.s0 ? 0 : q <= a.s1 ? (q - a.s0)*(q - a.s0)/2 : a.L*a.L/2 + a.L*(q - a.s1);
@@ -2150,6 +2201,23 @@ function render(){
   };
   const xoWalk = (o, stp, fn) => { for(let p = o.p0; p < o.p1; p += stp){ const q = Math.min(o.p1, p + stp), z1 = p - base, z2 = q - base; if(z2 <= ZN) continue; fn(Math.max(ZN, z1), ggX(o.g, Math.max(p, base + ZN)), z2, ggX(o.g, q)); } };
   for(const o of XO) xoWalk(o, 4, (z1, xa, z2, xb) => band(z1, xa, z2, xb, 1.9, 0, PL.bal));
+  // Bahnhofsgleise: Gleis 3 (rechts, Inselbahnsteig) und Gleis 4 (links), Weichenverbindungen
+  const BH = [];
+  for(const A of AREAS){
+    const p0 = Math.max(A.a0, base - 50), p1 = Math.min(A.b1, END_POS + 300);
+    if(p1 - base > ZN && p0 - base < 1500) BH.push(A);
+  }
+  const pathWalk = (p0, p1, fx, stp, fn) => { for(let q = Math.max(p0, base + ZN - stp); q < p1; q += stp){ const q2 = Math.min(p1, q + stp), z1 = q - base, z2 = q2 - base; if(z2 <= ZN) continue; fn(Math.max(ZN, z1), fx(Math.max(q, base + ZN)), z2, fx(q2)); } };
+  const swIn = (A, X0, X1) => q => X0 + (X1 - X0)*smooth((q - A.a0)/(A.a1 - A.a0));
+  const swOut = (A, X0, X1) => q => X1 + (X0 - X1)*smooth((q - A.b0)/(A.b1 - A.b0));
+  const zr = (q0, q1) => [Math.max(ZN, q0 - base), Math.min(ZF, q1 - base)];
+  for(const A of BH){
+    const [z1, z2] = zr(A.a1, Math.min(A.b0, END_POS + 300));
+    if(z2 > z1){ quad(z1, z2, 1.9, G3X + 1.9, 0, PL.bal2); quad(z1, z2, G3X - 1.9, G3X + 1.9, 0, PL.bal); quad(z1, z2, G4X - 1.9, -2.3, 0, PL.bal2); }
+    if(A.a0 > -1e8){ pathWalk(A.a0, A.a1, swIn(A, 0, G3X), 4, (za, xa, zb, xb) => band(za, xa, zb, xb, 1.9, 0, PL.bal)); pathWalk(A.a0, A.a1, swIn(A, -4.2, G4X), 4, (za, xa, zb, xb) => band(za, xa, zb, xb, 1.9, 0, PL.bal2)); }
+    if(A.b1 < 1e8){ pathWalk(A.b0, A.b1, swOut(A, 0, G3X), 4, (za, xa, zb, xb) => band(za, xa, zb, xb, 1.9, 0, PL.bal)); pathWalk(A.b0, A.b1, swOut(A, -4.2, G4X), 4, (za, xa, zb, xb) => band(za, xa, zb, xb, 1.9, 0, PL.bal2)); }
+  }
+  for(const B of BRANCH){ const fx = q => q < B.s1 ? G3X*smooth((q - B.s0)/(B.s1 - B.s0)) : G3X + (q - B.s1)*0.06; if(B.s1 + 500 - base > ZN && B.s0 - base < 1500) pathWalk(B.s0, B.s1 + 500, fx, 4, (za, xa, zb, xb) => band(za, xa, zb, xb, 1.9, 0, PL.bal)); }
   // Bahnübergänge: Straße quer zum Gleis
   for(const b of BUE){ const z1 = b.pos - 3.5 - base, z2 = b.pos + 3.5 - base; if(z2 > ZN && z1 < Math.min(1500, SICHT)){ quad(Math.max(ZN, z1), z2, -45, 45, 0.03, NIGHT ? '#2b2a28' : '#6e6b65'); if(z1 > ZN) quad(z1, z1 + 0.25, -45, -7.5, 0.04, '#d9d6cc'); } }
   // Schwellen
@@ -2163,6 +2231,12 @@ function render(){
       ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
     }
   }
+  const sleep = (q0, q1, fx) => { for(let k = Math.ceil(Math.max(q0, base + ZN)/0.65); k*0.65 < q1; k++){ const q = k*0.65, z = q - base; if(z > 140) break; const x = fx(q), a = P(z, x - 1.3, 0.02), b = P(z, x + 1.3, 0.02); ctx.lineWidth = Math.max(0.6, 0.2*f/z); ctx.globalAlpha = Math.min(1, 1.6 - z/110); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); } };
+  for(const A of BH){
+    sleep(A.a1, Math.min(A.b0, END_POS + 300), () => G3X); sleep(A.a1, Math.min(A.b0, END_POS + 300), () => G4X);
+    if(A.a0 > -1e8){ sleep(A.a0, A.a1, swIn(A, 0, G3X)); sleep(A.a0, A.a1, swIn(A, -4.2, G4X)); }
+    if(A.b1 < 1e8){ sleep(A.b0, A.b1, swOut(A, 0, G3X)); sleep(A.b0, A.b1, swOut(A, -4.2, G4X)); }
+  }
   for(const o of XO){
     for(let k = Math.ceil(o.p0/0.65); k*0.65 < o.p1; k++){
       const p = k*0.65, z = p - base; if(z <= ZN) continue; if(z > 140) break;
@@ -2175,6 +2249,14 @@ function render(){
   // Schienen
   for(const tx of [0, -4.2]) for(const sx of [-0.72, 0.72]) quad(ZN, ZF, tx + sx - 0.04, tx + sx + 0.04, 0.16, PL.rail);
   for(const o of XO) xoWalk(o, 2, (z1, xa, z2, xb) => { for(const sx of [-0.72, 0.72]) band(z1, xa + sx, z2, xb + sx, 0.04, 0.16, PL.rail); });
+  const railPath = (p0, p1, fx) => pathWalk(p0, p1, fx, 2, (za, xa, zb, xb) => { for(const sx of [-0.72, 0.72]) band(za, xa + sx, zb, xb + sx, 0.04, 0.16, PL.rail); });
+  for(const A of BH){
+    const [z1, z2] = zr(A.a1, Math.min(A.b0, END_POS + 300));
+    if(z2 > z1) for(const tx of [G3X, G4X]) for(const sx of [-0.72, 0.72]) quad(z1, z2, tx + sx - 0.04, tx + sx + 0.04, 0.16, PL.rail);
+    if(A.a0 > -1e8){ railPath(A.a0, A.a1, swIn(A, 0, G3X)); railPath(A.a0, A.a1, swIn(A, -4.2, G4X)); }
+    if(A.b1 < 1e8){ railPath(A.b0, A.b1, swOut(A, 0, G3X)); railPath(A.b0, A.b1, swOut(A, -4.2, G4X)); }
+  }
+  for(const B of BRANCH){ const fx = q => q < B.s1 ? G3X*smooth((q - B.s0)/(B.s1 - B.s0)) : G3X + (q - B.s1)*0.06; if(B.s1 + 500 - base > ZN && B.s0 - base < 1500) railPath(B.s0, B.s1 + 500, fx); }
   // Bahnsteige
   for(const s of STATIONS){
     const z1 = Math.max(ZN, s.from - base), z2 = s.to - base;
@@ -2182,11 +2264,13 @@ function render(){
     quad(z1, z2, 1.75, 7.5, 0.76, PL.plat);
     quad(z1, z2, 1.75, 1.95, 0.77, PL.edge);
     wall(z1, z2, 1.75, 0, 0.76, PL.platSide);
+    if(s.island){ quad(z1, z2, 7.3, 7.5, 0.77, PL.edge); wall(z1, z2, 7.5, 0, 0.76, PL.platSide); }
   }
   // Fahrdraht
   ctx.strokeStyle = PL.wire; ctx.lineWidth = Math.max(1, u*0.8);
   const onLeft = camX < -2.1;
   for(const tx of [0, -4.2]) pline((tx !== 0) === onLeft ? ZN : 40, ZF, tx, 5.6);
+  for(const A of BH){ const [z1, z2] = zr(A.a1, Math.min(A.b0, END_POS + 300)); if(z2 > z1) pline(z1, z2, G3X, 5.6); }
 
   if(SICHT < 1000 || NIGHT){
     const yS = P(Math.max(ZN + 1, SICHT*0.35), 0, 0)[1];
@@ -2245,7 +2329,7 @@ function render(){
     for(let k = 0; k < Math.min(n, 30); k++){
       const h1 = hash(i*97 + k), h2 = hash(i*131 + k*7);
       const z = st.stop - 15 - h1*Math.min(200, TRAIN_LEN + 30) - base;
-      if(z > ZN + 1 && z < 450) items.push({z, t:'pax', x:2.35 + h2*1.9, c:k % 5, hh:1.55 + (h1*10 % 1)*0.35});
+      if(z > ZN + 1 && z < 450) items.push({z, t:'pax', x:st.g3 ? 6.9 - h2*1.9 : 2.35 + h2*1.9, c:k % 5, hh:1.55 + (h1*10 % 1)*0.35});
     }
   });
   if(S.lead.on){ const z = S.lead.front - S.lead.len - base; if(z > ZN && z < (NIGHT ? 3000 : Math.min(3000, SICHT*1.1))) items.push({z, t:'lead'}); }
@@ -2266,7 +2350,7 @@ function render(){
       ctx.beginPath(); ctx.ellipse(b[0], b[1] + hgt*0.35, w, hgt*0.45, 0, 0, Math.PI*2); ctx.fill();
       ctx.globalAlpha = 1;
     } else if(it.t === 'mag'){
-      const z1 = z - 0.5, z2 = z + 0.5, mx = it.m.gg ? -4.2 : 0;
+      const z1 = z - 0.5, z2 = z + 0.5, mx = (it.m.gg ? -4.2 : 0) + sideX(it.m.pos);
       if(z1 > ZN){
         ctx.globalAlpha = vis;
         quad(z1, z2, 0.9 + mx, 1.35 + mx, 0.22, NIGHT ? '#6b5a12' : '#e3b417');
@@ -2344,6 +2428,7 @@ function render(){
       ctx.fillStyle = NIGHT ? '#5a4c42' : '#e2b993'; ctx.beginPath(); ctx.arc(hd[0], hd[1] + (g[1] - hd[1])*0.09, Math.max(0.8, 0.12*s), 0, 7); ctx.fill();
       ctx.globalAlpha = 1;
     } else if(it.t === 'lead'){
+      const lx = sideX(base + z), PP = P, P = (zz, x, h) => PP(zz, x + lx, h);
       const a = P(z, -1.45, 4.0), b = P(z, 1.45, 0.9);
       const body = z <= SICHT;
       ctx.globalAlpha = body ? vis : 0;
@@ -2897,6 +2982,545 @@ try{ lastId = parseInt(localStorage.getItem('fst-last'), 10) || 1; }catch(e){}
 loadScenario(lastId);
 reset();
 openMenu();
+// ================= 3D-Ansicht (Three.js r128) =================
+// Die Simulation bleibt unverändert; nur das Streckenbild wird als 3D-Szene gezeichnet.
+// Gleisachse aus den Bögen (ARCS), seitliche Lage aller Gleise wie im 2D-Bild (Gegengleis −4,2 m, Gleis 3 +9,25 m, Gleis 4 −8,7 m).
+const R3 = (() => {
+  const T = window.THREE, view3d = document.getElementById('view3d');
+  const R = {ok:false, on:false};
+  const PH = 0.96, RT = 0.45;   // Bahnsteighöhe, Schienenoberkante
+  if(!T || !view3d) return R;
+  let renderer;
+  try{ renderer = new T.WebGLRenderer({canvas:view3d, antialias:true, powerPreference:'high-performance'}); }
+  catch(e){ return R; }
+  if(!renderer.getContext()) return R;
+  R.ok = true;
+  const scene = new T.Scene();
+  const camera = new T.PerspectiveCamera(54, 16/9, 0.3, 14000);
+  scene.add(camera);
+  const hemi = new T.HemisphereLight(0xe4eef5, 0x6a7350, 0.62); scene.add(hemi);
+  const sun = new T.DirectionalLight(0xfff1dc, 0.6); sun.position.set(-0.5, 1, 0.3); scene.add(sun);
+  const head = new T.SpotLight(0xfff2d6, 0, 420, 0.32, 0.55, 1.2); camera.add(head); head.position.set(0, -1.6, 0); head.target.position.set(0, -6, -80); camera.add(head.target);
+  scene.fog = new T.Fog(0xcbd9df, 300, 5000);
+
+  // ---------- Texturen ----------
+  const cnv = (w, h, fn) => { const c = document.createElement('canvas'); c.width = w; c.height = h; fn(c.getContext('2d'), w, h); return c; };
+  const tex = (c, rep) => { const t = new T.CanvasTexture(c); if(rep){ t.wrapS = t.wrapT = T.RepeatWrapping; t.repeat.set(rep[0], rep[1]); } t.anisotropy = 4; return t; };
+  const rnd = (() => { let x = 12345; return () => { x = (x*16807) % 2147483647; return x/2147483647; }; })();
+  const gravel = tex(cnv(128, 128, (g, w, h) => { g.fillStyle = '#8b857c'; g.fillRect(0, 0, w, h); for(let i = 0; i < 2600; i++){ const v = 90 + rnd()*90; g.fillStyle = 'rgb(' + (v + 8) + ',' + (v + 2) + ',' + (v - 6) + ')'; g.fillRect(rnd()*w, rnd()*h, 1 + rnd()*2.5, 1 + rnd()*2.5); } }));
+  const grass = tex(cnv(256, 256, (g, w, h) => { g.fillStyle = '#6f8a45'; g.fillRect(0, 0, w, h); for(let i = 0; i < 9000; i++){ const v = rnd(); g.fillStyle = v < 0.5 ? 'rgba(60,85,35,.35)' : v < 0.85 ? 'rgba(130,160,80,.3)' : 'rgba(170,165,95,.25)'; g.fillRect(rnd()*w, rnd()*h, 1 + rnd()*3, 1 + rnd()*3); } }), [1, 1]);
+  grass.repeat.set(1500, 1500);
+  const skyTex = tex(cnv(16, 256, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#3f78b5'); gr.addColorStop(0.42, '#8fb6d8'); gr.addColorStop(0.5, '#cbd9df'); gr.addColorStop(1, '#cbd9df'); g.fillStyle = gr; g.fillRect(0, 0, w, h); }));
+  const hillTex = tex(cnv(2048, 256, (g, w, h) => {
+    g.clearRect(0, 0, w, h);
+    const layer = (col, base, amp, f1, f2, seed) => { g.fillStyle = col; g.beginPath(); g.moveTo(0, h); for(let x = 0; x <= w; x += 8){ const k = x/w*Math.PI*2; g.lineTo(x, h - base - amp*(0.55 + 0.3*Math.sin(k*f1 + seed) + 0.15*Math.sin(k*f2 + seed*2))); } g.lineTo(w, h); g.closePath(); g.fill(); };
+    layer('#9fb3b3', 60, 120, 3, 11, 1); layer('#7f9a86', 30, 80, 5, 17, 4); layer('#5f7c52', 10, 40, 7, 23, 2);
+  }));
+  hillTex.wrapS = T.RepeatWrapping;
+  const cloudTex = tex(cnv(256, 128, (g, w, h) => { for(let i = 0; i < 26; i++){ const x = 40 + rnd()*176, y = 50 + rnd()*40, r = 18 + rnd()*30; const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, 'rgba(255,255,255,.85)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); } }));
+  const paving = tex(cnv(128, 128, (g, w, h) => { g.fillStyle = '#a9a69f'; g.fillRect(0, 0, w, h); for(let i = 0; i < 1600; i++){ const v = 150 + rnd()*40; g.fillStyle = 'rgba(' + v + ',' + v + ',' + (v - 6) + ',.35)'; g.fillRect(rnd()*w, rnd()*h, 2, 2); } g.strokeStyle = 'rgba(80,78,72,.55)'; g.lineWidth = 2; for(let i = 0; i <= 4; i++){ g.beginPath(); g.moveTo(0, i*h/4); g.lineTo(w, i*h/4); g.stroke(); g.beginPath(); g.moveTo(i*w/4, 0); g.lineTo(i*w/4, h); g.stroke(); } }), [1, 1]);
+  const grassHill = tex(cnv(256, 256, (g, w, h) => { g.drawImage(grass.image, 0, 0); g.fillStyle = 'rgba(40,60,20,.18)'; g.fillRect(0, 0, w, h); }), [1, 1]);
+  const grassFace = tex(grassHill.image, [0.05, 0.05]);
+  const asphalt = tex(cnv(128, 128, (g, w, h) => { g.fillStyle = '#5d5b58'; g.fillRect(0, 0, w, h); for(let i = 0; i < 2500; i++){ const v = 70 + rnd()*40; g.fillStyle = 'rgb(' + v + ',' + v + ',' + v + ')'; g.fillRect(rnd()*w, rnd()*h, 1, 1); } g.fillStyle = '#d8d6cf'; g.fillRect(0, 60, 4, 8); }));
+  const glowTex = tex(cnv(64, 64, (g, w, h) => { const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.25, 'rgba(255,255,255,.85)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); }));
+
+  const stripes = tex(cnv(32, 96, (g, w, h) => { g.fillStyle = '#f2f2ee'; g.fillRect(0, 0, w, h); g.fillStyle = '#d0281f'; g.fillRect(0, h*0.25, w, h*0.18); g.fillRect(0, h*0.62, w, h*0.18); }));
+  const checker = tex(cnv(32, 128, (g, w, h) => { for(let r = 0; r < 4; r++) for(let k = 0; k < 2; k++){ g.fillStyle = (r + k) % 2 ? '#111' : '#f4f4f0'; g.fillRect(k*w/2, r*h/4, w/2, h/4); } }));
+  // ---------- Himmel, Hügel, Boden ----------
+  const sky = new T.Mesh(new T.SphereGeometry(12000, 24, 16), new T.MeshBasicMaterial({map:skyTex, side:T.BackSide, fog:false, depthWrite:false}));
+  sky.renderOrder = -10; scene.add(sky);
+  const hills = new T.Mesh(new T.CylinderGeometry(8000, 8000, 1100, 64, 1, true), new T.MeshBasicMaterial({map:hillTex, side:T.BackSide, transparent:true, fog:false, depthWrite:false}));
+  hills.renderOrder = -9; hillTex.repeat.set(3, 1); scene.add(hills);
+  const clouds = new T.Group(); scene.add(clouds);
+  for(let i = 0; i < 14; i++){ const sp = new T.Sprite(new T.SpriteMaterial({map:cloudTex, transparent:true, opacity:0.75, fog:false, depthWrite:false})); const a = rnd()*Math.PI*2, r = 5000 + rnd()*3500; sp.position.set(Math.cos(a)*r, 900 + rnd()*900, Math.sin(a)*r); sp.scale.set(2600 + rnd()*1800, 1300 + rnd()*700, 1); sp.renderOrder = -8; clouds.add(sp); }
+  const stars = (() => { const v = []; for(let i = 0; i < 500; i++){ const a = rnd()*Math.PI*2, e = 0.08 + rnd()*1.4; v.push(Math.cos(a)*Math.cos(e)*9000, Math.sin(e)*9000, Math.sin(a)*Math.cos(e)*9000); } const g = new T.BufferGeometry(); g.setAttribute('position', new T.Float32BufferAttribute(v, 3)); return new T.Points(g, new T.PointsMaterial({color:0xdfe6ff, size:1.6, sizeAttenuation:false, fog:false, transparent:true, opacity:0.85, depthWrite:false})); })();
+  stars.renderOrder = -9; scene.add(stars);
+  const ground = new T.Mesh(new T.PlaneGeometry(30000, 30000, 40, 40), new T.MeshLambertMaterial({map:grass}));
+  ground.rotation.x = -Math.PI/2; ground.position.y = -0.02; scene.add(ground);
+
+  // ---------- Materialien ----------
+  const M = {
+    bal:new T.MeshLambertMaterial({map:gravel}), bal2:new T.MeshLambertMaterial({map:gravel, color:0xb9b2a8}),
+    sleeper:new T.MeshLambertMaterial({color:0x8c8a85}), rail:new T.MeshLambertMaterial({color:0x6e5d4e}), railTop:new T.MeshLambertMaterial({color:0xd4d8d8}),
+    plat:new T.MeshLambertMaterial({map:paving}), edge:new T.MeshLambertMaterial({color:0xd9d6cf}), wall:new T.MeshLambertMaterial({color:0x8a8780}), line:new T.MeshBasicMaterial({color:0xf4f4ee}),
+    mast:new T.MeshLambertMaterial({color:0x5b6664}), wire:new T.LineBasicMaterial({color:0x2a2f30}), roof:new T.MeshLambertMaterial({color:0x5a6063, side:T.DoubleSide}),
+    tunnel:new T.MeshBasicMaterial({color:0x2b2a27, side:T.DoubleSide}), tlamp:new T.MeshBasicMaterial({color:0xffd890}), portal:new T.MeshLambertMaterial({color:0x9a958a}),
+    hill:new T.MeshLambertMaterial({map:grassHill}), hillFace:new T.MeshLambertMaterial({map:grassFace}), road:new T.MeshLambertMaterial({color:0x5c5a56}), magnet:new T.MeshLambertMaterial({color:0xe3b417}), trough:new T.MeshLambertMaterial({color:0x95918a}), street:new T.MeshLambertMaterial({map:asphalt}), flat:new T.MeshLambertMaterial({color:0x6a6560}), stripes:new T.MeshLambertMaterial({map:stripes}), checker:new T.MeshLambertMaterial({map:checker}), cabWin:new T.MeshLambertMaterial({color:0x1a242c}), cabBand:new T.MeshLambertMaterial({color:0x2b2f31}), glass:new T.MeshLambertMaterial({color:0x9fc4d6, transparent:true, opacity:0.35}), kreuz:new T.MeshLambertMaterial({transparent:true, alphaTest:0.1, side:T.DoubleSide, map:tex(cnv(128, 128, (g, w, h) => { g.translate(w/2, h/2); for(const r of [0.785, -0.785]){ g.save(); g.rotate(r); g.fillStyle = '#c8102e'; g.fillRect(-62, -10, 124, 20); g.fillStyle = '#fff'; for(const x of [-44, 0, 44]) g.fillRect(x - 9, -8, 18, 16); g.restore(); } }))}),
+    trunk:new T.MeshLambertMaterial({color:0x5a4430}), leaf:new T.MeshLambertMaterial({color:0xffffff}), house:new T.MeshLambertMaterial({color:0xffffff}), houseRoof:new T.MeshLambertMaterial({color:0xffffff}),
+    post:new T.MeshLambertMaterial({color:0x3d4443}), station:new T.MeshLambertMaterial({map:tex(cnv(512, 160, (g, w, h) => { g.fillStyle = '#e6d9bf'; g.fillRect(0, 0, w, h); g.fillStyle = '#b9ab8e'; g.fillRect(0, h - 14, w, 14); for(let r = 0; r < 2; r++) for(let c = 0; c < 9; c++){ const x = 18 + c*55, y = 22 + r*66; g.fillStyle = '#f4efe4'; g.fillRect(x - 3, y - 3, 30, 44); g.fillStyle = r === 1 && c === 4 ? '#5a3d2b' : '#33414b'; g.fillRect(x, y, 24, r === 1 && c === 4 ? 52 : 38); } }))}), stRoof:new T.MeshLambertMaterial({color:0x8e3b2c})
+  };
+  const G = {
+    sleeper:(() => { const g = new T.BufferGeometry(), x = 1.3, y = 0.05, z = 0.13; g.setAttribute('position', new T.Float32BufferAttribute([-x,y,-z, x,y,-z, x,y,z, -x,y,z, -x,y,z, x,y,z, -x,-y,z, x,-y,z], 3)); g.setIndex([0,2,1, 0,3,2, 4,7,5, 4,6,7]); g.computeVertexNormals(); return g; })(), box:new T.BoxGeometry(1, 1, 1), plane:new T.PlaneGeometry(1, 1), cone:new T.ConeGeometry(1, 1, 7), ball:new T.IcosahedronGeometry(1, 1),
+    cyl:new T.CylinderGeometry(1, 1, 1, 6), person:new T.CylinderGeometry(0.24, 0.24, 1, 7), prism:(() => { const g = new T.BufferGeometry(); const v = [-0.5,0,-0.5, 0.5,0,-0.5, 0,0.5,-0.5, -0.5,0,0.5, 0.5,0,0.5, 0,0.5,0.5]; g.setAttribute('position', new T.Float32BufferAttribute(v, 3)); g.setIndex([0,2,1, 3,4,5, 0,3,5, 0,5,2, 1,2,5, 1,5,4, 0,1,4, 0,4,3]); g.computeVertexNormals(); return g; })()
+  };
+
+  const houseTex = tex(cnv(128, 96, (g, w, h) => { g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h); for(let r = 0; r < 2; r++) for(let c = 0; c < 3; c++){ const x = 14 + c*40, y = 14 + r*42; g.fillStyle = '#f7f4ee'; g.fillRect(x - 3, y - 3, 26, 30); g.fillStyle = '#3a4650'; g.fillRect(x, y, 20, 24); g.fillStyle = '#7a8a94'; g.fillRect(x + 9, y, 2, 24); } }));
+  const HW = ['#efe6d6', '#e9dcc5', '#f3efe6', '#e2d3bd', '#ddd6cb'].map(c => new T.MeshLambertMaterial({map:houseTex, color:new T.Color(c)}));
+  const HR = ['#8e3b2c', '#7a3426', '#a04a35', '#5b5551', '#6d2e25'].map(c => new T.MeshLambertMaterial({color:new T.Color(c)}));
+  const cityTex = tex(cnv(256, 256, (g, w, h) => { g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h); g.fillStyle = 'rgba(0,0,0,.12)'; g.fillRect(0, h - 40, w, 40); for(let r = 0; r < 5; r++) for(let c = 0; c < 8; c++){ const x = 8 + c*31, y = 12 + r*44; if(r === 4){ g.fillStyle = c % 3 === 1 ? '#4a3a2e' : '#2d3a44'; g.fillRect(x, y + 6, 24, 30); continue; } g.fillStyle = '#2d3a44'; g.fillRect(x, y, 20, 28); g.fillStyle = 'rgba(255,255,255,.18)'; g.fillRect(x, y, 20, 5); } }));
+  const CW = ['#e7dcc9', '#d9c6a8', '#c9b9a6', '#e9e3d6', '#cfd3cf', '#d8b9a0'].map(c => new T.MeshLambertMaterial({map:cityTex, color:new T.Color(c)}));
+  const fieldTex = (base, rows, alt, n) => tex(cnv(128, 256, (g, w, h) => { g.fillStyle = base; g.fillRect(0, 0, w, h); for(let i = 0; i < n; i++){ g.fillStyle = i % 2 ? rows : alt; g.fillRect(i*w/n, 0, w/n*0.5, h); } for(let i = 0; i < 900; i++){ g.fillStyle = 'rgba(0,0,0,' + (rnd()*0.08) + ')'; g.fillRect(rnd()*w, rnd()*h, 2, 2); } }));
+  const FIELDS = [fieldTex('#8a6f4c', '#7a5f3e', '#957a55', 24), fieldTex('#c9b25c', '#bba24e', '#d4bd68', 20), fieldTex('#7f9a4a', '#728d40', '#8aa555', 16), fieldTex('#a2b45a', '#93a64f', '#adbf66', 12)].map(t => new T.MeshLambertMaterial({map:t, polygonOffset:true, polygonOffsetFactor:-2, polygonOffsetUnits:-4}));
+  // ---------- Gleisachse ----------
+  let CL = null;
+  function buildCL(){
+    const s0 = -1200, s1 = END_POS + 2500, ds = 2, n = Math.ceil((s1 - s0)/ds) + 2;
+    const X = new Float64Array(n), Z = new Float64Array(n), H = new Float64Array(n);
+    const arcs = ARCS.slice().sort((a, b) => a.s0 - b.s0);
+    let x = 0, z = 0, h = 0, ai = 0;
+    for(let i = 0; i < n; i++){
+      const s = s0 + i*ds; X[i] = x; Z[i] = z; H[i] = h;
+      const sm = s + ds/2; while(ai < arcs.length && arcs[ai].s1 <= sm) ai++;
+      const k = ai < arcs.length && sm > arcs[ai].s0 ? arcs[ai].k : 0;
+      const hm = h + k*ds/2; x += Math.sin(hm)*ds; z -= Math.cos(hm)*ds; h += k*ds;
+    }
+    CL = {s0, ds, n, X, Z, H, s1};
+  }
+  function W(s, d, h){
+    const C = CL; let f = (s - C.s0)/C.ds; if(f < 0) f = 0; if(f > C.n - 1.001) f = C.n - 1.001;
+    const i = Math.floor(f), t = f - i, hh = C.H[i] + (C.H[i + 1] - C.H[i])*t;
+    return [C.X[i] + (C.X[i + 1] - C.X[i])*t + d*Math.cos(hh), h, C.Z[i] + (C.Z[i + 1] - C.Z[i])*t + d*Math.sin(hh), hh];
+  }
+  const dfx = (fx, s) => (fx(s + 1) - fx(s - 1))/2;
+
+  // ---------- Bauhilfen ----------
+  // Band entlang des Gleises: Querschnitt prof = [[d, h], ...] (links → rechts), seitliche Lage fx(s)
+  function ribbon(o, a, b, step, fx, prof, vrep, vsc){
+    const n = Math.max(1, Math.ceil((b - a)/step)), m = prof.length, pos = [], uv = [], idx = [];
+    for(let j = 0; j <= n; j++){
+      const s = a + (b - a)*j/n, d0 = fx(s);
+      for(let k = 0; k < m; k++){ const p = W(s, d0 + prof[k][0], prof[k][1]); pos.push(p[0] - o[0], p[1], p[2] - o[2]); uv.push(k/(m - 1)*(vrep || 1), s*(vsc || 0.25)); }
+    }
+    for(let j = 0; j < n; j++) for(let k = 0; k < m - 1; k++){ const A = j*m + k, B = A + 1, C = A + m, D = C + 1; idx.push(A, B, C, B, D, C); }
+    const g = new T.BufferGeometry(); g.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new T.Float32BufferAttribute(uv, 2)); g.setIndex(idx); g.computeVertexNormals(); return g;
+  }
+  const m4 = new T.Matrix4(), q4 = new T.Quaternion(), e3 = new T.Euler(), v3 = new T.Vector3(), sc3 = new T.Vector3(), col = new T.Color();
+  function place(inst, i, o, p, rotY, sx, sy, sz){ e3.set(0, rotY, 0); q4.setFromEuler(e3); v3.set(p[0] - o[0], p[1], p[2] - o[2]); sc3.set(sx, sy, sz); m4.compose(v3, q4, sc3); inst.setMatrixAt(i, m4); }
+  function boxAt(grp, o, s, d, h, w, ht, len, mat, rot){ const p = W(s, d, h); bXf(mat, G.box, p[0] - o[0], p[1], p[2] - o[2], -(p[3] + (rot || 0)), w, ht, len); }
+
+  // Tafeln/Signale als Textur aus den 2D-Signalbildern (glyph)
+  // Signalbild einmal breit zeichnen, dann auf die tatsächliche Breite zuschneiden (symmetrisch zum Mast)
+  function glyphCanvas(o, S0){
+    const [bt, bb] = bounds(o), S = Math.min(S0, 520/((bb - bt) || 1)), H = Math.max(8, Math.ceil((bb - bt)*S + 6));
+    const c = document.createElement('canvas'); c.width = Math.ceil(3.2*S); c.height = H;
+    const G0 = {c, g:c.getContext('2d'), S, bt:bt - 3/S, bb, hw:1.6};
+    drawGlyph(G0, o);
+    const d = G0.g.getImageData(0, 0, c.width, H).data; let mx = 0;
+    for(let x = 0; x < c.width; x++){ let any = false; for(let y = 0; y < H; y += 2) if(d[(y*c.width + x)*4 + 3] > 8){ any = true; break; } if(any) mx = Math.max(mx, Math.abs(x + 0.5 - c.width/2)); }
+    const hw = Math.max(0.1, (mx + 4)/S), c2 = document.createElement('canvas'); c2.width = Math.ceil(hw*2*S); c2.height = H;
+    return {c:c2, g:c2.getContext('2d'), S, bt:G0.bt, bb, hw:c2.width/2/S};
+  }
+  function drawGlyph(G0, o){ const g = G0.g; g.clearRect(0, 0, G0.c.width, G0.c.height); g.save(); g.translate(G0.c.width/2, -G0.bt*G0.S); ONLYLIGHT = false; INLUPE = false; glyph(g, o, G0.S, S.t); g.restore(); }
+  const LIGHT = {KS1:0x3dff86, KS1B:0x3dff86, HP1:0x3dff86, HP2:0x3dff86, VR1:0x3dff86, VR2:0x3dff86, KS2:0xffc21a, VR0:0xffc21a, HP0:0xff3b2f};
+
+  // ---------- Szene je Szenario ----------
+  let built = null, TRK = [], CH = new Map(), DYN = [];
+  const CHL = 250;
+  function rebuild(){
+    CH.forEach(c => disposeChunk(c)); CH.clear(); DYN = [];
+    buildCL();
+    const lo = CL.s0 + 10, hi = CL.s1 - 10;
+    TRK = [{a:lo, b:hi, fx:() => 0, main:true, fixed:true}, {a:lo, b:hi, fx:() => -4.2, main:true, fixed:true}];
+    for(const A of AREAS){
+      const a1 = Math.max(lo, A.a1), b0 = Math.min(hi, A.b0);
+      TRK.push({a:a1, b:b0, fx:() => G3X, fixed:true}, {a:a1, b:b0, fx:() => G4X, fixed:true});
+      if(A.a0 > -1e8){ TRK.push({a:A.a0, b:A.a1, fx:s => G3X*smooth((s - A.a0)/(A.a1 - A.a0))}, {a:A.a0, b:A.a1, fx:s => -4.2 + (G4X + 4.2)*smooth((s - A.a0)/(A.a1 - A.a0))}); }
+      if(A.b1 < 1e8){ TRK.push({a:A.b0, b:A.b1, fx:s => G3X*(1 - smooth((s - A.b0)/(A.b1 - A.b0)))}, {a:A.b0, b:A.b1, fx:s => G4X + (-4.2 - G4X)*smooth((s - A.b0)/(A.b1 - A.b0))}); }
+    }
+    for(const g of GG){ TRK.push({a:g.a0, b:g.a1, fx:s => ggX(g, s), xo:true}, {a:g.b0, b:g.b1, fx:s => ggX(g, s), xo:true}); }
+    for(const B of BRANCH){ TRK.push({a:B.s0, b:B.s1 + 500, fx:s => s < B.s1 ? G3X*smooth((s - B.s0)/(B.s1 - B.s0)) : G3X + (s - B.s1)*0.06}); }
+    built = {sc:SC, objs:OBJS};
+  }
+  const HILL = [[-40, 0], [-28, 5], [-17, 9.5], [-6, 12], [4, 12], [15, 9.5], [26, 5], [38, 0]];
+  // Abschnitte nach BOStrab (Straßenbahn in der Stadt) aufteilen: [von, bis, bo]
+  function boSplit(a, b){
+    if(b <= a) return [];
+    const cuts = [a, b]; for(const g of KMSEG) if(g.bo){ if(g.from > a && g.from < b) cuts.push(g.from); if(g.to > a && g.to < b) cuts.push(g.to); }
+    cuts.sort((x, y) => x - y); const out = [];
+    for(let i = 0; i < cuts.length - 1; i++) if(cuts[i + 1] - cuts[i] > 0.01) out.push([cuts[i], cuts[i + 1], isBo((cuts[i] + cuts[i + 1])/2)]);
+    return out;
+  }
+  const inTunnel = s => TUNNELS.some(t => s > t.from - 5 && s < t.to + 5);
+  const areaAt = s => AREAS.find(A => s > A.a0 - 20 && s < A.b1 + 20);
+  function disposeChunk(c){ c.grp.traverse(x => { if(x.geometry && !Object.values(G).includes(x.geometry)) x.geometry.dispose(); if(x.userData.spr) x.material.dispose(); else if(x.material && x.material.map && x.userData.own){ x.material.map.dispose(); x.material.dispose(); } }); scene.remove(c.grp); DYN = DYN.filter(d => d.chunk !== c); }
+  // Zusammenfassen gleichartiger Teile eines Abschnitts zu einem Mesh je Material (weniger Zeichenaufrufe)
+  let BT = null;
+  function bAdd(mat, geo){ let L = BT.get(mat); if(!L){ L = []; BT.set(mat, L); } L.push(geo); }
+  function bXf(mat, geo, x, y, z, ry, sx, sy, sz, own, rx){ const g = own ? geo : geo.clone(); e3.set(rx || 0, ry, 0, 'YXZ'); q4.setFromEuler(e3); v3.set(x, y, z); sc3.set(sx, sy, sz); m4.compose(v3, q4, sc3); g.applyMatrix4(m4); bAdd(mat, g); }
+  function mergeGeos(list){
+    let nv = 0, ni = 0;
+    for(const g of list){ if(!g.attributes.normal) g.computeVertexNormals(); nv += g.attributes.position.count; ni += g.index ? g.index.count : g.attributes.position.count; }
+    const pos = new Float32Array(nv*3), nor = new Float32Array(nv*3), uv = new Float32Array(nv*2), idx = nv > 65000 ? new Uint32Array(ni) : new Uint16Array(ni);
+    let vo = 0, io = 0;
+    for(const g of list){
+      const P = g.attributes.position, n = P.count;
+      pos.set(P.array, vo*3); nor.set(g.attributes.normal.array, vo*3); if(g.attributes.uv) uv.set(g.attributes.uv.array, vo*2);
+      if(g.index){ const I = g.index.array; for(let k = 0; k < I.length; k++) idx[io + k] = I[k] + vo; io += I.length; }
+      else { for(let k = 0; k < n; k++) idx[io + k] = vo + k; io += n; }
+      vo += n;
+    }
+    const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(pos, 3)); g.setAttribute('normal', new T.BufferAttribute(nor, 3)); g.setAttribute('uv', new T.BufferAttribute(uv, 2)); g.setIndex(new T.BufferAttribute(idx, 1));
+    return g;
+  }
+
+  function buildChunk(ci){
+    const s0 = ci*CHL, s1 = s0 + CHL, o0 = W(s0, 0, 0), o = [o0[0], 0, o0[2]];
+    const grp = new T.Group(); grp.position.set(o[0], 0, o[2]);
+    const c = {grp, ci, detail:[]}; BT = new Map();
+    // Gleise
+    const slp = [];
+    const boIv = boSplit(s0, s1);
+    for(const [a, b] of boIv.filter(x => !x[2])) bAdd(M.bal, ribbon(o, a, b, ARCS.some(A => A.s0 < b + 2 && A.s1 > a - 2) ? 4 : 25, () => 0, [[-2.65, 0.19], [-1.55, 0.19]], 0.5));
+    for(const [a, b] of boIv.filter(x => x[2])){ bAdd(M.street, ribbon(o, a, b, 25, () => 0, [[-9.5, RT - 0.02], [5.3, RT - 0.02]], 3, 0.1)); bAdd(M.plat, ribbon(o, a, b, 25, () => 0, [[5.3, RT - 0.02], [5.3, RT + 0.12], [11.8, RT + 0.12]], 3, 0.5)); bAdd(M.plat, ribbon(o, a, b, 25, () => 0, [[-15.3, RT + 0.12], [-9.5, RT + 0.12], [-9.5, RT - 0.02]], 3, 0.5)); }
+    TRK.forEach((t, ti) => boSplit(Math.max(t.a, s0), Math.min(t.b, s1)).forEach(([a, b, bo]) => {
+      if(b - a < 0.5) return;
+      const bt = t.main ? 0.25 - ti*0.003 : 0.24 - (ti % 8)*0.003, stp = t.fixed && !ARCS.some(A => A.s0 < b + 2 && A.s1 > a - 2) ? 25 : 4;
+      if(!bo) bAdd(t.main || t.xo ? M.bal : M.bal2, ribbon(o, a, b, stp, t.fx, [[-2.15, 0], [-1.55, bt], [1.55, bt], [2.15, 0]], 2));
+      for(const r of [-0.75, 0.75]){
+        bAdd(M.rail, ribbon(o, a, b, stp, t.fx, [[r - 0.036, 0.3], [r - 0.036, RT], [r + 0.036, RT], [r + 0.036, 0.3]]));
+        bAdd(M.railTop, ribbon(o, a, b, stp, t.fx, [[r - 0.034, RT + 0.002], [r + 0.034, RT + 0.002]]));
+      }
+      if(!bo) for(let k = Math.ceil(a/0.65); k*0.65 < b; k++) slp.push([k*0.65, t.fx]);
+    }));
+    if(slp.length){ const im = new T.InstancedMesh(G.sleeper, M.sleeper, slp.length); slp.forEach(([s, fx], i) => { const p = W(s, fx(s), 0.26); place(im, i, o, p, -(p[3] + Math.atan(dfx(fx, s))), 1, 1, 1); }); im.frustumCulled = false; grp.add(im); c.detail.push(im); }
+    // Schotter zwischen Gleis 1 und Gleis 3 im Bahnhof
+    for(const A of AREAS){ const a = Math.max(A.a1, s0), b = Math.min(A.b0, s1); if(b - a > 1) bAdd(M.bal2, ribbon(o, a, b, 6, () => 0, [[2.15, 0.01], [7.1, 0.01]])); }
+    // Oberleitung
+    const masts = [], arms = [];
+    for(let k = Math.ceil(s0/60); k*60 < s1; k++){
+      const s = k*60; if(inTunnel(s)) continue;
+      const A = AREAS.find(X => s > X.a0 - 15 && s < X.b1 + 15), B = BRANCH.find(X => s > X.s0 - 15 && s < X.s1 + 520);
+      const mast = d => { const p = W(s, d, 3.8); masts.push([p, p[3]]); }, arm = (d0, d1) => { const p = W(s, (d0 + d1)/2, 6.9); arms.push([p, p[3], Math.abs(d1 - d0)]); };
+      if(A){ mast(G3X + 2.6); arm(-0.9, G3X + 2.6); mast(G4X - 2.6); arm(G4X - 2.6, -3.3); }
+      else if(B){ mast(-6.9); arm(-6.9, 0.9); }
+      else { mast(3.4); arm(-4.95, 3.45); }
+    }
+    if(masts.length){ const im = new T.InstancedMesh(G.box, M.mast, masts.length); masts.forEach(([p, h], i) => place(im, i, o, p, -h, 0.32, 7.6, 0.32)); im.frustumCulled = false; grp.add(im); }
+    if(arms.length){ const im = new T.InstancedMesh(G.box, M.mast, arms.length); arms.forEach(([p, h, l], i) => place(im, i, o, p, -h, l, 0.16, 0.16)); im.frustumCulled = false; grp.add(im); }
+    const wires = [];
+    const wireAt = (d, a, b) => { if(b - a < 2) return; let prev = null; for(let s = a; s <= b + 0.01; s += Math.min(10, b - a)){ const p = W(s, d, 5.7), q = [p[0] - o[0], p[1], p[2] - o[2]]; if(prev) wires.push(...prev, ...q); prev = q; } };
+    wireAt(0, s0, s1); wireAt(-4.2, s0, s1);
+    for(const A of AREAS){ wireAt(G3X, Math.max(A.a1, s0), Math.min(A.b0, s1)); wireAt(G4X, Math.max(A.a1, s0), Math.min(A.b0, s1)); }
+    if(wires.length){ const g = new T.BufferGeometry(); g.setAttribute('position', new T.Float32BufferAttribute(wires, 3)); grp.add(new T.LineSegments(g, M.wire)); }
+    // Bahnsteige
+    for(const st of STATIONS){
+      const a = Math.max(st.from, s0), b = Math.min(st.to, s1); if(b - a < 0.5) continue;
+      bAdd(M.plat, ribbon(o, a, b, 5, () => 0, [[1.75, PH], [7.5, PH]], 2.9, 0.5));
+      bAdd(M.wall, ribbon(o, a, b, 5, () => 0, [[1.75, 0], [1.75, PH - 0.12]]));
+      bAdd(M.edge, ribbon(o, a, b, 5, () => 0, [[1.7, PH - 0.12], [1.7, PH], [2.05, PH + 0.004]]));
+      bAdd(M.line, ribbon(o, a, b, 5, () => 0, [[2.55, PH + 0.006], [2.65, PH + 0.006]]));
+      if(st.island){ bAdd(M.edge, ribbon(o, a, b, 5, () => 0, [[7.2, PH + 0.004], [7.55, PH], [7.55, PH - 0.12]])); bAdd(M.line, ribbon(o, a, b, 5, () => 0, [[6.6, PH + 0.006], [6.7, PH + 0.006]])); bAdd(M.wall, ribbon(o, a, b, 5, () => 0, [[7.5, PH - 0.12], [7.5, 0]])); }
+      else bAdd(M.wall, ribbon(o, a, b, 5, () => 0, [[7.5, PH], [7.5, 0]]));
+      // Dach (Bahnhof) bzw. Wartehäuschen (Haltepunkt)
+      const mid = (st.from + st.to)/2;
+      if(!st.hp){
+        const ra = Math.max(a, mid - 55), rb = Math.min(b, mid + 55);
+        if(rb - ra > 1){ bAdd(M.roof, ribbon(o, ra, rb, 5, () => 0, [[2.5, 4.6], [4.6, 5.0], [6.7, 4.6]])); for(let s = Math.ceil(ra/12)*12; s < rb; s += 12) boxAt(grp, o, s, 4.6, PH + 1.85, 0.22, 3.7, 0.22, M.post); }
+      } else if(st.stop - 40 > a && st.stop - 40 < b){
+        const ss = st.stop - 40; boxAt(grp, o, ss, 6.0, PH + 2.45, 1.9, 0.1, 3.8, M.roof); boxAt(grp, o, ss, 6.85, PH + 1.2, 0.06, 2.3, 3.6, M.glass);
+        for(const dz of [-1.75, 1.75]){ boxAt(grp, o, ss + dz, 6.85, PH + 1.2, 0.1, 2.4, 0.1, M.post); boxAt(grp, o, ss + dz, 6.1, PH + 1.2, 1.5, 2.3, 0.05, M.glass); }
+        boxAt(grp, o, ss, 6.6, PH + 0.45, 0.4, 0.06, 2.6, M.post);
+      }
+      for(let s = Math.ceil(a/25)*25; s < b; s += 25){ boxAt(grp, o, s, st.hp ? 6.6 : 3.2, PH + 2.25, 0.12, 4.5, 0.12, M.post); }
+    }
+    // Empfangsgebäude
+    for(const st of STATIONS){
+      if(st.hp || st.stop - 60 < s0 || st.stop - 60 >= s1) continue;
+      const d = st.island ? 18 : 12, p = W(st.stop - 60, d, 0);
+      bXf(M.station, G.box, p[0] - o[0], 3.6, p[2] - o[2], -p[3], 10, 7.2, 26);
+      bXf(M.stRoof, G.prism, p[0] - o[0], 7.2, p[2] - o[2], -p[3], 11, 7, 27);
+      const nb = cnv(512, 64, (g, w, h) => { g.fillStyle = '#16365f'; g.fillRect(0, 0, w, h); g.fillStyle = '#fff'; g.font = '700 44px Barlow Condensed, Arial Narrow, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(st.name.replace(/ Hp$/, ''), w/2, h/2 + 2, w - 20); });
+      const nm = new T.Mesh(new T.PlaneGeometry(9, 1.1), new T.MeshLambertMaterial({map:tex(nb)})); nm.userData.own = true; const q = W(st.stop - 60, d - 5.05, 5.6); nm.position.set(q[0] - o[0], 5.6, q[2] - o[2]); nm.rotation.y = -q[3] - Math.PI/2; grp.add(nm);
+    }
+    // Tunnel
+    for(const t of TUNNELS){
+      const a = Math.max(t.from, s0), b = Math.min(t.to, s1);
+      if(b - a > 0.5){
+        const arch = []; for(let k = 0; k <= 12; k++){ const an = Math.PI*k/12; arch.push([-2.1 + 5.8*Math.cos(an), 0.2 + 6.6*Math.sin(an)]); }
+        bAdd(M.tunnel, ribbon(o, a, b, 6, () => 0, arch.reverse()));
+        bAdd(M.hill, ribbon(o, a, b, 6, () => 0, HILL, 3.9, 0.05));
+        for(let s = Math.ceil(a/25)*25; s < b; s += 25){ boxAt(grp, o, s, -6.6, 3.9, 0.2, 0.25, 0.8, M.tlamp); boxAt(grp, o, s, 2.4, 3.9, 0.2, 0.25, 0.8, M.tlamp); }
+      }
+      for(const [sp, dir] of [[t.from, 1], [t.to, -1]]){
+        if(sp < s0 || sp >= s1) continue;
+        const p = W(dir > 0 ? sp : sp + 1.6, 0, 0), add = (shape, depth, mat, y) => bXf(mat, new T.ExtrudeGeometry(shape, {depth, bevelEnabled:false}), p[0] - o[0], y || 0, p[2] - o[2], -p[3], 1, 1, 1, true);
+        const face = new T.Shape(); face.moveTo(HILL[0][0], 0); face.lineTo(-10.6, 0); face.lineTo(-10.6, 9.6); face.lineTo(6.4, 9.6); face.lineTo(6.4, 0);
+        for(let k = HILL.length - 1; k >= 0; k--) face.lineTo(HILL[k][0], HILL[k][1]);
+        add(face, 1.2, M.hillFace, -0.01);
+        const fr = new T.Shape(); fr.moveTo(-10.6, 0); fr.lineTo(-7.9, 0); fr.lineTo(-7.9, 0.2); fr.absarc(-2.1, 0.2, 5.8, Math.PI, 0, true); fr.lineTo(3.7, 0); fr.lineTo(6.4, 0); fr.lineTo(6.4, 9.6); fr.lineTo(-10.6, 9.6); fr.lineTo(-10.6, 0);
+        add(fr, 1.6, M.portal);
+        const cap = new T.Shape(); cap.moveTo(-11.1, 9.6); cap.lineTo(6.9, 9.6); cap.lineTo(6.9, 10.2); cap.lineTo(-11.1, 10.2); cap.lineTo(-11.1, 9.6);
+        add(cap, 1.9, M.wall);
+        if(dir > 0){ const nm = t.name.replace(/\s*Tunnel\s*/i, '').trim(), len = Math.round(t.to - t.from) + ' m';
+          const bc = cnv(256, 96, (g, w, h) => { g.fillStyle = '#111'; g.fillRect(0, 0, w, h); g.fillStyle = '#f4f4f0'; g.fillRect(5, 5, w - 10, h - 10); g.fillStyle = '#111'; g.font = '700 36px Barlow Condensed, Arial Narrow, sans-serif'; g.textAlign = 'center'; g.fillText(nm, w/2, 42); g.beginPath(); g.arc(70, 82, 16, Math.PI, 0); g.fill(); g.font = '700 28px Barlow Condensed, Arial Narrow, sans-serif'; g.fillText(len, 165, 84); });
+          const bm = new T.Mesh(new T.PlaneGeometry(3.6, 1.35), new T.MeshLambertMaterial({map:tex(bc)})); bm.userData.own = true; const q = W(sp - 0.05, -2.1, 7.9); bm.position.set(q[0] - o[0], 7.9, q[2] - o[2]); bm.rotation.y = -q[3]; grp.add(bm); }
+      }
+    }
+    // Bahnübergänge
+    for(const bu of BUE){
+      if(bu.pos < s0 || bu.pos >= s1) continue;
+      boxAt(grp, o, bu.pos, -2, 0.235, 90, 0.47, 7, M.road);
+      for(const [ds, d] of [[-5, 4.6], [5, -9]]){
+        const q = W(bu.pos + ds, d, 2.6); bXf(M.kreuz, G.plane, q[0] - o[0], 2.6, q[2] - o[2], -q[3] + (ds > 0 ? Math.PI : 0), 1.25, 1.25, 1);
+        bXf(M.post, G.cyl, q[0] - o[0], 1.2, q[2] - o[2], 0, 0.05, 2.4, 0.05);
+      }
+    }
+    // Kabelkanal neben dem Gleis (freie Strecke)
+    for(const [a, b, bo] of boIv){ if(bo) continue; let x = a; for(const t of TUNNELS.concat(STATIONS.map(st => ({from:st.from - 5, to:st.to + 5})))){ if(t.to < x || t.from > b) continue; if(t.from > x) bAdd(M.trough, ribbon(o, x, Math.min(b, t.from), 25, () => 0, [[2.75, 0], [2.75, 0.16], [3.25, 0.16], [3.25, 0]], 1, 0.1)); x = Math.max(x, t.to); } if(b - x > 1 && !AREAS.some(A => x < A.b1 && b > A.a0)) bAdd(M.trough, ribbon(o, x, b, ARCS.some(A => A.s0 < b && A.s1 > x) ? 6 : 25, () => 0, [[2.75, 0], [2.75, 0.16], [3.25, 0.16], [3.25, 0]], 1, 0.1)); }
+    // Felder und Wiesen
+    for(const side of [-1, 1]){
+      const r = hash(ci*3 + (side > 0 ? 1 : 0) + 101); if(r < 0.35) continue;
+      const mid = s0 + CHL/2; if(STATIONS.some(x => mid > x.from - 300 && mid < x.to + 300) || isBo(mid) || inTunnel(mid) || (side > 0 && BRANCH.some(B => mid > B.s0 - 200 && mid < B.s1 + 700))) continue;
+      const w = 90 + hash(ci*7 + side)*140, d = side*(34 + w/2), p = W(mid, d, 0);
+      bXf(FIELDS[Math.floor(hash(ci*11 + side*5)*FIELDS.length)], G.plane, p[0] - o[0], 0.01, p[2] - o[2], -p[3] + (hash(ci + side) - 0.5)*0.3, w, CHL*0.92, 1, false, -Math.PI/2);
+    }
+    // Bäume
+    const trees = [], crowns = [], conif = [];
+    for(let k = Math.ceil(s0/23); k*23 < s1; k++){
+      const s = k*23; if(inTunnel(s)) continue;
+      for(const side of [-1, 1]){
+        const r1 = hash(k*2 + (side > 0 ? 1 : 0)), r2 = hash(k*7 + side*3); if(r1 < 0.3) continue;
+        const A = areaAt(s), st = STATIONS.find(x => s > x.from - 40 && s < x.to + 40);
+        if(side > 0 && BRANCH.some(B => s > B.s0 - 30 && s < B.s1 + 540)) continue;
+        if(BUE.some(b => Math.abs(b.pos - s) < 14) || isBo(s)) continue;
+        let d = side*(10 + r1*34); if(A || st) d = side > 0 ? 22 + r1*30 : -(14 + r1*30); if(Math.abs(d) < 10) continue;
+        const hgt = 6 + r2*10, p = W(s + r2*10, d, 0), cf = hash(k + side*11) < 0.55;
+        trees.push([p, hgt]); (cf ? conif : crowns).push([p, hgt, hash(k*3 + side)]);
+      }
+    }
+    if(trees.length){ const im = new T.InstancedMesh(G.cyl, M.trunk, trees.length); trees.forEach(([p, h], i) => place(im, i, o, [p[0], h*0.2, p[2]], 0, 0.22, h*0.4, 0.22)); im.frustumCulled = false; grp.add(im); }
+    if(conif.length){ const im = new T.InstancedMesh(G.cone, M.leaf, conif.length); conif.forEach(([p, h, r], i) => { place(im, i, o, [p[0], h*0.58, p[2]], 0, h*0.24, h*0.85, h*0.24); im.setColorAt(i, col.setHSL(0.3 + r*0.05, 0.38, 0.17 + r*0.07)); }); im.frustumCulled = false; grp.add(im); }
+    if(crowns.length){ const im = new T.InstancedMesh(G.ball, M.leaf, crowns.length); crowns.forEach(([p, h, r], i) => { place(im, i, o, [p[0], h*0.62, p[2]], r*3, h*0.3, h*0.34, h*0.3); im.setColorAt(i, col.setHSL(0.22 + r*0.08, 0.42, 0.22 + r*0.1)); }); im.frustumCulled = false; grp.add(im); }
+    // Häuser in Bahnhofsnähe und vereinzelt auf dem Land
+    const houses = [];
+    for(let k = Math.ceil(s0/90); k*90 < s1; k++){
+      const s = k*90, nearSt = STATIONS.some(x => s > x.from - 400 && s < x.to + 400), r = hash(k*13 + 5);
+      if(inTunnel(s) || isBo(s) || (!nearSt && r > 0.12) || (nearSt && r > 0.75)) continue;
+      const side = hash(k*17) < 0.5 ? -1 : 1, d = side*(28 + hash(k*19)*45);
+      if(side > 0 && BRANCH.some(B => s > B.s0 - 30 && s < B.s1 + 560)) continue;
+      houses.push([W(s, d, 0), 7 + hash(k*23)*6, 9 + hash(k*29)*5, 5 + hash(k*31)*3, hash(k*37)]);
+    }
+    // Stadt: geschlossene Häuserzeilen beiderseits der Straße
+    for(let k = Math.ceil(s0/24); k*24 < s1; k++){
+      const s = k*24; if(!isBo(s)) continue;
+      for(const side of [-1, 1]){
+        const r = hash(k*5 + side*7), d = side > 0 ? 13 + r*3 : -(17 + r*3), h = 9 + Math.floor(hash(k*11 + side)*4)*3.2, p = W(s, d, 0);
+        bXf(CW[Math.floor(r*CW.length) % CW.length], G.box, p[0] - o[0], h/2, p[2] - o[2], -p[3], 10, h, 23.4);
+        bXf(M.flat, G.box, p[0] - o[0], h + 0.25, p[2] - o[2], -p[3], 10.4, 0.5, 23.6);
+      }
+    }
+    for(const [p, w, l, h, r] of houses){
+      bXf(HW[Math.floor(r*HW.length) % HW.length], G.box, p[0] - o[0], h/2, p[2] - o[2], -p[3] + r, w, h, l);
+      bXf(HR[Math.floor(r*7) % HR.length], G.prism, p[0] - o[0], h, p[2] - o[2], -p[3] + r, w + 0.6, w*0.55, l + 0.6);
+    }
+    // PZB-Gleismagnete
+    for(const mg of MAGNETS){ if(mg.pos < s0 || mg.pos >= s1) continue; const mx = (mg.gg ? -4.2 : 0) + sideX(mg.pos); boxAt(grp, o, mg.pos, 1.12 + mx, 0.34, 0.45, 0.16, 1.0, M.magnet); }
+    // Signale und Tafeln
+    for(const ob of OBJS){
+      if(ob.pos < s0 || ob.pos >= s1) continue;
+      addObj(c, grp, o, ob);
+    }
+    // Hektometertafeln: eine Textur je Abschnitt
+    const hms = HM.filter(h => h.pos >= s0 && h.pos < s1);
+    let hmMat = null;
+    if(hms.length){
+      const n = hms.length, ac = cnv(48*n, 72, (g, w, h) => hms.forEach((hm, i) => { const x0 = i*48; g.fillStyle = '#111'; g.fillRect(x0, 0, 48, h); g.fillStyle = '#f4f4f0'; g.fillRect(x0 + 3, 3, 42, h - 6); g.fillStyle = '#111'; g.fillRect(x0 + 3, h/2 - 1, 42, 2); g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = '700 ' + (String(hm.km).length > 2 ? 18 : 24) + 'px Barlow Condensed, Arial Narrow, sans-serif'; g.fillText(String(hm.km), x0 + 24, h*0.27); g.font = '700 28px Barlow Condensed, Arial Narrow, sans-serif'; g.fillText(String(hm.hm), x0 + 24, h*0.76); }));
+      hmMat = new T.MeshLambertMaterial({map:tex(ac)});
+      hms.forEach((hm, i) => {
+        const p = W(hm.pos, 2.95, 2.3), g = G.plane.clone(), uv = g.attributes.uv; for(let k = 0; k < uv.count; k++) uv.setX(k, (i + uv.getX(k))/n);
+        bXf(hmMat, g, p[0] - o[0], 2.3, p[2] - o[2], -p[3], 0.42, 0.63, 1, true);
+        const po = W(hm.pos + 0.05, 2.95, 1.0); bXf(M.post, G.box, po[0] - o[0], 1.0, po[2] - o[2], -po[3], 0.07, 2.0, 0.07);
+      });
+    }
+    BT.forEach((list, mat) => { const m = new T.Mesh(mergeGeos(list), mat); if(mat === hmMat){ m.userData.own = true; c.detail.push(m); } grp.add(m); list.forEach(g => g.dispose()); }); BT = null;
+    scene.add(grp); CH.set(ci, c); return c;
+  }
+  function addObj(c, grp, o, ob){
+    const dyn = ob.k === 'main' || ob.k === 'dist' || ob.k === 'ls';
+    const G0 = glyphCanvas(ob, dyn ? 150 : 170); drawGlyph(G0, ob);
+    const t = tex(G0.c), mat = dyn ? new T.MeshBasicMaterial({map:t, transparent:true}) : new T.MeshLambertMaterial({map:t, transparent:true, alphaTest:0.05});
+    const w = G0.hw*2, h = G0.bb - G0.bt, pl = new T.Mesh(new T.PlaneGeometry(w, h), mat); pl.userData.own = true;
+    const yo = ob.k === 'ne5' || ob.k === 'sign' ? PH - 0.76 : 0, yc = ob.h + yo - (G0.bt + G0.bb)/2, p = W(ob.pos, ob.x, yc);
+    pl.position.set(p[0] - o[0], yc, p[2] - o[2]); pl.rotation.y = -p[3]; grp.add(pl);
+    // Rückseite grau
+    bXf(M.post, G.plane, pl.position.x - Math.sin(p[3])*0.02, yc, pl.position.z + Math.cos(p[3])*0.02, -p[3] + Math.PI, w*0.9, h*0.9, 1);
+    // Mast bzw. Pfosten
+    const base = yo ? PH : 0, top = ob.h + yo - G0.bb + 0.02;
+    if(ob.k !== 'ls' && top > base + 0.1){ const q = W(ob.pos + 0.08, ob.x, (base + top)/2), r = ob.k === 'main' ? 0.12 : 0.05; bXf(M.post, G.cyl, q[0] - o[0], (base + top)/2, q[2] - o[2], 0, r, top - base, r); }
+    if(ob.k === 'main'){
+      const q = W(ob.pos - 0.14, ob.x, 2.45); bXf(M.stripes, G.plane, q[0] - o[0], 2.45, q[2] - o[2], -q[3], 0.28, 0.9, 1);
+      if(MAIN[ob.ref].left){ const q2 = W(ob.pos - 0.14, ob.x, 3.7); bXf(M.checker, G.plane, q2[0] - o[0], 3.7, q2[2] - o[2], -q2[3], 0.36, 1.2, 1); }
+    }
+    if(dyn){
+      const sp = new T.Sprite(new T.SpriteMaterial({map:glowTex, color:0xffffff, transparent:true, depthWrite:false, blending:T.AdditiveBlending, sizeAttenuation:false, fog:false}));
+      const hp = W(ob.pos - 0.3, ob.x, ob.h); sp.position.set(hp[0] - o[0], ob.h, hp[2] - o[2]); sp.scale.set(0.012, 0.012, 1); sp.userData.spr = true; grp.add(sp);
+      DYN.push({chunk:c, ob, G0, t, sp, last:-1});
+    }
+  }
+
+  // ---------- Züge ----------
+  const trains = new Map();
+  const KCOL = {rb:0xc8102e, re:0xb5122a, ic:0xeceeed, gz:0x5b4636, avg:0xe3b51f, lead:0x9da6a9};
+  function trainMesh(kind, cars, carLen, front, back){
+    const grp = new T.Group(), mats = {};
+    const body = new T.MeshLambertMaterial({color:KCOL[kind]}), win = new T.MeshLambertMaterial({color:0x1f2a33});
+    const conts = [0x2f5d8a, 0x8a8f94, 0xc9772b, 0x3f7a52, 0x7a2f2a, 0xc8b02e].map(c => new T.MeshLambertMaterial({color:c}));
+    for(let i = 0; i < cars; i++){
+      const car = new T.Group();
+      const m = kind === 'gz' && i > 0 ? conts[Math.floor(hash(i*7 + cars)*conts.length)] : body;
+      const b = new T.Mesh(G.box, m); b.scale.set(2.9, kind === 'gz' && i > 0 ? 2.7 : 3.5, carLen - 0.8); b.position.y = kind === 'gz' && i > 0 ? 2.15 : 2.5; car.add(b);
+      if(kind !== 'gz'){ const w = new T.Mesh(G.box, win); w.scale.set(2.95, 0.9, carLen - 2.5); w.position.y = 3.0; car.add(w); }
+      const u = new T.Mesh(G.box, M.post); u.scale.set(2.4, 0.6, carLen - 2); u.position.y = 0.75; car.add(u);
+      const cab = (front && i === 0) || (back && i === cars - 1 && kind !== 'gz');
+      if(cab){ const ws = new T.Mesh(G.box, M.cabWin); ws.scale.set(2.5, 1.05, 0.1); ws.position.set(0, kind === 'gz' ? 3.1 : 3.25, (carLen - 0.8)/2 + 0.02); car.add(ws);
+        const bd = new T.Mesh(G.box, M.cabBand); bd.scale.set(2.92, 0.28, 0.08); bd.position.set(0, 1.55, (carLen - 0.8)/2 + 0.03); car.add(bd); }
+      grp.add(car);
+    }
+    const lights = [];
+    const mk = (c, x, y) => { const sp = new T.Sprite(new T.SpriteMaterial({map:glowTex, color:c, transparent:true, depthWrite:false, blending:T.AdditiveBlending, sizeAttenuation:false, fog:false})); sp.scale.set(0.022, 0.022, 1); sp.userData = {x, y}; grp.add(sp); lights.push(sp); };
+    if(front) [[-0.95, 1.2], [0.95, 1.2], [0, 3.85]].forEach(([x, y]) => mk(0xfffbe8, x, y));
+    if(back) [[-1.0, 1.3], [1.0, 1.3]].forEach(([x, y]) => mk(0xff2a1f, x, y));
+    scene.add(grp);
+    return {grp, lights, cars, carLen};
+  }
+  function updTrain(key, kind, sFront, len, d, dir){
+    // dir = −1: Gegenzug (Spitze vorn, Wagen dahinter mit größerer Lage); +1: vorausfahrender Zug (Spitze bei sFront, Schluss hinten)
+    let tr = trains.get(key);
+    const carLen = kind === 'avg' ? 19 : kind === 'gz' ? 18 : 25, cars = Math.max(1, Math.min(30, Math.round(len/carLen)));
+    if(!tr){ tr = trainMesh(kind, cars, len/cars, dir < 0, dir > 0); trains.set(key, tr); }
+    tr.seen = true;
+    const cl = len/cars;
+    tr.grp.children.forEach((ch, i) => {
+      if(i < cars){ const sc = dir < 0 ? sFront + (i + 0.5)*cl : sFront - (i + 0.5)*cl; const dd = typeof d === 'function' ? d(sc) : d; const p = W(sc, dd, 0); ch.position.set(p[0], 0, p[2]); ch.rotation.y = -p[3]; }
+    });
+    tr.lights.forEach(sp => { const s = dir < 0 ? sFront - 0.2 : sFront - len - 0.2; const dd = typeof d === 'function' ? d(s) : d; const p = W(s, dd + sp.userData.x, sp.userData.y); sp.position.set(p[0], p[1], p[2]); });
+  }
+  const mkInst = (geo, mat) => { const m = new T.InstancedMesh(geo, mat, 90); for(let i = 0; i < 90; i++) m.setColorAt(i, col.set(0xffffff)); m.count = 0; m.frustumCulled = false; scene.add(m); return m; };
+  const pax = mkInst(new T.CylinderGeometry(0.2, 0.17, 1, 8), new T.MeshLambertMaterial({color:0xffffff}));
+  const paxLeg = mkInst(new T.CylinderGeometry(0.15, 0.12, 1, 6), new T.MeshLambertMaterial({color:0xffffff}));
+  const paxHead = mkInst(new T.SphereGeometry(0.12, 8, 6), new T.MeshLambertMaterial({color:0xffffff}));
+  const PCOL = [0x2f5d8a, 0xa6463b, 0x3f7a52, 0xc9a227, 0x6b4f8a].map(c => new T.Color(c)), LCOL = [0x2a3140, 0x3b3b3b, 0x4a5a78].map(c => new T.Color(c)), SKIN = [0xe2b993, 0xc89870, 0x8d5f3e].map(c => new T.Color(c));
+
+  // ---------- je Bild ----------
+  let lastW = 0, lastH = 0, prMax = Math.min(window.devicePixelRatio || 1, 1.5), pr = prMax, ema = 16, slow = 0, fast = 0, lastT = 0;
+  R.frame = function(){
+    if(!built || built.sc !== SC || built.objs !== OBJS) rebuild();
+    const W0 = view3d.clientWidth, H0 = view3d.clientHeight;
+    // Auflösung an die Leistung des Geräts anpassen
+    const now = performance.now(); if(lastT){ const d = Math.min(200, now - lastT); ema += (d - ema)*0.05; } lastT = now;
+    if(ema > 40){ slow++; fast = 0; } else if(ema < 20){ fast++; slow = 0; } else { slow = 0; fast = 0; }
+    if(slow > 90 && pr > 0.6){ pr = Math.max(0.6, pr - 0.25); slow = 0; lastW = -1; }
+    if(fast > 300 && pr < prMax){ pr = Math.min(prMax, pr + 0.25); fast = 0; lastW = -1; }
+    if(W0 !== lastW || H0 !== lastH){ lastW = W0; lastH = H0; renderer.setPixelRatio(pr); renderer.setSize(W0, H0, false); camera.aspect = W0/Math.max(1, H0); camera.fov = Math.max(30, Math.min(52, 2*Math.atan(Math.tan(31*Math.PI/180)/camera.aspect)*180/Math.PI)); camera.updateProjectionMatrix(); }
+    // Kamera im Führerstand
+    const base = S.front;
+    let lat = sideX(base), dl = (sideX(base + 3) - sideX(base - 3))/6;
+    if(S.gg){ lat += ggX(S.gg, base); dl += (ggX(S.gg, base + 3) - ggX(S.gg, base - 3))/6; }
+    const p = W(base, lat, 3.25), hd = p[3] + Math.atan(dl);
+    camera.position.set(p[0], 3.25, p[2]);
+    camera.lookAt(p[0] + Math.sin(hd)*100, 3.25 - 8.2, p[2] - Math.cos(hd)*100);
+    sky.position.copy(camera.position); stars.position.copy(camera.position); hills.position.set(camera.position.x, 60, camera.position.z); clouds.position.set(camera.position.x, 0, camera.position.z);
+    ground.position.set(Math.round(camera.position.x/100)*100, -0.02, Math.round(camera.position.z/100)*100);
+    // Licht, Nebel, Nacht
+    const fogFar = NIGHT ? 2600 : SICHT < 1000 ? SICHT*1.25 : 5200, fogNear = NIGHT ? 60 : SICHT < 1000 ? 20 : 400;
+    scene.fog.near = fogNear; scene.fog.far = fogFar; scene.fog.color.set(NIGHT ? 0x070a10 : SICHT < 1000 ? 0xc9d0d2 : 0xcbd9df);
+    hemi.intensity = NIGHT ? 0.07 : SICHT < 1000 ? 0.7 : 0.62; sun.intensity = NIGHT ? 0.02 : SICHT < 1000 ? 0.18 : 0.6;
+    head.intensity = NIGHT ? 1.1 : 0;
+    sky.material.color.set(NIGHT ? 0x0b1020 : 0xffffff); hills.visible = !NIGHT && SICHT >= 1000; stars.visible = NIGHT && SICHT >= 150; clouds.visible = !NIGHT && SICHT >= 1000;
+    const inT = TUNNELS.find(t => base >= t.from && base <= t.to);
+    if(inT){ const f = Math.max(0.1, Math.min(1, 1 - (inT.to - base - 25)/140)); hemi.intensity *= f; sun.intensity *= f; head.intensity = Math.max(head.intensity, 0.9*(1 - f)); }
+    // Abschnitte bauen/entfernen
+    const viewFar = Math.min(3000, fogFar + 250), c0 = Math.floor((base - 300)/CHL), c1 = Math.floor((base + viewFar)/CHL);
+    CH.forEach((c, k) => { if(k < c0 - 1 || k > c1 + 1){ disposeChunk(c); CH.delete(k); } });
+    let builds = 0;
+    for(let k = c0; k <= c1; k++){ if(!CH.has(k)){ if(builds > 0 && k > Math.floor((base + 600)/CHL)) break; buildChunk(k); builds++; } }
+    CH.forEach(c => { const near = c.ci*CHL - base < 450; c.detail.forEach(m => { m.visible = near; }); });
+    // Signale: Signalbild und Lichtpunkt aktualisieren
+    for(const D of DYN){
+      const dist = D.ob.pos - base;
+      if(dist < -50 || dist > 3200) { D.sp.visible = false; continue; }
+      const key = D.ob.k === 'main' ? S.sig[D.ob.ref].aspect + (S.sig[D.ob.ref].ersatzOn ? 'E' : '') + (S.sig[D.ob.ref].zs3On ? 'Z' : '') + (D.ob.k === 'main' && MAIN[D.ob.ref].mastVr >= 0 ? S.dsig[MAIN[D.ob.ref].mastVr].aspect : '') + ((S.t % 1) < 0.55 ? 'b' : '')
+                : D.ob.k === 'dist' ? S.dsig[D.ob.ref].aspect + S.dsig[D.ob.ref].zs3v + ((S.t % 1) < 0.55 ? 'b' : '') : String(S.ls[D.ob.ref].sh1);
+      if(key !== D.last && dist < 1800){ drawGlyph(D.G0, D.ob); D.t.needsUpdate = true; D.last = key; }
+      const asp = D.ob.k === 'main' ? S.sig[D.ob.ref].aspect : D.ob.k === 'dist' ? S.dsig[D.ob.ref].aspect : (S.ls[D.ob.ref].sh1 ? 'X' : 'HP0');
+      const c = D.ob.k === 'ls' ? (asp === 'X' ? 0xf4f6ff : 0xff3b2f) : LIGHT[asp];
+      const blinkOff = (asp === 'KS1B') && (S.t % 1) >= 0.55;
+      if(!c || blinkOff){ D.sp.visible = false; continue; }
+      D.sp.visible = true; D.sp.material.color.setHex(c);
+      const near = Math.min(1, Math.max(0, (dist - 15)/60));
+      D.sp.material.opacity = (dist > LSICHT ? 0 : 1)*near*(NIGHT ? 1 : 0.95);
+      const sz = (NIGHT ? 0.03 : 0.02)*Math.min(1, 0.55 + dist/1500); D.sp.scale.set(sz, sz, 1);
+    }
+    // Züge
+    trains.forEach(t => { t.seen = false; });
+    S.oc.forEach(Tn => updTrain(Tn, Tn.kind, Tn.front, Tn.len, -4.2, -1));
+    S.cross.forEach((X, i) => { if(X && X.state === 'run') updTrain('x' + i, 'avg', X.front, 76, -4.2, -1); });
+    if(S.lead.on) updTrain('lead', 'lead', S.lead.front, S.lead.len, s => sideX(s), 1);
+    trains.forEach((t, k) => { if(!t.seen){ scene.remove(t.grp); t.grp.traverse(x => { if(x.material && x.material !== M.post) x.material.dispose && x.material.dispose(); }); trains.delete(k); } });
+    // Fahrgäste
+    let n = 0;
+    STATIONS.forEach((st, i) => {
+      const P = S.pax[i]; if(!P || (P.state !== 'pending' && P.state !== 'run')) return;
+      const cnt = P.state === 'pending' ? P.on : Math.round(P.on*(1 - Math.max(0, (P.prog - P.off/(P.on + P.off || 1))/(1 - P.off/(P.on + P.off || 1) || 1))));
+      if(st.stop - base > 500) return;
+      for(let k = 0; k < Math.min(cnt, 30) && n < 90; k++){
+        const h1 = hash(i*97 + k), h2 = hash(i*131 + k*7), s = st.stop - 15 - h1*Math.min(200, TRAIN_LEN + 30);
+        const d = st.g3 ? 6.9 - h2*1.9 : 2.35 + h2*1.9, q = W(s, d, PH + 0.82);
+        const hh = 1.6 + (h1*10 % 1)*0.3, lg = hh*0.47, tr = hh*0.36;
+        place(paxLeg, n, [0, 0, 0], [q[0], PH + lg/2, q[2]], 0, 1, lg, 1); paxLeg.setColorAt(n, LCOL[(k + i) % 3]);
+        place(pax, n, [0, 0, 0], [q[0], PH + lg + tr/2, q[2]], 0, 1, tr, 1); pax.setColorAt(n, PCOL[k % 5]);
+        place(paxHead, n, [0, 0, 0], [q[0], PH + lg + tr + 0.13, q[2]], 0, 1, 1.1, 1); paxHead.setColorAt(n, SKIN[(k*3 + i) % 3]); n++;
+      }
+    });
+    for(const m of [pax, paxLeg, paxHead]){ m.count = n; m.instanceMatrix.needsUpdate = true; m.instanceColor.needsUpdate = true; }
+    renderer.render(scene, camera);
+  };
+  // Bildschirmposition eines Streckenpunkts (für HUD-Beschriftungen)
+  R.project = function(s, d, h){ const p = W(s, d, h); const v = new T.Vector3(p[0], p[1], p[2]).project(camera); return v.z < 1 && v.z > -1 ? [(v.x + 1)/2, (1 - v.y)/2] : null; };
+  R.info = () => JSON.stringify(renderer.info.render) + ' ' + JSON.stringify(renderer.info.memory);
+  R.scene = scene; R.ground = ground; R.camera = camera;
+  R.dispose = function(){ CH.forEach(c => disposeChunk(c)); CH.clear(); };
+  return R;
+})();
+
+// HUD über der 3D-Ansicht: Magnet-Beschriftung (Lernhilfe), Führerstandsrahmen, Signal-Lupe und Anzeigen
+function overlay3d(){
+  const ctx = vctx, W = view.width, H = view.height;
+  if(!W || !H) return;
+  ctx.clearRect(0, 0, W, H);
+  const u = Math.max(H/450, 0.68*Math.min(window.devicePixelRatio || 1, 2));
+  if(lern){
+    for(const m of MAGNETS){
+      const z = m.pos - S.front; if(z < 4 || z > 150 || !(m.gg ? onGG(m.pos) : !onGG(m.pos))) continue;
+      const mx = (m.gg ? -4.2 : 0) + sideX(m.pos), q = R3.project(m.pos, 1.12 + mx, 0.3); if(!q) continue;
+      const ml = magLabel(m), f = ml.spd ? 0 : ml.f, fs = Math.max(9*u, Math.min(14*u, 1400*u/(z + 60)));
+      ctx.font = '700 ' + Math.round(fs) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
+      const label = ml.txt, tw = ctx.measureText(label).width + fs*0.7, x = q[0]*W, y = q[1]*H + fs*0.3;
+      const col = ml.spd ? '#7db8ff' : f === 1000 ? '#f2c230' : f === 500 ? '#ff6a5e' : f === 2000 ? '#b9c4ff' : '#8a9893';
+      ctx.globalAlpha = Math.min(1, (150 - z)/40);
+      ctx.fillStyle = 'rgba(12,16,15,.85)'; rr(ctx, x - tw/2, y, tw, fs*1.3, fs*0.25); ctx.fill();
+      ctx.strokeStyle = col; ctx.lineWidth = Math.max(1, 0.8*u); ctx.stroke();
+      ctx.fillStyle = col; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, x, y + fs*0.68);
+      ctx.globalAlpha = 1;
+    }
+  }
+  ctx.fillStyle = NIGHT ? '#070909' : '#121615';
+  ctx.fillRect(0, H - 14*u, W, 14*u);
+  hud(ctx, W, H, u);
+}
+
+// Umschalter 2D/3D (3D nur mit WebGL)
+let use3d = R3.ok;
+try{ if(localStorage.getItem('fst-3d') === '0') use3d = false; }catch(e){}
+function set3d(on){
+  use3d = on && R3.ok;
+  $('view3d').hidden = !use3d;
+  $('t3d').setAttribute('aria-pressed', String(use3d));
+  try{ localStorage.setItem('fst-3d', use3d ? '1' : '0'); }catch(e){}
+}
+if(!R3.ok){ $('t3d').disabled = true; $('t3d').title = '3D-Ansicht braucht WebGL'; }
+$('t3d').addEventListener('click', () => set3d(!use3d));
+set3d(use3d);
 new ResizeObserver(resize).observe(view);
 resize();
 let last = performance.now();
@@ -2904,11 +3528,12 @@ function frame(now){
   let dt = (now - last)/1000; last = now;
   if(dt > 0.1) dt = 0.1;
   if(!S.paused && !S.finished && !menuOpen && !fpOpen){ const n = Math.max(1, Math.ceil(dt/0.02)); for(let i = 0; i < n && !S.finished; i++) step(dt/n); }
-  render(); drawTacho(); updateUI();
+  if(use3d){ R3.frame(); overlay3d(); } else render();
+  drawTacho(); updateUI();
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-window.__arcs = () => ARCS; window.__ocz = () => OCZ;
+window.__r3 = R3; window.__set3d = set3d; window.__arcs = () => ARCS; window.__ocz = () => OCZ; window.__areas = () => AREAS; window.__branch = () => BRANCH;
 window.__sim = { hornOn, hornOff, get BUE(){ return BUE; }, pressStoer, pzbDead, get NE1(){ return NE1; }, get GG(){ return GG; }, get HM(){ return HM; }, get NE6(){ return NE6; }, get OBJS(){ return OBJS; }, kmAt, get BW(){ return BW; }, get DIST(){ return DIST; }, get TUNNELS(){ return TUNNELS; }, get FP(){ return FP; }, fpState, fmtClock, pressDoor, pressFdl, befreienVerbot, pzbActive, lmLen, get MAGNETS(){ return MAGNETS; }, get AVG(){ return AVG; }, setVehicle(v){ VEHICLE = v; }, get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
 })();
 </script>
