@@ -10,6 +10,7 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 - **2D-Ansicht:** Schalter „3D“ oben – für ältere Geräte; ohne WebGL startet automatisch 2D
 - **Führerstand in 3D:** Pult mit Tacho (zulässige Geschwindigkeit als gelbe Marke), Manometern (Hauptluftbehälter, Bremszylinder), Fahrplanbildschirm, PZB-Leuchtmeldern, Fahrzeug-Leuchtmeldern (HS, Stromabnehmer, Kompressor, Türen, Sifa), Schalterreihe, beweglichem Fahr-/Bremshebel und Schnellbremstaster; Frontscheibe mit Wischern und Sonnenblende, **Seitenfenster** mit Schiebefenster und Außenspiegeln, Rückwand mit Tür; Pultbeleuchtung bei Nacht und im Tunnel; Wagenkasten schwankt leicht, Stöße an Weichen
 - **Umschauen:** im Bild ziehen (Maus oder Finger), `←`/`→` bzw. `A`/`D` halten; Doppeltipp oder `C` zentriert
+- **Bildschirmaufteilung:** Das Bedienpult unten nimmt 30 % der Bildschirmhöhe ein, der Streckenblick den Rest; Handy quer: Pult als Spalte rechts (30 % der Breite, scrollbar)
 - **2D-Kabine:** in der 2D-Ansicht gezeichneter Fensterrahmen mit Pult; Schalter „Kabine“ blendet die Kabine aus
 
 ## Aufrüsten und Geräusche
