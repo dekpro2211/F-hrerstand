@@ -39,17 +39,18 @@ Lern- und Übungssimulator für den Führerstand: Signale nach DS 301 (Signalbuc
 - Druckluft: Kompressor schaltet bei 8 bar ein und bei 10 bar ab, jede Bremsung verbraucht Luft
 - Geräusche (Web Audio, nach dem Vorbild eines Drehstrom-Triebwagens nachgebildet): Hubantrieb des Stromabnehmers, Hauptschalter, Lüfter, Kompressor mit Abblasen, Pulswechselrichter mit gestuften Taktfrequenzen („Singen“ beim Anfahren und elektrischen Bremsen), Getriebe, Rollgeräusch, Fahrtwind, lauter im Tunnel, Achsstöße an Weichen und Bahnübergängen, Bremsluft und Lösen, Bremsenquietschen kurz vor dem Halt, Türwarnton und Türen, Zweiklang-Signalhorn, Vorbeifahrt von Gegenzügen
 
-## Straßenbahn Karlsruhe (Szenarien 31–35)
+## Straßenbahn Karlsruhe (Szenarien 31–36)
 
-Stadtlinien 1–5 mit der Haltestellenfolge aus dem KVV-Liniennetzplan (Stand 2023). Abstände, Gleislage, Kreuzungen, Weichen und Abschnitte (Rasengleis / Straßenraum) sind angenommen. Fahrzeug Straßenbahn (37 m, 70 km/h), keine PZB, Fahren auf Sicht nach BOStrab, Glocke statt Pfeife.
+Stadtlinien 1–5 und 8 mit der Haltestellenfolge aus dem KVV-Liniennetzplan (Stand 2023). Abstände, Gleislage, Kreuzungen, Weichen und Abschnitte (Rasengleis / Straßenraum) sind angenommen. Fahrzeug Straßenbahn (37 m, 70 km/h), keine PZB, Fahren auf Sicht nach BOStrab, Glocke statt Pfeife.
 
 | Nr. | Linie | Strecke |
 |---|---|---|
-| 31 | 1 | Neureut-Heide – Kunstakademie – Stadtbahntunnel (Europaplatz – Durlacher Tor) – Durlacher Allee – Durlach Turmberg |
-| 32 | 2 | Knielingen Nord – Mühlburger Tor – Europaplatz – Südweststadt – Hauptbahnhof – Tunnel (Kongresszentrum – Durlacher Tor) – Durlach – Wolfartsweier Nord |
-| 33 | 3 | Europaplatz – Karlstor – Hauptbahnhof – Tivoli – Rüppurrer Tor – Kronenplatz – Durlacher Tor – Hauptfriedhof – Rintheim |
+| 31 | 1 | Neureut-Heide – Kunstakademie – Mühlburger Tor – Stadtbahntunnel (Europaplatz – Durlacher Tor) – Durlacher Allee – Durlach Turmberg |
+| 32 | 2 | Knielingen Nord – Kaiserallee – Mühlburger Tor – Europaplatz – Südweststadt – Hauptbahnhof (Bahnhofsvorplatz) – Tunnel (Kongresszentrum – Durlacher Tor) – Durlach – Wolfartsweier Nord |
+| 33 | 3 | Rappenwört – Daxlanden – Entenfang – Kaiserallee – Europaplatz – Karlstor – Hauptbahnhof (Bahnhofsvorplatz) – Tivoli – Rüppurrer Tor – Kronenplatz – Durlacher Tor – Hauptfriedhof – Rintheim |
 | 34 | 4 | Oberreut Badeniaplatz – Weinbrennerplatz – Europaplatz – Kriegsstraße – Durlacher Tor – Hauptfriedhof – Waldstadt Europäische Schule |
-| 35 | 5 | Rheinhafen – Entenfang – Kühler Krug – Kriegsstraße – Rüppurrer Tor – Ostendstraße – Durlacher Allee – Durlach Bf |
+| 35 | 5 | Rheinhafen – Entenfang – Kühler Krug – Kriegsstraße – Rüppurrer Tor – Ostendstraße – Schloss Gottesaue – Durlacher Allee – Durlach Bf |
+| 36 | 8 | Durlach Turmberg – Schlossplatz – Friedrichschule – Auer Straße – Gritznerstraße – Aue – Wolfartsweier Nord |
 
 ## Albtalbahn S1/S11 (Szenarien 41–43)
 
@@ -132,6 +133,7 @@ Linien S1 und S11 der AVG mit allen Haltestellen und Kilometern nach der AVG-Fah
 | 20 | S4 | S4 Heilbronn – Öhringen | Innenstadt (BOStrab), Weinsberger Tunnel, Kreuzungen Weinsberg/Eschenau |
 | 23 | Tram-Train | Systemwechsel und Innenstadt | El 1v/El 1/El 2, So 2, F-/W-/G-Signale, Sh 4, Stadtbahntunnel (fiktive Strecke) |
 | 21 | S4 | S4 Gesamtstrecke | Grötzingen Oberausstraße – Öhringen-Cappel, ca. 91 km, 60 Halte |
+| 24 | S4 | S4 Übung: GPA und Bahnübergang | Geschwindigkeitsprüfabschnitt am Lf 6 „8“ (Einschaltmagnet, Messstrecke, 1000-Hz-Wirkmagnet, Ausschaltmagnet), Gefahr am Bahnübergang |
 
 Bestandene Szenarien werden im Browser gespeichert (localStorage).
 
@@ -152,6 +154,7 @@ Bestandene Szenarien werden im Browser gespeichert (localStorage).
 | `M` | Motor starten / abstellen (Aufrüsten) |
 | `←` `→` / `A` `D` | Umschauen in der 3D-Kabine, `C` zentriert |
 | `P` | Pause |
+| `K` | Freiflug „Erkunden“ ein/aus |
 
 Auf dem Smartphone werden Hebel und Tasten per Touch bedient.
 
@@ -176,3 +179,66 @@ Vereinfachte Fahrdynamik und PZB-Logik. Ersetzt weder Signalbuch noch Ausbildung
 MIT – siehe [LICENSE](LICENSE).
 
 Enthält [three.js](https://threejs.org) r128 (`three.min.js`), © 2010–2021 three.js authors, MIT-Lizenz.
+
+## Karlsruhe Hbf (Szenario 50, Vorschau)
+
+Bahnhof nach Vorbild für die künftigen Linien S8, S31 und S32: fünfschiffige Bahnsteighalle (1913, August Stürzenacker) mit verglasten Flanken, Laterne im Scheitel, Bogenbindern alle 9 m, Stützen zwischen den Gleispaaren und Glasschürzen an den Hallenenden mit Schriftzug „KARLSRUHE HBF“; fünf Inselbahnsteige unter der Halle (Gleis 1–10), zwei weitere mit Bahnsteigdächern (Gleis 11–14), Zugzielanzeiger mit Uhr und Gleisnummern, Stationsschilder, Pendelleuchten, Bänke, Weichenfächer an beiden Enden, Fahrleitung über allen Gleisen, Empfangsgebäude mit Kuppelhalle, abgestellte Stadtbahnwagen. Der Bahnhof wird über die Station (`hbf:{gleis, dir}`) eingebunden; das eigene Gleis und die Fahrtrichtung (West/Ost) legen die Lage aller Gleise fest. Szenario 50: Probefahrt Karlsruhe-Durlach – Karlsruhe Hbf Gleis 8.
+
+## Bahnhofsvorplatz Karlsruhe Hbf (Linien 2 und 3, Szenario 50)
+
+Nach Fotos und den Visualisierungen des Umbaus: gepflasterter Platz mit vier Straßenbahngleisen und drei Bahnsteigen (Glasdächer auf schlanken Stützen, gläserne Rückwände an den Sitzgruppen, Bänke, rote Haltestellenmaste mit „H“, Abfahrtsanzeiger, Fahrkartenautomaten), hohe Gittermaste mit Leuchtenkronen und Querseilen, Leuchtenmaste, Kiosk, Fahrräder vor dem Westflügel, Fahnen, Bäume und Fahrgäste.
+Empfangsgebäude: Mittelbau mit steilem Giebel (vier Reliefpfeiler mit Figuren, Uhr, fünf hohe Sprossenfenster), Eckpfeiler mit Ornamentblöcken, Vordach mit sechs gläsernen Oberlichtern und Schriftzug „Hauptbahnhof“, Kupferdach mit Glasflächen und dahinter die Kuppelhalle als Kupfertonne mit Laterne; Flügel mit zwei Geschossen, Mansarddach und Gauben, Eckpavillons an den Enden. Gegenüber die Häuserzeile am Bahnhofplatz (Hotelbauten mit Schieferdach, Arkadenhäuser mit rotem Mansarddach, Kolonnade mit Fahnen, Bürohaus). Nachts leuchten Eingänge und Uhr.
+Derselbe Platz steht in Szenario 50 hinter dem Empfangsgebäude nördlich der Bahnsteighalle (um 180° gedreht, Gelände dort eben, Straßenbahngleise mit Fahrleitung laufen beidseits als Straße weiter). Im Freiflug („Erkunden“) lässt sich von der Halle über das Gebäude auf den Platz fliegen.
+
+## Freiflug „Erkunden“
+
+Strecke ohne Zug ansehen: „Erkunden“ in der Kopfleiste (Taste `K`) oder „Strecke ansehen“ unter jeder Szenariokarte. Die Fahrt ist währenddessen angehalten und geht danach an derselben Stelle weiter (bei laufender Fahrt mit Pause). Das Streckenbild füllt den Bildschirm, die Abschnitte werden um den nächsten Streckenpunkt der Kamera gebaut.
+
+| Bedienung | Smartphone | Rechner |
+|---|---|---|
+| Fliegen | Steuerkreis links | `W` `A` `S` `D` / `↑` `↓` |
+| Umschauen | im Bild ziehen | Maus ziehen, `←` `→` drehen, `R` `F` neigen |
+| Höher / tiefer | ▲ / ▼ | `E` oder Leertaste / `Q` |
+| Tempo | „Tempo“ (0,3× – 8×) | `+` / `−`, `Shift` dreifach |
+| Vor / zurück in Blickrichtung | – | Mausrad |
+| Hinfliegen | Karte oben rechts antippen | Karte anklicken, `M` Ausschnitt (Strecke / 4 km / 1 km), `N` Karte ein/aus |
+| Halt anspringen | „Springen zu …“ | dto. |
+| Augenhöhe im Gleis | „Ins Gleis“ | `G` |
+| Beenden | „Beenden“ | `Esc` oder `K` |
+
+Die Geschwindigkeit wächst mit der Höhe über Grund; die Kamera bleibt mindestens 1,6 m über dem Gelände, im Tunnel über den Schienen, höchstens 1,8 km neben der Strecke.
+
+## Liniennetz Karlsruhe (gemeinsame Karte)
+
+Die Stadtlinien 1, 2, 3, 4, 5 und 8 liegen in einer Karte. Grundlage ist der Liniennetzplan: Lage jeder Haltestelle aus dem Plan (11,5 m je Bildpunkt, Ursprung Europaplatz), Linienführung als Polygonzug mit Kreisbögen an den Ecken (an Haltestellen eng, an Abzweigen mittel, an Stützpunkten weit). Gemeinsame Abschnitte laufen über dieselben Punkte und Knoten; jede Linie fährt auf dem rechten Gleis (2,1 m neben der Achse), Linien in Gegenrichtung (z. B. 1 und 8 in Durlach) nutzen das andere Gleis.
+
+- Umsteigehaltestellen: Mühlburger Tor, Yorckstraße, Schillerstraße, Europaplatz, Karlstor/Bundesgerichtshof, Mathystraße, Otto-Sachs-Straße, Ebertstraße, Hauptbahnhof, Poststraße, Ettlinger Tor, Rüppurrer Tor, Durlacher Tor, Karl-Wilhelm-Platz, Hauptfriedhof, Marktplatz/Kronenplatz (U), Gottesauer Platz, Tullastraße, Weinweg, Untermühlstraße, Auer Straße, Gritznerstraße bis Wolfartsweier, Friedrichschule, Schlossplatz, Turmberg.
+- Andere Linien im Bild: eigene Gleise (Rillenschienen bzw. Rasengleis), Straßenraum, Fahrleitung, Haltestellen mit Bahnsteigen an beiden Gleisen, Häuserzeilen; gemeinsame Abschnitte zeichnet nur die eigene Strecke, unterirdische Abschnitte und Rampen des Stadtbahntunnels werden ausgelassen.
+- Kreuzungen zweier Linien an der Oberfläche (Entenfang, Weinbrennerplatz, Rüppurrer Tor) mit Fahrsignal vor der Kreuzung; zufällige Straßenkreuzungen in der Nähe entfallen.
+- Enge Bögen mit Geschwindigkeitsbeschränkung nach v ≈ 4,6·√R (Lf 6/Lf 7 als G-Tafeln).
+- Zwischen den Linien Blockbebauung (Raster 76 m, nach der nächsten Strecke ausgerichtet, in der Innenstadt höher); im Stadtgebiet keine Felder und kein Wald.
+- Freiflug: Karte mit dem ganzen Netz in den Linienfarben; beim Überfliegen einer anderen Linie wird deren Strecke aufgebaut (Kamera bleibt an ihrem Ort), beim Beenden geht es mit der ursprünglichen Fahrt weiter.
+- Neu: Mathystraße auch bei Linie 2 und 5 (nach dem Netzplan). Fahrpläne aller Stadtlinien neu berechnet.
+
+### S1/S11 im Liniennetz
+
+Der Stadtabschnitt der S1/S11 (BOStrab, km 12,85–23,6) liegt in derselben Karte: Haus Bethlehem, Kurt-Schumacher-Straße, August-Bebel-Straße, Knielinger Allee/Städt. Klinikum, dann gemeinsam mit Linie 2 Moltkestraße – Yorckstraße – Mühlburger Tor, im Stadtbahntunnel mit Linie 1/2 Europaplatz – Marktplatz (Kaiserstraße, Pyramide) – Ettlinger Tor – Kongresszentrum, wieder gemeinsam mit Linie 2/3 Augartenstraße – Poststraße – Hauptbahnhof (Vorplatz), ab dem Knoten westlich des Vorplatzes nach Süden Albtalbahnhof – Dammerstock – Rüppurr – Battstraße. Hardtbahn (Hochstetten – Neureut) und Albtalbahn (Ettlingen – Bad Herrenalb/Ittersbach) behalten ihre Bögen und sind an den Stadtabschnitt angehängt (gedreht und verschoben, sodass sie in dessen Richtung ankommen). Die Kilometrierung wird im Stadtabschnitt zwischen den Haltestellen auf die Weglänge der Karte abgebildet.
+
+Am Bahnhofsvorplatz fährt die S1/S11 westwärts auf dem Gegengleis der Linien 2 und 3 und hält am nördlichen Bahnsteig; der Vorplatz wird dafür um 180° gedreht aufgebaut, das Empfangsgebäude liegt links (Süden). Fahrpläne der Szenarien 41 und 42 neu berechnet.
+
+## S4-Übung: Geschwindigkeitsprüfabschnitt und Bahnübergang (Szenario 24)
+
+Grötzingen Oberausstraße – Wössingen nach Buchfahrplan. Lage des GPA und der beiden Bahnübergänge angenommen (Übung).
+
+- **GPA vor dem Esig Jöhlingen** (100 → 80 km/h): Lf 6 „8“ bei km 5,05, Lf 7 „8“ am Esig km 6,2.
+  Aufbau wie im WBT: **Einschaltmagnet** (km 4,85) – **Messstrecke 200 m** – **1000-Hz-Wirkmagnet am Lf 6** – **Ausschaltmagnet** 50 m dahinter.
+  Der Einschaltmagnet startet ein Zeitglied (Prüfzeit = 200 m bei 95 km/h ≈ 7,6 s). Erreicht der Zug den Wirkmagneten,
+  solange die Prüfzeit läuft, war er im Mittel schneller als 95 km/h: 1000-Hz-Beeinflussung (Wachsam binnen 4 s, danach 1000-Hz-Überwachung).
+  Ist die Zeit abgelaufen, ist der Magnet unwirksam. Der Ausschaltmagnet stellt die Anlage zurück.
+  Mit Lernhilfe zeigen die Magnetschilder den Zustand: „GPA Ein“, „GPA 1000 Hz · 3,2 s“ (Zeitglied läuft), „GPA unwirksam“, „GPA Aus“.
+- **Gefahr am Bahnübergang:** An einem der beiden technisch gesicherten Bahnübergänge (km 6,45 hinter dem Jöhlinger Tunnel oder km 8,55 vor Wössingen,
+  zufällig) umfährt ein Pkw die geschlossene Halbschranke und bleibt im Gleis liegen. Richtig: Achtungssignal Zp 1 (Taste H), sofort Schnellbremsung (SB),
+  nach dem Halt das gefährliche Ereignis dem Fdl melden (Taste Fdl). Der Pkw-Fahrer bekommt den Motor wieder an, wenn der Zug steht; danach Weiterfahrt auf Sicht
+  mit höchstens 20 km/h über den Bahnübergang. Fehler: kein Achtungssignal, Weiterfahrt ohne Meldung; Zusammenstoß bricht die Fahrt ab.
+  Wer erst reagiert, wenn der Pkw schon steht, schafft es bei 100 km/h nur noch mit Schnellbremsung.
+
