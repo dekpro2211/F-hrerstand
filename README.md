@@ -134,6 +134,17 @@ Linien S1 und S11 der AVG mit allen Haltestellen und Kilometern nach der AVG-Fah
 | 23 | Tram-Train | Systemwechsel und Innenstadt | El 1v/El 1/El 2, So 2, F-/W-/G-Signale, Sh 4, Stadtbahntunnel (fiktive Strecke) |
 | 21 | S4 | S4 Gesamtstrecke | Grötzingen Oberausstraße – Öhringen-Cappel, ca. 91 km, 60 Halte |
 | 24 | S4 | S4 Übung: GPA und Bahnübergang | Geschwindigkeitsprüfabschnitt am Lf 6 „8“ (Einschaltmagnet, Messstrecke, 1000-Hz-Wirkmagnet, Ausschaltmagnet), Gefahr am Bahnübergang |
+| 51 | S4 PZB | Halt erwarten (500 Hz) | Ks 2, 1000 Hz, 500 Hz vor dem Esig Bauerbach: 65 → 45 km/h auf 153 m, Halt vor Hp 0 |
+| 52 | S4 PZB | Restriktiv bei der Zugkreuzung | Flehingen: Stand über 15 s → 45/25 km/h, AVG-Regel 500 Hz + 15 s unter 30 km/h → 25 km/h, richtig befreien |
+| 53 | S4 PZB | Startprogramm und Späthalt | Startprogramm 45/25 (AVG 550 m), Halt in Bt-Wannenweg vor Bksig 21 mit Hp 0 |
+| 54 | S4 PZB | Zs 3 „3“ vor Eppingen | Zs 3v, 500 Hz 150 m vor dem Esig, 30 km/h im Weichenbereich |
+| 55 | S4 PZB | Ersatzsignal Zs 1 | Esig Wössingen gestört, Befehl über 2000 Hz mit höchstens 40 km/h |
+| 56 | S4 PZB | Vorsichtsignal Zs 7 | Befehl, Fahrt auf Sicht bis Bksig 7, stehender Zug im Abschnitt |
+| 57 | S4 PZB | Gegengleis mit Zs 8 | Jöhlingen West – Wössingen auf dem Gegengleis, 2000 Hz an der Ne 1 |
+| 58 | S4 PZB | Abfahrt nur bei Fahrt | Asig Bretten bleibt auf Hp 0 über die Abfahrtszeit hinaus |
+| 59 | S4 PZB | Signal fällt auf Halt | Bksig 702 fällt 420 m vor dem Zug auf Halt: Schnellbremsung, Fdl melden |
+| 60 | S4 PZB | Gestörte Streckeneinrichtung | 2000 Hz am Fahrt zeigenden Bksig 3: Zwangsbremsung ohne Verschulden, melden |
+| 61 | S4 PZB | Befreien zur falschen Zeit | Esig Sulzfeld kommt erst spät in Fahrt; vorzeitiges Befreien → 500 Hz → Zwangsbremsung |
 
 Bestandene Szenarien werden im Browser gespeichert (localStorage).
 
@@ -241,4 +252,24 @@ Grötzingen Oberausstraße – Wössingen nach Buchfahrplan. Lage des GPA und de
   nach dem Halt das gefährliche Ereignis dem Fdl melden (Taste Fdl). Der Pkw-Fahrer bekommt den Motor wieder an, wenn der Zug steht; danach Weiterfahrt auf Sicht
   mit höchstens 20 km/h über den Bahnübergang. Fehler: kein Achtungssignal, Weiterfahrt ohne Meldung; Zusammenstoß bricht die Fahrt ab.
   Wer erst reagiert, wenn der Pkw schon steht, schafft es bei 100 km/h nur noch mit Schnellbremsung.
+
+## Eine Karte für alle Szenarien
+
+Alle sichtbaren Szenarien liegen in einer gemeinsamen Karte (Koordinaten des Liniennetzplans):
+
+- **Straßenbahnlinien 1–5, 8** und **S1/S11** wie bisher im Liniennetz.
+- **S4**: Anbindung in **Durlach Bf** am Ende der Linie 5 über Hubstraße und Grötzingen Bahnhof zur Oberausstraße (Grötzingen Bahnhof = km 0,0), dann Kraichgaubahn über Bretten, Eppingen und Heilbronn bis Öhringen. Die Bögen sind für die ganze Strecke einmal festgelegt (grob nach der echten Lage der Orte) – die Szenarien 17–21 und 24 nehmen ihren Ausschnitt daraus. Bahnübergänge, GPA und Gelände sind dadurch in jedem S4-Szenario gleich.
+- **Szenario 50**: DB-Strecke von Karlsruhe-Durlach zur Bahnsteighalle des Hauptbahnhofs (Gleis 8), genau hinter dem Bahnhofsvorplatz der Linien 2 und 3.
+- **Szenarien 16 und 23** (Beispielstrecken, fiktiv): zweigen in Durlach bzw. Grötzingen ab.
+- Gelände: fester Zufallswert für die ganze Karte; Bäume, Häuser und Wald entlang der Strecke richten sich nach der Lage auf der Strecke, nicht nach dem Szenario.
+
+Freiflug: Die Karte oben rechts zeigt in jedem Szenario dasselbe Netz (Knopf: Netz, Strecke, 4 km, 1 km). Fliegt man zu einer anderen Strecke oder über das Ende des Abschnitts hinaus, wird der passende Abschnitt aufgebaut – die Kamera bleibt an derselben Stelle.
+
+Leistung: Schilder und Signaltafeln werden ohne Rücklesen aus der Grafikkarte ausgemessen (das hat beim Aufbau der Abschnitte mehrere Sekunden gekostet), der Aufbau im Freiflug ist je Bild zeitlich begrenzt, Gelände nach Sprüngen wird über mehrere Bilder nachgeladen. Die 2D-Ansicht stürzte mit einem vorausfahrenden Zug im Bild ab – behoben.
+
+## S4: PZB-Übungen mit 500 Hz und 2000 Hz (Szenarien 51–61, Zugart O)
+
+Alle Übungen laufen auf echten Abschnitten der S4 mit Zugart O (AVG: O fest). Überwachung nach PZB 90: 1000 Hz 165 → 85 km/h in 23 s, 500 Hz am Magneten 65 km/h und 153 m danach 45 km/h, restriktiv 45/25 km/h, Startprogramm 45/25 km/h (AVG bis Befreien oder 550 m), 2000 Hz am Hp 0 sofort Zwangsbremsung, mit Befehl (Zs 1, Zs 7, Zs 8) höchstens 40 km/h.
+
+Neu in der Simulation dafür: Haltfall (Signal fällt vor dem Zug auf Halt; Zwangsbremsung zählt nicht als Fehler, wenn binnen 3 s mindestens voll gebremst wurde), Signal kommt erst bei Annäherung in Fahrt, gestörter 2000-Hz-Magnet am Fahrt zeigenden Signal (Meldung an den Fdl), Startprogramm bei Fahrtbeginn, stehender Zug im Abschnitt, der erst weiterfährt, wenn man dahinter steht.
 
