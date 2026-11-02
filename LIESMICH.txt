@@ -1,0 +1,33 @@
+Signal-Karteikarten (DS 301) – als App aufs Handy
+=================================================
+
+Dieser Ordner ist eine Web-App (PWA). Einmal online gestellt, lässt sie sich
+auf Android und iPhone wie eine normale App installieren: eigenes Symbol,
+Vollbild ohne Browserleiste, funktioniert danach auch offline.
+
+1) Online stellen (einmalig, kostenlos, ca. 2 Minuten)
+   - Am PC https://app.netlify.com/drop öffnen.
+   - Den ENTPACKTEN Ordner "signal-karteikarten" in das Feld ziehen.
+   - Netlify zeigt eine Adresse wie https://xyz-123.netlify.app
+     (kostenloses Konto anlegen, damit die Seite dauerhaft bleibt).
+
+2) Android (Chrome)
+   - Die Adresse in Chrome öffnen.
+   - Menü ⋮ > "App installieren" (oder "Zum Startbildschirm hinzufügen").
+
+3) iPhone (Safari – nur Safari kann das)
+   - Die Adresse in Safari öffnen.
+   - Teilen-Symbol (Quadrat mit Pfeil) > "Zum Home-Bildschirm" > "Hinzufügen".
+
+Hinweise
+   - Karten, Markierungen, Statistik und Fortschritt werden auf dem Gerät
+     gespeichert, jedes Handy hat seinen eigenen Stand.
+   - Neue Version: den neuen Ordner wieder bei Netlify hochladen (beim selben
+     Projekt "Deploys" > Ordner hineinziehen). Die App lädt das Update beim
+     nächsten Öffnen mit Internet; der Fortschritt bleibt erhalten.
+   - Am PC geht auch einfach: index.html doppelklicken.
+
+Echte APK für Android (optional)
+   - Wenn die App bei Netlify online ist: https://www.pwabuilder.com öffnen,
+     die Netlify-Adresse eingeben, "Package for stores" > Android > Download.
+     Die APK-Datei kann man auf dem Android-Handy direkt installieren.
