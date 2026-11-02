@@ -273,3 +273,11 @@ Alle Übungen laufen auf echten Abschnitten der S4 mit Zugart O (AVG: O fest). �
 
 Neu in der Simulation dafür: Haltfall (Signal fällt vor dem Zug auf Halt; Zwangsbremsung zählt nicht als Fehler, wenn binnen 3 s mindestens voll gebremst wurde), Signal kommt erst bei Annäherung in Fahrt, gestörter 2000-Hz-Magnet am Fahrt zeigenden Signal (Meldung an den Fdl), Startprogramm bei Fahrtbeginn, stehender Zug im Abschnitt, der erst weiterfährt, wenn man dahinter steht.
 
+
+## Signalstandorte und Bü 4 (Korrektur)
+
+- Ne 4 (Schachbretttafel): Steht ein Hauptsignal links vom Gleis (S4, in oder kurz vor Linksbögen), steht die Ne 4 jetzt als eigene Tafel rechts vom Gleis in Höhe des Signals – an der Stelle, an der das Signal regelmäßig stehen würde. Bisher hing sie fälschlich am links stehenden Signalmast.
+- Signale und Tafeln stehen nicht mehr übereinander: Vorsignale und Lf 6 rücken bei Konflikt mit einem Hauptsignal, einer Haltetafel, einem Weichen-/Fahrsignal oder Bahnübergang etwas vor, Lf 7 etwas zurück; Ne 3, Bahnhofsnamenschild und W-Signal werden optisch versetzt.
+- Steht ein Hauptsignal mitten im Bahnsteig vor dem Halteplatz (Zsig 39,9 in Eppingen Pbf, Bksig 32 in Trappensee), beginnt der Bahnsteig erst hinter dem Signal.
+- Bü 4 (Pfeiftafel): Pfeifen zählt ab kurz vor der Tafel (etwa 4 s Fahrzeit, mindestens 60 m) bis zum Bahnübergang, zusammen mindestens 2 s („etwa 3 Sekunden“). Zu kurze Pfiffe meldet die Lernhilfe mit der gemessenen Dauer, die Fehlermeldung nennt sie ebenfalls.
+- Pfeife und Befehl-Taste auf dem iPad: Halten über Touch-Ereignisse, ohne Wisch-/Langdruck-Geste, die das Halten bisher nach kurzer Zeit abbrechen konnte.
