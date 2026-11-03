@@ -281,3 +281,11 @@ Neu in der Simulation dafür: Haltfall (Signal fällt vor dem Zug auf Halt; Zwan
 - Steht ein Hauptsignal mitten im Bahnsteig vor dem Halteplatz (Zsig 39,9 in Eppingen Pbf, Bksig 32 in Trappensee), beginnt der Bahnsteig erst hinter dem Signal.
 - Bü 4 (Pfeiftafel): Pfeifen zählt ab kurz vor der Tafel (etwa 4 s Fahrzeit, mindestens 60 m) bis zum Bahnübergang, zusammen mindestens 2 s („etwa 3 Sekunden“). Zu kurze Pfiffe meldet die Lernhilfe mit der gemessenen Dauer, die Fehlermeldung nennt sie ebenfalls.
 - Pfeife und Befehl-Taste auf dem iPad: Halten über Touch-Ereignisse, ohne Wisch-/Langdruck-Geste, die das Halten bisher nach kurzer Zeit abbrechen konnte.
+
+## Führerstand GT8-100D/2S-M nach Fotos (Wagen 858 A)
+
+- Hauptpult: Foto vom Fahrersitz, vom Augpunkt (etwa 2,3 m über Schienenoberkante) auf die Pultfläche projiziert – aus jeder Blickrichtung wie im echten Wagen: Nummernschild „858 - A“, Federspeicher, PZB-Melderfeld, Batteriespannung (0–40 V), Tacho 0–120 km/h mit Schild „Zul. Höchstgeschwindigkeit 100 km/h“, Türmelder 1–4, Weichentaster, Druckluftmanometer (0–12 bar), Stromanzeiger, Melderfeld BMA/NBÜ/FGSW, Notbremse, Schalterleiste (Batteriehauptschalter … Scheibenwischer), beige Türtasterkappen.
+- Beweglich bzw. schaltend: Tacho-, Spannungs- und Manometerzeiger, PZB-Melder (85/70, 1000/500 Hz, Befehl 40, Zwangsbremse), Sifa, Sammelstörung, Türmelder, Weichentaster nach W-Signal, Haltewunsch.
+- Seitenpult links (entzerrte Fotos): Fahrschalter mit Bogenkulisse (Fahren vorn, Bremsen hinten, bewegt sich mit dem Hebel), Richtungswender, Schalterfeld, IBIS mit Betriebsnummer, Linienlisten, Armlehne, Schwanenhalsmikrofon.
+- Gerätesäule rechts (Foto): RBL-Bediengerät mit Uhrzeit, Systemanzeige 750 V / 15 kV (leuchtet je nach Fahrdrahtspannung), GSM-R-Gerät, Funkgerät „Kanal 03“; Funkhörer, Haltegriff, Heizgitter.
+- Führerraum: beige Eckholme, Rollos halb heruntergezogen, Innenspiegel, Scheibenwischer, Außenspiegel. Nachts und im Tunnel wird die Pultbeleuchtung gedämpft.
