@@ -5338,7 +5338,8 @@ const R3 = (() => {
     else if(PR) PR.visible = false;
     if(wx === 'schnee'){ if(!SN) SN = mkPrecip(true); SN.visible = true; SN.geometry.setDrawRange(0, nP); const U = SN.material.uniforms; U.uT.value = (performance.now()/1000) % 900; U.uCam.value.copy(cwp); U.uPx.value = FOREST.uniforms.uScale.value; U.uCol.value.setHex(NIGHT ? 0x8a9098 : 0xf4f6fa); }
     else if(SN) SN.visible = false;
-    const cabV = cab.visible && !R.freeCam, wet = wx === 'regen' && cabV && q !== 'low' && !TUNNELS.some(t => base > t.from + 15 && base < t.to);
+    const cabV = cab.visible && !R.freeCam, g8c = cabV && G8.grp.visible, covered = TUNNELS.some(t => base > t.from + 15 && base < t.to), wet = wx === 'regen' && cabV && !g8c && q !== 'low' && !covered;
+    if(g8c) G8.weather(wx, covered, v, q === 'low');
     if(wet){ if(!DRP) DRP = mkDrops(); DRP.mesh.visible = true; dropsFrame(DRP, 1, v); } else if(DRP) DRP.mesh.visible = false;
     const inT = TUNNELS.some(t => base >= t.from && base <= t.to), beamOn = cabV && q !== 'low' && (NIGHT || inT || vis < 1600);
     if(beamOn){ if(!BEAM) BEAM = mkBeam(); BEAM.visible = true; BEAM.material.opacity = NIGHT ? 0.05 + (vis < 1000 ? 0.05 : vis < 1600 ? 0.03 : 0) : inT ? 0.04 : vis < 1000 ? 0.025 : 0.012; } else if(BEAM) BEAM.visible = false;
@@ -7232,6 +7233,7 @@ const R3 = (() => {
       // Haltegriff: hellgrauer Bügel vor dem rechten Pultteil
       const hp = [new T.Vector3(0.06, y2 - 0.05, z2 + 0.01), new T.Vector3(0.07, y2 - 0.14, z2 + 0.12), new T.Vector3(0.12, y2 - 0.30, z2 + 0.17), new T.Vector3(0.30, y2 - 0.34, z2 + 0.18), new T.Vector3(0.46, y2 - 0.30, z2 + 0.16), new T.Vector3(0.50, y2 - 0.14, z2 + 0.10), new T.Vector3(0.50, y2 - 0.05, z2 + 0.01)];
       const hc = new T.CatmullRomCurve3(hp), hr = new T.Mesh(new T.TubeGeometry(hc, 40, 0.019, 10), new T.MeshLambertMaterial({color:0xd3d3cd})); grp.add(hr); }
+    const WIPE = {list:[], drops:[], p:0, wait:0, mode:'aus', last:0, dirty:false};
     // ---- Führerraum: Boden, Frontscheibe mit Rahmen, Seitenfenster, Decke, Rollos, Innenspiegel, Rückwand ----
     { const ZB = -1.02, YB = 2.57, ZT = -0.86, YT = 3.98, XL = -0.80, XR = 1.02, SL = -0.90, SR = 1.13, CE = 4.03, ZR = 0.95;
       const add = (mat, w, h, d, x, y, z, rx, ry, rz) => { const m = new T.Mesh(G.box, mat); m.scale.set(w, h, d); m.position.set(x, y, z); m.rotation.set(rx || 0, ry || 0, rz || 0); grp.add(m); return m; };
@@ -7240,10 +7242,35 @@ const R3 = (() => {
       const tilt = Math.atan2(ZT - ZB, YT - YB), mid = (a, b) => (a + b)/2, PL = Math.hypot(YT - YB, ZT - ZB);
       const blk = new T.MeshLambertMaterial({color:0x1b1d1e});
       add(blk, XR - XL + 0.1, 0.12, 0.08, mid(XL, XR), YT + 0.04, ZT + 0.02);                                  // Rahmen oben
-      for(const [x, s] of [[XL, -1], [XR, 1]]){ const p = add(beige, 0.11, PL, 0.07, x, mid(YB, YT), mid(ZB, ZT), -tilt); add(rubber, 0.022, PL, 0.075, x - s*0.06, mid(YB, YT), mid(ZB, ZT), -tilt); add(rubber, 0.022, PL, 0.075, x + s*0.06, mid(YB, YT), mid(ZB, ZT), -tilt); }
-      // Scheibenwischer (außen, geparkt)
-      for(const [x0, s] of [[-0.56, 1], [0.86, -1]]) for(const dx of [0, 0.05]){ add(rubber, 0.008, 0.55, 0.01, x0 - s*(0.16 + dx), YB + 0.33, ZB - 0.06, -tilt, 0, s*0.85); }
-      add(rubber, 0.014, 0.36, 0.016, -0.74, YB + 0.33, ZB - 0.075, -tilt, 0, 0.85); add(rubber, 0.014, 0.36, 0.016, 1.0, YB + 0.3, ZB - 0.075, -tilt, 0, -0.85);
+      for(const [x, s] of [[XL, -1], [XR, 1]]){ const p = add(beige, 0.11, PL, 0.07, x, mid(YB, YT), mid(ZB, ZT), tilt); add(rubber, 0.022, PL, 0.075, x - s*0.06, mid(YB, YT), mid(ZB, ZT), tilt); add(rubber, 0.022, PL, 0.075, x + s*0.06, mid(YB, YT), mid(ZB, ZT), tilt); }
+      // Scheibenwischer: Parallelogrammwischer nach den Fotos von 858 A – je zwei parallele Arme mit Drehpunkt an der Scheibenunterkante,
+      // oben ein Kopfstück mit Bügel; daran ist das lange Wischblatt (etwa 0,9 m) etwa in der Mitte geklemmt, es reicht nach oben über die Augenhöhe
+      // und nach unten bis zur Scheibenunterkante und bleibt beim Wischen senkrecht. Ruhestellung außen an den Eckholmen.
+      // Lage in der Scheibenebene: x quer, s von der Unterkante die Scheibe hinauf (Gruppe gF, lokale z-Achse zum Fahrer)
+      const gF = new T.Group(); gF.position.set(0, YB, ZB); gF.rotation.x = tilt; grp.add(gF);
+      const wArm = new T.MeshLambertMaterial({color:0x1d1e1f}), wBlade = new T.MeshLambertMaterial({color:0x0a0a0a}), wCar = new T.MeshLambertMaterial({color:0x2e3134}), wMet = new T.MeshLambertMaterial({color:0x55595c});
+      WIPE.s0 = -0.05;   // Drehpunkte knapp unter der sichtbaren Scheibenunterkante
+      WIPE.list = [{px:-0.436, dx:-0.058, R:0.59, park:-27.5*D, inner:48*D, up:0.42, dn:0.50}, {px:0.548, dx:0.083, R:0.68, park:33.3*D, inner:-48*D, up:0.40, dn:0.52}].map(w => {
+        const arms = [0, w.dx].map(o => { const piv = new T.Group(); piv.position.set(w.px + o, WIPE.s0, -0.035); gF.add(piv);
+          const a = new T.Mesh(G.box, wArm); a.scale.set(0.009, w.R, 0.008); a.position.y = w.R/2; piv.add(a);
+          const hub = new T.Mesh(G.cyl, wMet); hub.scale.set(0.012, 0.02, 0.012); hub.rotation.x = Math.PI/2; piv.add(hub); return piv; });
+        const head = new T.Group(); gF.add(head);
+        { const b = new T.Mesh(G.box, wArm); b.scale.set(Math.abs(w.dx) + 0.03, 0.014, 0.01); b.position.set(w.dx/2, 0, -0.033); head.add(b);
+          const hook = new T.Mesh(new T.TorusGeometry(0.018, 0.0035, 6, 12, Math.PI), wMet); hook.position.set(w.dx + Math.sign(w.dx)*0.022, 0, -0.033); hook.rotation.z = Math.sign(w.dx) > 0 ? -Math.PI/2 : Math.PI/2; head.add(hook);
+          // Wischblatt: Bügel (Träger mit Krallen) und Gummilippe an der Scheibe, Klemmstück am Kopf
+          const L = w.up + w.dn, yc = (w.up - w.dn)/2;
+          const car = new T.Mesh(G.box, wCar); car.scale.set(0.02, L, 0.014); car.position.set(0, yc, -0.02); head.add(car);
+          const lip = new T.Mesh(G.box, wBlade); lip.scale.set(0.007, L - 0.01, 0.012); lip.position.set(0, yc, -0.008); head.add(lip);
+          for(const f of [-0.42, -0.14, 0.14, 0.42]){ const c = new T.Mesh(G.box, wArm); c.scale.set(0.026, 0.024, 0.01); c.position.set(0, yc + f*L, -0.022); head.add(c); }
+          for(const e of [-1, 1]){ const c = new T.Mesh(G.box, wArm); c.scale.set(0.022, 0.012, 0.016); c.position.set(0, yc + e*(L/2 - 0.006), -0.02); head.add(c); }
+          const cl = new T.Mesh(G.box, wMet); cl.scale.set(0.034, 0.05, 0.022); cl.position.set(0, 0, -0.03); head.add(cl); }
+        return Object.assign(w, {arms, head, a:w.park, a0:w.park});
+      });
+      WIPE.XL = XL; WIPE.XR = XR; WIPE.PL = PL;
+      // Regentropfen bzw. Schneeflocken auf der Scheibe (Canvas in der Scheibenebene, die Wischblätter räumen ihren Wischbereich frei)
+      { const cv = document.createElement('canvas'); cv.width = 512; cv.height = 400; const t = tex(cv);
+        const m = new T.Mesh(new T.PlaneGeometry(XR - XL, PL), new T.MeshBasicMaterial({map:t, transparent:true, depthWrite:false, fog:false}));
+        m.position.set(mid(XL, XR), PL/2, -0.004); m.renderOrder = 6; m.visible = false; gF.add(m); Object.assign(WIPE, {cv, g:cv.getContext('2d'), t, mesh:m}); }
       // Seitenwände mit Fenstern (Brüstung, Fensterholm oben), Ecken zur Frontscheibe
       for(const [x, s] of [[SL, -1], [SR, 1]]){
         const YS = 2.575;   // Fensterbrüstung auf Höhe des Seitenpults
@@ -7256,7 +7283,7 @@ const R3 = (() => {
       // Rollos: Kasten oben, Behang etwa 22 cm heruntergezogen (wie auf den Fotos)
       const blind = new T.MeshLambertMaterial({color:0xb9b8b1, side:T.DoubleSide});
       for(const [x0, x1] of [[XL + 0.08, 0.10], [0.12, XR - 0.08]]){ add(new T.MeshLambertMaterial({color:0x9c9d99}), x1 - x0 + 0.02, 0.06, 0.07, mid(x0, x1), YT - 0.02, ZT + 0.07);
-        const b = new T.Mesh(G.plane, blind); b.scale.set(x1 - x0, 0.22, 1); b.position.set(mid(x0, x1), YT - 0.16, ZT + 0.065 + 0.02); b.rotation.x = -tilt; grp.add(b);
+        const b = new T.Mesh(G.plane, blind); b.scale.set(x1 - x0, 0.22, 1); b.position.set(mid(x0, x1), YT - 0.16, ZT + 0.065 + 0.02); b.rotation.x = tilt; grp.add(b);
         add(blk, x1 - x0, 0.012, 0.02, mid(x0, x1), YT - 0.27, ZT + 0.09); }
       // Lautsprecher in der Decke
       add(new T.MeshLambertMaterial({color:0xcfc4a6}), 0.16, 0.012, 0.1, 0.1, CE - 0.025, ZT + 0.35);
@@ -7296,7 +7323,44 @@ const R3 = (() => {
         let c = clockC.getContext('2d'); c.fillStyle = '#e6f05a'; c.fillRect(0, 0, 160, 48); c.fillStyle = '#111'; c.font = '600 34px "Barlow Condensed","Arial Narrow",sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(tx, 80, 26); clockT.needsUpdate = true;
         c = gsmC.getContext('2d'); c.fillStyle = '#0c0d0e'; c.fillRect(0, 0, 128, 40); c.fillStyle = '#f2f2f2'; c.font = '700 28px "Barlow Condensed","Arial Narrow",sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(tx, 64, 21); gsmT.needsUpdate = true; }
     }
-    return {grp, update};
+    // Scheibenwischer nach Wetter: Regen Dauerbetrieb (etwa 40 Wischspiele/min), Schnee Intervall, sonst aus – ein angefangenes Wischspiel läuft
+    // immer bis in die Ruhestellung zu Ende (Endabschaltung). Beide Wischer laufen gegenläufig zur Mitte und zurück.
+    const dropI = cnv(24, 24, g => { const gr = g.createRadialGradient(10, 9, 1, 12, 12, 11); gr.addColorStop(0, 'rgba(255,255,255,.8)'); gr.addColorStop(0.35, 'rgba(190,205,215,.38)'); gr.addColorStop(0.8, 'rgba(40,50,60,.45)'); gr.addColorStop(1, 'rgba(40,50,60,0)'); g.fillStyle = gr; g.beginPath(); g.arc(12, 12, 11, 0, 7); g.fill(); });
+    const flakeI = cnv(24, 24, g => { const gr = g.createRadialGradient(12, 12, 1, 12, 12, 11); gr.addColorStop(0, 'rgba(255,255,255,.95)'); gr.addColorStop(0.55, 'rgba(240,244,250,.75)'); gr.addColorStop(1, 'rgba(230,236,245,0)'); g.fillStyle = gr; g.beginPath(); g.arc(12, 12, 11, 0, 7); g.fill(); });
+    function weather(wx, covered, v, lowQ){
+      const W = WIPE, now = performance.now(), dt = Math.min(0.1, (now - (W.last || now))/1000); W.last = now;
+      if(!W.list.length) return;
+      const rain = wx === 'regen' && !covered, snow = wx === 'schnee' && !covered;
+      W.mode = wx === 'regen' ? 'dauer' : wx === 'schnee' ? 'intervall' : 'aus';
+      // Wischerstellung
+      const T1 = 1.5;
+      if(W.wait > 0) W.wait -= dt;
+      else if(W.mode !== 'aus' || W.p > 0){ W.p += dt/T1; if(W.p >= 1){ W.p = 0; if(W.mode === 'intervall') W.wait = 5; } }
+      const k = 0.5 - 0.5*Math.cos(Math.PI*2*W.p);
+      for(const w of W.list){ w.a0 = w.a; w.a = w.park + (w.inner - w.park)*k;
+        for(const piv of w.arms) piv.rotation.z = -w.a;
+        w.head.position.set(w.px + Math.sin(w.a)*w.R, W.s0 + Math.cos(w.a)*w.R, 0); }
+      // Tropfen bzw. Flocken (Glaskoordinaten in m)
+      const show = (rain || snow || W.drops.length) && !lowQ;
+      W.mesh.visible = !!show; if(!show){ if(W.drops.length && lowQ) W.drops = []; return; }
+      const SW = W.XR - W.XL, SH = W.PL;
+      if(rain) for(let i = 0; i < dt*(45 + Math.min(1, v/20)*40); i++) W.drops.push({x:W.XL + Math.random()*SW, s:Math.random()*SH, r:0.008 + Math.random()*0.016, sn:false, age:0});
+      if(snow) for(let i = 0; i < dt*14*(0.4 + Math.min(1, v/15)); i++) W.drops.push({x:W.XL + Math.random()*SW, s:Math.random()*SH, r:0.005 + Math.random()*0.01, sn:true, age:0});
+      const up = v > 11 ? Math.min(1, (v - 11)/15) : 0;
+      for(const d of W.drops){ d.age += dt; if(!rain && !d.sn) d.dry = (d.dry || 0) + dt; if(!d.sn){ d.s += (-0.004 + up*0.07)*dt*(d.r/0.01); d.x += (d.x - (W.XL + SW/2))/SW*up*0.03*dt; } }
+      W.drops = W.drops.filter(d => {
+        if(d.s < -0.02 || d.s > SH + 0.02 || (d.sn && d.age > 25) || d.dry > 15) return false;   // Flocken tauen, Tropfen trocknen ab
+        for(const w of W.list){ const lo = Math.min(w.a0, w.a), hi = Math.max(w.a0, w.a); if(hi - lo < 1e-4) continue;
+          const q = (d.x - w.px)/w.R; if(q < -1 || q > 1) continue; const th = Math.asin(q), tol = 0.012/w.R;
+          if(th < lo - tol || th > hi + tol) continue; const st = W.s0 + Math.cos(th)*w.R; if(d.s <= st + w.up + 0.01 && d.s >= st - w.dn - 0.01) return false; }
+        return true; });
+      if(W.drops.length > 520) W.drops.splice(0, W.drops.length - 520);
+      if(now - (W.drawT || 0) < 40) return; W.drawT = now;
+      const g = W.g, sx = 512/SW, sy = 400/SH; g.clearRect(0, 0, 512, 400);
+      for(const d of W.drops){ const X = (d.x - W.XL)*sx, Y = (SH - d.s)*sy, r = d.r*sx; g.globalAlpha = d.sn ? Math.min(1, (25 - d.age)/5) : 1 - (d.dry || 0)/15; g.drawImage(d.sn ? flakeI : dropI, X - r, Y - r, r*2, r*2); }
+      g.globalAlpha = 1; W.t.needsUpdate = true;
+    }
+    return {grp, update, weather};
   })();
   // ---------- Führerstand Bombardier ET 2010 nach Fotos: gerundete Armaturentafel mit Blendschutz – links Display mit Softkeys, Instrumentendisplay (Tacho, Symbole),
   //            Tastenfeld 4 × 4, Touch-Display; rechts Seitenpult mit Drehschaltern und Gerätesäule; links Seitenpult mit Fahr-/Bremshebel (Seitenstick), Armlehne ----------

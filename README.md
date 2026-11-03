@@ -289,3 +289,9 @@ Neu in der Simulation dafür: Haltfall (Signal fällt vor dem Zug auf Halt; Zwan
 - Seitenpult links (entzerrte Fotos): Fahrschalter mit Bogenkulisse (Fahren vorn, Bremsen hinten, bewegt sich mit dem Hebel), Richtungswender, Schalterfeld, IBIS mit Betriebsnummer, Linienlisten, Armlehne, Schwanenhalsmikrofon.
 - Gerätesäule rechts (Foto): RBL-Bediengerät mit Uhrzeit, Systemanzeige 750 V / 15 kV (leuchtet je nach Fahrdrahtspannung), GSM-R-Gerät, Funkgerät „Kanal 03“; Funkhörer, Haltegriff, Heizgitter.
 - Führerraum: beige Eckholme, Rollos halb heruntergezogen, Innenspiegel, Scheibenwischer, Außenspiegel. Nachts und im Tunnel wird die Pultbeleuchtung gedämpft.
+
+### GT8: Scheibenwischer
+
+- Parallelogrammwischer wie am Wagen 858 A: je zwei parallele Arme mit Drehpunkt an der Scheibenunterkante (hinter der Pultabdeckung), oben ein Kopfstück mit Bügel. Daran ist das lange Wischblatt (etwa 0,9 m, Bügel mit Krallen und Gummilippe) etwa in der Mitte geklemmt: es reicht nach oben deutlich über die Augenhöhe und nach unten bis zur Scheibenunterkante und bleibt beim Wischen senkrecht – der Wischbereich ist ein hoher Bogen über das Sichtfeld. Ruhestellung außen an den Eckholmen (Lage nach den Fotos vom Fahrersitz und von außen).
+- Nach Wetter: Regen – Dauerbetrieb (gut 40 Wischspiele je Minute), Schnee – Intervall (alle 5 s ein Wischspiel), sonst aus. Ein angefangenes Wischspiel läuft bis in die Ruhestellung zu Ende; beide Wischer laufen gegenläufig zur Mitte und zurück.
+- Tropfen und Schneeflocken liegen auf der GT8-Frontscheibe selbst; die Wischblätter räumen genau ihren Wischbereich frei. Ohne Regen trocknen die Tropfen ab, Flocken tauen. Im Tunnel kommen keine neuen Tropfen dazu.
