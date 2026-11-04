@@ -73,6 +73,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:1.2rem;letter-spacing:
 @keyframes pulser{50%{background:#4a1d19}}
 .dtxt{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .r-zug .lbl{margin-left:auto}
+.pzbsw{display:inline-flex;gap:4px;flex-wrap:nowrap}#zugart[hidden],#zugartL[hidden],.pzbsw[hidden],.chip[hidden]{display:none}.pzbsw .chip{padding-inline:6px}.pzbsw .chip.off{background:#5a1d18;border-color:#b3402f;color:#ffd9d2}.pzbsw .chip.wait{background:#4d4214;border-color:#b39a2f}
 .chip.fdl.alert{border-color:var(--blue);color:var(--blue);animation:pulseb .8s steps(2) infinite}
 @keyframes pulseb{50%{background:#173a5e}}
 .lm{display:grid;place-items:center;aspect-ratio:1;border-radius:50%;border:2px solid #0c0f0e;font-family:var(--f-display);font-weight:700;font-size:.7rem;line-height:1;text-align:center;color:#3c4744;background:#141917;max-width:38px;width:100%;justify-self:center;transition:background .08s}
@@ -333,6 +334,22 @@ body{margin:0;padding-block:6px 8px}
 body.flying{overflow:hidden}
 body.flying .app > :not(.view), body.flying .help{display:none!important}
 body.flying .view{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;max-height:none!important;min-height:0!important;aspect-ratio:auto!important;border:0!important;border-radius:0!important;z-index:60;margin:0}
+.nbu{position:absolute;left:10px;top:44px;z-index:4;background:rgba(14,17,16,.86);border:1px solid #39413d;border-radius:8px;padding:6px 7px;font-family:var(--f-display);color:#cfd6d2;display:flex;flex-direction:column;gap:5px;-webkit-user-select:none;user-select:none}
+.nbu[hidden]{display:none}
+.nbu-t{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#8f9a95;font-weight:600}
+.nbu-lm{display:flex;gap:8px;font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.nbu-lm span{display:flex;align-items:center;gap:4px}
+.nbu-lm i{width:11px;height:11px;border-radius:50%;background:#1b201e;border:1px solid #0b0d0c;display:block}
+.nbu-lm i.g{background:#3ddc6a;box-shadow:0 0 7px #3ddc6a}.nbu-lm i.r{background:#ff3a2a;box-shadow:0 0 8px #ff3a2a}
+.nbu-sw{display:flex;border:1px solid #39413d;border-radius:5px;overflow:hidden}
+.nbu-sw button,.nbu-b button{appearance:none;font-family:inherit;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:#1a1f1d;color:#cfd6d2;border:0;padding:5px 8px;cursor:pointer;touch-action:manipulation;flex:1}
+.nbu-sw button+button{border-left:1px solid #39413d}
+.nbu-sw button[aria-pressed="true"]{background:#c9a227;color:#1b1503}
+.nbu-b{display:flex;gap:4px}.nbu-b button{border:1px solid #39413d;border-radius:5px}
+.nbu-b button.alert{border-color:#ff5a45;color:#ffd0c8;animation:pulser .8s steps(2) infinite}
+#bIcS{color:#9fe8bb}#bIcL{color:#ffb3aa}
+@media (max-width:600px), (max-height:520px){.nbu{top:32px;left:6px;padding:4px 5px;gap:3px}.nbu-t{font-size:.5rem}.nbu-sw button,.nbu-b button{font-size:.54rem;padding:3px 5px}.nbu-lm{font-size:.52rem;gap:5px}.nbu-lm i{width:9px;height:9px}}
+body.flying .nbu{display:none}
 #flyUi{position:absolute;inset:0;pointer-events:none;z-index:5;font-family:var(--f-display);-webkit-user-select:none;user-select:none}
 #flyUi[hidden]{display:none}
 .fly-top{position:absolute;left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px));top:max(10px,env(safe-area-inset-top,0px));display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
@@ -400,6 +417,12 @@ body.flying .view{position:fixed!important;inset:0!important;width:100%!importan
   </header>
 
   <section class="view" aria-label="Blick auf die Strecke"><canvas id="view3d" hidden></canvas><canvas id="view"></canvas>
+    <div class="nbu" id="nbuBox" role="group" aria-label="NBÜ-Bedienteil" hidden>
+      <div class="nbu-t">NBÜ · Intercom</div>
+      <div class="nbu-lm"><span><i id="nbuLmN"></i>NBÜ</span><span><i id="nbuLmF"></i>FGN/Stör</span><span><i id="nbuLmI"></i>Notruf</span></div>
+      <div class="nbu-sw" id="nbuSw" title="Umschalter NBÜ Prüflauf/Aus/Ein (Taste N)"><button data-p="test">Test</button><button data-p="aus">Aus</button><button data-p="ein">Ein</button></div>
+      <div class="nbu-b"><button id="bNbuQ" title="Quittieren (Taste U)">Quitt</button><button id="bIcS" title="Intercom Sprechen (Taste I)">Sprechen</button><button id="bIcL" title="Intercom Löschen (Taste O)">Löschen</button></div>
+    </div>
     <div id="flyUi" hidden>
       <div class="fly-top">
         <div class="fly-info" id="flyInfo" aria-live="off">–</div>
@@ -456,7 +479,12 @@ body.flying .view{position:fixed!important;inset:0!important;width:100%!importan
       <div class="row r-zug">
         <button class="chip fdl" id="bFdl" title="Fahrdienstleiter verständigen (Taste F)">Fdl</button>
         <button class="chip stoer" id="bStoer" aria-pressed="false" title="PZB-Störschalter (verplombt, Taste X) – nur bei ständiger Zwangsbremsung">Stör</button>
-        <span class="lbl">Zugart</span>
+        <span class="pzbsw" id="pzbSw" role="group" aria-label="PZB-Schalttafel">
+          <button class="chip" id="bPzbHS" aria-pressed="true" title="PZB-Hauptschalter ein/aus (Taste J) – aus- und wieder einschalten bei Störungen, danach etwa 8 s bis betriebsbereit">HS</button>
+          <button class="chip" id="bFrs" title="Fahrtrichtungsschalter „V“ / „0“ (Taste V) – in „V“ wird die PZB aktiv (Startprogramm)">FRS V</button>
+          <button class="chip" id="bHahn" aria-pressed="true" title="PZB-Luftabsperrhahn auf/zu (Taste L) – nur bei Störungen der Pneumatik bzw. nicht lösbarer Zwangsbremsung">Hahn</button>
+        </span>
+        <span class="lbl" id="zugartL">Zugart</span>
         <div class="seg" id="zugart" role="group" aria-label="Zugart">
           <button data-z="O" aria-pressed="false">O</button><button data-z="M" aria-pressed="true">M</button><button data-z="U" aria-pressed="false">U</button>
         </div>
@@ -497,9 +525,9 @@ body.flying .view{position:fixed!important;inset:0!important;width:100%!importan
         <h3>Bedienung</h3>
         <ul>
           <li>Hebel: ziehen oder <kbd>▲</kbd>/<kbd>▼</kbd> bzw. <kbd>W</kbd>/<kbd>S</kbd>. Oben Fahrstufen F1–F8, unten Bremsstufen B1–B7 und SB (Schnellbremsung).</li>
-          <li><kbd>Q</kbd> Wachsam · <kbd>E</kbd> Frei · <kbd>B</kbd> Befehl (halten) · <kbd>Leertaste</kbd> Sifa · <kbd>F</kbd> Fdl · <kbd>X</kbd> PZB-Störschalter · <kbd>H</kbd> Pfeife (halten) · <kbd>T</kbd> Türen · <kbd>M</kbd> Motor (Aufrüsten) · <kbd>P</kbd> Pause · <kbd>V</kbd> Außenansicht des eigenen Zuges (ziehen dreht, Mausrad zoomt) · Umschauen (3D): im Bild ziehen oder <kbd>←</kbd>/<kbd>→</kbd> bzw. <kbd>A</kbd>/<kbd>D</kbd> halten, Doppeltipp oder <kbd>C</kbd> zentriert</li>
+          <li><kbd>Q</kbd> Wachsam · <kbd>E</kbd> Frei · <kbd>B</kbd> Befehl (halten) · <kbd>Leertaste</kbd> Sifa · <kbd>F</kbd> Fdl · <kbd>X</kbd> PZB-Störschalter · <kbd>J</kbd> PZB-Hauptschalter · <kbd>V</kbd> Fahrtrichtungsschalter V/0 · <kbd>L</kbd> PZB-Luftabsperrhahn · <kbd>N</kbd> NBÜ-Schalter Test/Aus/Ein · <kbd>U</kbd> NBÜ Quitt · <kbd>I</kbd>/<kbd>O</kbd> Intercom Sprechen/Löschen (GT8 im Stadtbahntunnel) · <kbd>H</kbd> Pfeife (halten) · <kbd>T</kbd> Türen · <kbd>M</kbd> Motor (Aufrüsten) · <kbd>P</kbd> Pause · <kbd>V</kbd> Außenansicht des eigenen Zuges (ziehen dreht, Mausrad zoomt) · Umschauen (3D): im Bild ziehen oder <kbd>←</kbd>/<kbd>→</kbd> bzw. <kbd>A</kbd>/<kbd>D</kbd> halten, Doppeltipp oder <kbd>C</kbd> zentriert</li>
           <li>Straßenbahn Karlsruhe (Szenarien 31–36, Linien 1–5 und 8): Haltestellenfolge nach dem aktuellen Liniennetzplan, Abstände, Kreuzungen und Weichen angenommen; keine PZB, Fahren auf Sicht nach BOStrab, im Stadtbahntunnel H-/V-Signale mit Abfahrt nach 20 s Haltezeit.</li>
-          <li>Tram-Train (Szenario 23): El 1v kündigt im halben Bremswegabstand das El 1 an: Fahrschalter auf 0, spätestens am El 1 Hauptschalter aus (<kbd>M</kbd> während der Fahrt), Systemtrennstelle antriebslos durchrollen; erst wenn der Stromabnehmer das El 2 (mit Tafel „750 V =“) passiert hat, wieder ein. Ab So 2 BOStrab: Fahrsignal F 0 Halt, F 1 Fahrt frei, F 4 Halt erwarten, „A“ = Fahrtanforderung angenommen; W 1–3 (Weiche nicht verschlossen) höchstens 15 km/h, W 11–13 verschlossen; Sh 4 Läutetafel: <kbd>H</kbd> läutet die Glocke; G 1a kündigt an, G 2a/G 4 gelten ab dem Signal; im Stadtbahntunnel H-/V-Signale.</li>
+          <li>Tram-Train (Szenario 23): El 1v kündigt im halben Bremswegabstand das El 1 an: Fahrschalter auf 0, spätestens am El 1 Hauptschalter aus (<kbd>M</kbd> während der Fahrt), Systemtrennstelle antriebslos durchrollen; erst wenn der Stromabnehmer das El 2 (mit Tafel „750 V =“) passiert hat, wieder ein. Beim GT8 statt des Hauptschalters den Linienschütz aus- und wieder einlegen (Handbuch 2.6), die Systemwahl schaltet selbsttätig um. Ab So 2 BOStrab: Fahrsignal F 0 Halt, F 1 Fahrt frei, F 4 Halt erwarten, „A“ = Fahrtanforderung angenommen; W 1–3 (Weiche nicht verschlossen) höchstens 15 km/h, W 11–13 verschlossen; Sh 4 Läutetafel: <kbd>H</kbd> läutet die Glocke; G 1a kündigt an, G 2a/G 4 gelten ab dem Signal; im Stadtbahntunnel H-/V-Signale.</li>
           <li>„Fahrplan“ zeigt den Buchfahrplan mit Ankunft und Abfahrt (½ = 30 s). Nicht vor der Abfahrtszeit abfahren – vorzeitige Abfahrt ist ein Fehler. Uhr und Verspätung stehen unten rechts im Streckenbild.</li>
           <li>An jedem Bahnhof und Haltepunkt: an der Haltetafel halten, Türen freigeben, Fahrgastwechsel abwarten, Türen schließen. Mit offenen Türen ist die Traktion gesperrt.</li>
           <li>„Szenarien“ öffnet die Auswahl: 17 Übungsfahrten in drei Stufen und 6 Fahrten auf der S4 (Szenario 24: GPA und Gefahr am Bahnübergang) und 11 PZB-Übungen auf der S4 mit 500 Hz und 2000 Hz, Zugart O (51–61). Bestandene Szenarien werden in diesem Browser gespeichert.</li>
@@ -549,9 +577,12 @@ body.flying .view{position:fixed!important;inset:0!important;width:100%!importan
           <li><b>1000 Hz</b> (Vr 0, Vr 2, Ks 2, ständige Langsamfahrstelle): binnen 4 s Wachsam. Kurve O 165 → 85 km/h in 23 s, M 125 → 70 in 29 s, U 105 → 55 in 38 s. Leuchtmelder 1000 Hz 700 m, Überwachung 1250 m. Neue 1000-Hz-Beeinflussung: erneut Wachsam.</li>
           <li><b>Wachsam</b> auch an Signalen in Warnstellung ohne wirksamen Magnet: Ks 1 blinkend und Lf 6 bis Kennziffer 9.</li>
           <li><b>500 Hz</b> 250 m vor Hp 0 und 150 m vor Zs 3 bis Kennziffer 3: O 65 → 45, M 50 → 35, U 40 → 25 km/h auf 153 m. <b>2000 Hz</b> am Hp 0: sofort Zwangsbremsung.</li>
-          <li><b>Restriktiv</b> nach mehr als 15 s unter 10 km/h: 85/70 Wechselblinken, 45 km/h, bei 500 Hz 25 km/h. Startprogramm nach dem Aufrüsten ebenso. AVG-Stadtbahn: Halt in den ersten 500 m = Frühhalt (VÜ 3), Gleichblinken, 65 km/h bis 800 m.</li>
-          <li><b>Befreien</b> (Frei): technisch erst nach 700 m und ohne 500 Hz. Zulässig nur, wenn das nächste Hauptsignal Fahrt über 30 km/h zeigt und keine 500-Hz-Beeinflussung folgt – sonst „Unberechtigtes Befreien“ und Zwangsbremsung am 500-Hz-Magnet.</li>
-          <li><b>Befehl</b> nur mit Zs 1, Zs 7, Zs 8 oder schriftlichem Befehl: halten, bis Befehl 40 leuchtet. Über 40 km/h wirkungslos.</li>
+          <li><b>Restriktiv</b> nach mehr als 15 s unter 10 km/h (Umschaltgeschwindigkeit): 85/70 Wechselblinken, 45 km/h, bei 500 Hz 25 km/h. Jede laufende 1000-Hz-Überwachung für sich: sie endet 1250 m nach ihrem Magneten; eine danach folgende 1000-Hz-Beeinflussung läuft nicht restriktiv (Ril 483.0111 Abschn. 4 (5), (12)). AVG-Stadtbahn: Halt in den ersten 500 m = Frühhalt (VÜ 3), Gleichblinken, 65 km/h bis 800 m.</li>
+          <li><b>500 Hz restriktiv</b> (Regelfahrzeug, Ril 483.0111 Abschn. 4 (9)): wenn die Umschaltgeschwindigkeit (O: 30 → 10 km/h in 153 m, M/U: 10 km/h) 15 s unterschritten ist – O 45 → 25 km/h, M/U 25 km/h; Beginn in 0–100 m: 200 m (kurz), in 100–250 m: 250 m (lang); läuft schon eine restriktive 1000-Hz-Überwachung: sofort 200 m restriktiv. Ende mit kurzem Hupton, danach ist eine laufende 1000-Hz-Überwachung ebenfalls restriktiv. Solange LM 500 Hz leuchtet, bleibt LM 1000 Hz dunkel.</li>
+          <li><b>Startprogramm</b> (Fahrtrichtungsschalter in „V“, Neuaufrüsten): restriktive 1000-Hz-Überwachung, 700 m gelten als abgelaufen (befreibar), endet nach 550 m. 85/70 Wechselblinken erst nach dem Anfahren (ab 5 km/h).</li>
+          <li><b>Prüfgeschwindigkeit</b> ohne Beeinflussung: O 165, M 125, U 105 km/h, höchstens vFz + 5 km/h (AVG: 105 km/h), im PZB-Störbetrieb 100 km/h. Darüber nach 7 s Intervallton und intermittierende Zwangsbremsung, bei weiterer Erhöhung durchgehend; unter der Prüfgeschwindigkeit hebt sie sich selbst auf.</li>
+          <li><b>Befreien</b> (Frei): technisch erst 700 m nach der letzten 1000-Hz-Beeinflussung und ohne 500 Hz. Zulässig nur, wenn das nächste Hauptsignal Fahrt über 30 km/h zeigt und keine 500- oder 1000-Hz-Beeinflussung innerhalb von 550 m zu erwarten ist. Die befreite Überwachung läuft 1250 m im Hintergrund weiter: 500 Hz → Zwangsbremsung, erneute 1000 Hz → Zwangsbremsung, wenn schneller als 85 (70, 55) km/h.</li>
+          <li><b>Befehl</b> nur mit Zs 1, Zs 7, Zs 8, schriftlichem Befehl oder an der Ne 1 am Gegengleis: halten, bis Befehl 40 leuchtet. Solange die Befehlstaste gedrückt ist, ertönt ein Ton und die PZB überwacht 40 km/h – darüber Zwangsbremsung.</li>
           <li><b>GPA</b> an Lf 6: Kennziffer 8 wirksam über 95 km/h, 9 über 105 km/h (1000 Hz). Aufbau (Szenario 24): Einschaltmagnet – Messstrecke – 1000-Hz-Wirkmagnet am Lf 6 – Ausschaltmagnet. Der Einschaltmagnet startet ein Zeitglied; ist es beim Erreichen des Wirkmagneten noch nicht abgelaufen, war der Zug zu schnell und der Magnet wirkt. <b>GÜ</b> vor Lf 7 ab Kennziffer 10: 2000 Hz über der Prüfgeschwindigkeit (100 → 120, 110 → 130, 120 → 135, 130 → 140, 140 → 150 km/h).</li>
           <li>Alle Überwachungsgeschwindigkeiten mindestens <b>5 km/h unterfahren</b>.</li>
           <li><b>Nach PZB-Zwangsbremsung:</b> Stillstand, Fdl verständigen (Taste Fdl), Zustimmung abwarten – am Hauptsignal Befehl 2 –, Fahrschalter in Bremsstellung, Frei. Leuchtmelder: 85/70 dunkel, 1000/500 blinken, „Fzg hat gesandet“ leuchtet. Frei nur im Stillstand.</li>
@@ -560,8 +591,20 @@ body.flying .view{position:fixed!important;inset:0!important;width:100%!importan
           <li><b>Störschalter</b> (Taste Stör, nur im Stillstand) nur, wenn die PZB ständig Zwangsbremsungen erzeugt oder es für die Weiterfahrt technisch erforderlich ist. Dann 85 dunkel, 1000 Hz blinkt, höchstens 50 km/h, melden.</li>
           <li><b>AVG-Stadtbahn:</b> nach 500 Hz länger als 15 s unter 30 km/h → nur noch 25 km/h (Wechselblinken + 500 Hz). Startprogramm im neu aufgerüsteten Führerstand: 45 km/h bis Befreien oder 550 m.</li>
           <li><b>Leuchtmelderblock</b> wie im GT8 (I60R): 85, 70, 1000 Hz, 500 Hz, Befehl 40, „Fzg hat gesandet“ (wirksame Zwangsbremsung) und die Leuchttaster „Indusi Befehl“ und „Indusi Frei“. Beim Regelfahrzeug zusätzlich 55.</li>
-          <li><b>Funktionsprüfung</b> täglich: im Stillstand Wachsam und Frei gleichzeitig (auf dem Handy kurz nacheinander).</li>
+          <li><b>Funktionsprüfung</b> täglich: im Stillstand bei HLL etwa 5 bar Wachsam und Frei gleichzeitig (auf dem Handy kurz nacheinander). 85, 70, 55, Befehl 40, 500 Hz und 1000 Hz leuchten nacheinander auf, Drucksenkung und Ton, danach nur der Zugart-LM. Die Zwangsbremsung nicht mit dem Führerbremsventil unterstützen.</li>
+          <li><b>PZB-Schalttafel</b>: PZB-Hauptschalter (J), Fahrtrichtungsschalter V/0 (V), PZB-Luftabsperrhahn (K), Störschalter (X) – nur im Stillstand. Nach dem Einschalten etwa 8 s bis betriebsbereit, dann blinkt der blaue LM (Zugdaten).</li>
+          <li><b>Unregelmäßigkeiten</b> (Ril 483.0111 A01/A02, Übungen 62–66): alle LM dunkel → PZB gestört, 50 km/h, melden, im Stillstand Hauptschalter aus/ein und Fahrtrichtungsschalter 10 s „0“; Zwangsbremsung lässt sich nicht lösen → FT, Fahrtrichtungsschalter 10 s „0“, Hauptschalter 10 s aus, zuletzt Hauptschalter aus und Luftabsperrhahn zu (50 km/h); LM 1000 Hz blinkt 10 s mit Ton, 85 leuchtet (Störungssammelmeldung) → melden, ohne Einschränkung weiter; LM leuchtet bei der Funktionsprüfung nicht → Fahrtrichtungsschalter „0“/„V“ bzw. Hauptschalter aus/ein, wiederholen, sonst melden; wiederholte Zwangsbremsungen ohne Ursache → Fdl, Hauptschalter aus/ein, dann Störschalter (50 km/h).</li>
           <li><b>Sifa:</b> spätestens alle 30 s betätigen, sonst Leuchtmelder, Summer und Zwangsbremsung; im Stillstand mit Sifa oder Frei zurücksetzen.</li>
+        </ul>
+        <h3>GT8-100D/2S-M (nach Bedienhandbuch der AVG)</h3>
+        <ul>
+          <li><b>Fahrzeugdaten:</b> 37,6 m, 58,5 t leer, 4 × 127 kW, Anfahrbeschleunigung 1,0 m/s², Betriebsbremse 1,6 m/s², Schnellbremsung 2,73 m/s² (mit Magnetschienenbremse, Sand und Glocke), höchstens 100 km/h – darüber Summton und nach 6 s Zwangsbremsung.</li>
+          <li><b>Sifa im Befehlsgeber:</b> beim Fahren gedrückt; spätestens nach 24 s kurz loslassen und wieder drücken (<kbd>Leertaste</kbd>), sonst Summton und Fahrstrom aus – innerhalb von 6 s reagieren, sonst Zwangsbremsung bis zum Stillstand. Fahrstrom danach erst wieder, wenn der Befehlsgeber über „0“ zurück nach „Fahren“ geht.</li>
+          <li><b>Zwangsbremsung</b> nur im Stillstand aufheben: Befehlsgeber über „Bremsen“ nach „0“ (nach PZB zusätzlich Frei).</li>
+          <li><b>Haltestellenbremse:</b> setzt beim Bremsen unter 7 km/h ein und hält den Wagen; sie löst, sobald der Befehlsgeber in „Fahren“ steht und genug Zugkraft aufgebaut ist (kein Zurückrollen am Berg).</li>
+          <li><b>Manometer:</b> gelber Zeiger Vorratsluft 8–10 bar (ab 7 bar fahrbereit); roter Zeiger Bremsleitung – gelöst 6 bar, Befehlsgeber über 55 % 3–4,2 bar (Blending je nach Beladung), Haltestellenbremse 3 bar, Schnellbremse etwa 1 bar, Rüstzustand „0“ (FRS 0) 0 bar.</li>
+          <li><b>Türen:</b> eine während der Fahrt erteilte Türfreigabe (<kbd>T</kbd>) wird erst unter 7 km/h mit der Haltestellenbremse wirksam, der Fahrstrom ist dann unterbrochen; Anfahren nur mit allen Türen zu.</li>
+          <li><b>NBÜ im Stadtbahntunnel</b> (Szenario 25): Prüflauf im Stillstand (FRS V, Türen zu): Schalter „Test“ (<kbd>N</kbd>), Alarm mit „Quitt“ (<kbd>U</kbd>), dann „Ein“. Die Überbrückung wirkt ab 10 s nach der Anfahrt. Fahrgastnotbremse: „FGN/Stör“ rot und Alarm – innerhalb von 10 s quittieren, sonst Zwangsbremsung; über Intercom sprechen (<kbd>I</kbd>, Löschen <kbd>O</kbd>), Leitstelle verständigen (<kbd>F</kbd>), nicht im Tunnel halten, bis zur nächsten Haltestelle fahren. Nach Halt mit Türfreigabe wirkt die Notbremse – Notbremsgriff zurückstellen (Quitt). Am Bahnsteig und bis 10 s nach der Anfahrt bremst eine Notbremse sofort.</li>
         </ul>
       </div>
     </div>
@@ -642,7 +685,7 @@ const ZUGART = {
   M:{vmax:125,v1000:70,t1000:29,v500a:50,v500e:35,lamp:'70'},
   U:{vmax:105,v1000:55,t1000:38,v500a:40,v500e:25,lamp:'55'}
 };
-const LVL = {1:'Leicht', 2:'Mittel', 3:'Schwer', 4:'S4 nach Buchfahrplan (AVG)', 9:'S4: PZB-Übungen 500 Hz und 2000 Hz (Zugart O)', 5:'Tram-Train (AVG, EBO und BOStrab)', 6:'Straßenbahn Karlsruhe (Linien 1–5 und 8)', 7:'Albtalbahn S1/S11 (AVG): Hochstetten – Karlsruhe – Bad Herrenalb / Ittersbach', 8:'Karlsruhe Hbf (S8, S31, S32)'};
+const LVL = {1:'Leicht', 2:'Mittel', 3:'Schwer', 4:'S4 nach Buchfahrplan (AVG)', 9:'S4: PZB-Übungen (Zugart O) – 500 Hz, 2000 Hz und Störungen nach Ril 483.0111', 5:'Tram-Train (AVG, EBO und BOStrab)', 6:'Straßenbahn Karlsruhe (Linien 1–5 und 8)', 7:'Albtalbahn S1/S11 (AVG): Hochstetten – Karlsruhe – Bad Herrenalb / Ittersbach', 8:'Karlsruhe Hbf (S8, S31, S32)'};
 const SCEN = [
  {id:1, kurven:[[4660,5657,6,"RLR"]], nr:'RB 3801', clock:'06:12:00', fp:{regel:[[0,60],[210,240],[390,420],[600,600]], avg:[[0,60],[210,240],[390,420],[600,600]]}, lvl:1, title:'Erste Fahrt', goal:'PZB-Funktionsprüfung (Wachsam und Frei gleichzeitig), Startprogramm befreien, Lf 6 mit Wachsam bestätigen (Prüfabschnitt über 95 km/h), Zs 3, Sifa, Halt an der Haltetafel.',
   zug:'M', lineV:100, lern:true, test:true,
@@ -756,9 +799,9 @@ const SCEN = [
   halts:[{name:'Birkenweg',pos:1800},{name:'Fichtenhain',pos:6900}],
   stations:[{name:'Ahornfeld',from:-240,to:20,stop:0,first:true},{name:'Eichstetten',from:4780,to:5025,stop:5000},{name:'Grünhaid',from:10280,to:10525,stop:10500}],
   main:[{id:'A',sys:'ks',pos:80},{id:'B',sys:'ks',pos:3000,block:true},{id:'C',sys:'ks',pos:4400,zs3:6},{id:'D',sys:'ks',pos:5400,cond:{st:1,t:25}},{id:'E',sys:'hv',pos:8300,block:true},{id:'F',sys:'hv',pos:9900,hp2:true}],
-  pzbFaults:[{pos:2400, kind:'dark'}, {pos:7600, kind:'zb'}], end:10800},
+  pzbFaults:[{pos:2400, kind:'dark', fix:'hs'}, {pos:7600, kind:'zb'}], end:10800},
  {id:23, lvl:5, avgOnly:true, nr:'S 4 TT', clock:'07:12:00', fp:{avg:[[0,60],[210,240],[390,420],[510,540],[690,720],[900,930],[1080,1110],[1260,1260]]}, title:'Tram-Train: Systemwechsel und Innenstadt',
-  goal:'Beispielstrecke (fiktiv): EBO-Strecke mit PZB, Systemwechsel 15 kV ~ / 750 V = (El 1v, El 1, El 2 mit Spannungstafel: Hauptschalter aus und erst nach El 2 wieder ein), Ende der Zugsicherung (So 2), BOStrab: Rasengleis mit G-Signalen, Kreuzungen mit Fahrsignalen F 0/F 1/F 4 und Anforderung (A), Weichensignale W 11/W 1 (15 km/h), Läutetafel Sh 4, Straßenbahn in der Straße, Stadtbahntunnel mit H-/V-Signalen und unterirdischen Haltestellen.',
+  goal:'Beispielstrecke (fiktiv): EBO-Strecke mit PZB, Systemwechsel 15 kV ~ / 750 V = (El 1v, El 1, El 2 mit Spannungstafel: Hauptschalter aus und erst nach El 2 wieder ein, beim GT8 den Linienschütz), Ende der Zugsicherung (So 2), BOStrab: Rasengleis mit G-Signalen, Kreuzungen mit Fahrsignalen F 0/F 1/F 4 und Anforderung (A), Weichensignale W 11/W 1 (15 km/h), Läutetafel Sh 4, Straßenbahn in der Straße, Stadtbahntunnel mit H-/V-Signalen und unterirdischen Haltestellen.',
   zug:'O', lineV:80, lern:true, bremsweg:700, platLen:85,
   halts:[{name:'Ebersheim Nord',pos:1700},{name:'Gleisdreieck',pos:3300},{name:'Ostpark',pos:4300},{name:'Lindenplatz',pos:5750},{name:'Rathaus',pos:6750},{name:'Schlossplatz (U)',pos:9300}],
   stations:[{name:'Bf Ebersheim',from:-100,to:20,stop:0,first:true},{name:'Marktplatz (U)',from:8215,to:8325,stop:8300,hp:true}],
@@ -1067,7 +1110,7 @@ SCEN.push(
     'Halt erwarten nach PZB 90, Zugart O: Vorsignal Ks 2 – Wachsam binnen 4 s (1000 Hz, Überwachung 165 → 85 km/h in 23 s). 250 m vor dem Esig Bauerbach 500 Hz: am Magneten höchstens 65 km/h, 153 m danach höchstens 45 km/h. Vor dem Hp 0 halten, bis der Fdl die Fahrstraße einstellt.',
     {sig:{'Esig Bauerbach':{cond:{stop:20}}}}, {clock:'09:41:00'}),
   s4Ex(52, 'S4 PZB: Restriktiv bei der Zugkreuzung', 'Bauerbach', 'Zaisenhausen',
-    'Zugkreuzung in Flehingen: Esig Ks 2 mit Zs 3 „6“ (1000 Hz), 500-Hz-Magnet kurz vor dem Bahnsteig. Länger als 15 s unter 10 km/h → restriktive Überwachung (85/70 Wechselblinken, 45 km/h, bei 500 Hz 25 km/h); nach 500 Hz länger als 15 s unter 30 km/h gilt bei der AVG 25 km/h. Befreien erst, wenn das Asig Fahrt über 30 km/h zeigt.',
+    'Zugkreuzung in Flehingen: Esig Ks 2 mit Zs 3 „6“ (1000 Hz), 500-Hz-Magnet kurz vor dem Bahnsteig. Länger als 15 s unter 10 km/h → restriktive Überwachung (85/70 Wechselblinken, 45 km/h, bei 500 Hz 25 km/h); nach 500 Hz wird die Überwachung restriktiv, wenn die Umschaltgeschwindigkeit (Zugart O: 30 → 10 km/h in 153 m) 15 s unterschritten ist – dann 45 → 25 km/h, Ende mit kurzem Hupton. Befreien erst, wenn das Asig Fahrt über 30 km/h zeigt.',
     {}, {clock:'10:05:00'}),
   s4Ex(53, 'S4 PZB: Startprogramm und Späthalt', 'Bretten', 'Kupferhälde Hp',
     'Führerstand in Bretten neu aufgerüstet – Startprogramm: 85/70 Wechselblinken, höchstens 45 km/h, bei 500 Hz 25 km/h, bei der AVG bis zum Befreien oder 550 m. Befreien nur bei Fahrtbegriff über 30 km/h. Danach Halt in Bt-Wannenweg unmittelbar vor dem Bksig 21 mit Hp 0: 1000 Hz am Vorsignal, 500 Hz vor dem Bahnsteig, Späthalt (VÜ 2) und 25 km/h.',
@@ -1095,10 +1138,26 @@ SCEN.push(
     {sig:{'Bksig 3':{f2000:true}}}, {clock:'13:05:00'}),
   s4Ex(61, 'S4 PZB: Befreien zur falschen Zeit', 'Zaisenhausen', 'Sulzfeld',
     'Vor Sulzfeld: Vorsignal Ks 2, 1000 Hz. Das Esig zeigt lange Hp 0 und kommt erst kurz vor dem Signal in Fahrt. Nicht vorzeitig befreien – nur, wenn das Signal Fahrt über 30 km/h zeigt und keine 500-Hz-Überwachung läuft. Sonst: unzulässiges Befreien und am 500-Hz-Magneten Zwangsbremsung.',
-    {sig:{'Esig Sulzfeld':{cond:{approach:150}}}}, {clock:'13:27:00'})
+    {sig:{'Esig Sulzfeld':{cond:{approach:150}}}}, {clock:'13:27:00'}),
+  // Unregelmäßigkeiten nach Ril 483.0111 Anhang 01 (beim Einschalten) und Anhang 02 (im Betrieb)
+  s4Ex(62, 'S4 PZB-Störung: Leuchtmelder dunkel', 'Bt-Rinklingen Hp', 'Kupferhälde Hp',
+    'Ril 483.0111 A02 Nr. 3: Kurz nach der Abfahrt erlöschen alle PZB-Leuchtmelder. Die PZB ist gestört – höchstens 50 km/h, sofort melden (Fdl). Im nächsten Halt im Stillstand: PZB-Hauptschalter aus und nach 10 s wieder ein (Taste J), etwa 8 s bis betriebsbereit, LM prüfen – dann wieder Startprogramm und normale Geschwindigkeit.',
+    {}, {clock:'14:02:00', pzbFaults:[{pos:350, kind:'dark', fix:'hs'}]}),
+  s4Ex(63, 'S4 PZB-Störung: Zwangsbremsung lässt sich nicht lösen', 'Jöhlingen Bf', 'Bft Wössing Ost',
+    'Ril 483.0111 A02 Nr. 10 und Nr. 2: Zwangsbremsung ohne Beeinflussung. Anhalten, sofort den Fdl verständigen. FT löst nicht → Fahrtrichtungsschalter 10 s „0“, dann „V“ (Taste V) → ohne Erfolg: PZB-Hauptschalter 10 s aus (Taste J) → die Zwangsbremsung löst sich, PZB nach etwa 8 s wieder betriebsbereit (Startprogramm). Erst nach Zustimmung des Fdl weiter.',
+    {}, {clock:'14:25:00', pzbFaults:[{pos:900, kind:'nolos', fix:'hs'}]}),
+  s4Ex(64, 'S4 PZB-Störung: Störungssammelmeldung', 'Sulzfeld', 'Bft Eppingen Pbf',
+    'Ril 483.0111 A02 Nr. 4 a: Der LM 1000 Hz blinkt 10 s mit akustischem Signal, LM 85 leuchtet weiter. Die PZB arbeitet weiter: umgehend den betriebsleitenden Stellen melden (Fdl) und die Zugleistung ohne Geschwindigkeitseinschränkung zu Ende fahren – kein Störschalter.',
+    {}, {clock:'14:48:00', pzbFaults:[{pos:1200, kind:'sam'}]}),
+  s4Ex(65, 'S4 PZB: Funktionsprüfung nicht in Ordnung', 'Bft Gö-Industrie', 'Bauerbach',
+    'Ril 483.0111 Abschn. 3 (3) und A01 Nr. 8: Vor der Abfahrt Funktionsprüfung (Wachsam und Frei gleichzeitig, im Stillstand, HLL 5 bar): 85, 70, 55, Befehl 40, 500 Hz und 1000 Hz müssen nacheinander aufleuchten. Leuchtet ein LM nicht auf: Fahrtrichtungsschalter auf „0“ und wieder „V“ (Taste V), Funktionsprüfung wiederholen – erst dann abfahren.',
+    {}, {clock:'15:10:00', test:true, pzbFaults:[{pos:-50, kind:'lm500', fix:'frs'}]}),
+  s4Ex(66, 'S4 PZB-Störung: ständige Zwangsbremsungen', 'Bretten', 'Kupferhälde Hp',
+    'Ril 483.0111 A02 Nr. 10 und Nr. 1: Zwangsbremsungen ohne Beeinflussung. Jedes Mal anhalten und den Fdl verständigen. Beim zweiten Mal im Stillstand prüfen und den PZB-Hauptschalter 10 s aus und wieder ein (Taste J). Tritt sie weiter auf: Störschalter (Taste X), melden, höchstens 50 km/h.',
+    {}, {clock:'15:33:00', pzbFaults:[{pos:600, kind:'zb'}]})
 );
 // Fahrpläne der Übungen (aus Probefahrten, Halte 30 s)
-{ const FPX = {"51":[[0,60],[290,290]],"52":[[0,60],[240,270],[350,380],[700,700]],"53":[[0,60],[140,170],[250,300],[390,420],[500,500]],"54":[[0,60],[350,380],[460,460]],"55":[[0,60],[280,310],[370,370]],"56":[[0,60],[230,260],[580,580]],"57":[[0,60],[140,170],[370,370]],"58":[[0,60],[180,210],[400,430],[500,530],[610,640],[720,720]],"59":[[0,60],[150,180],[420,450],[520,550],[620,620]],"60":[[0,60],[210,240],[510,510]],"61":[[0,60],[270,270]]}; SCEN.forEach(sc => { if(FPX[sc.id]) sc.fp = {avg:FPX[sc.id]}; }); }
+{ const FPX = {"51":[[0,60],[290,290]],"52":[[0,60],[240,270],[350,380],[700,700]],"53":[[0,60],[140,170],[250,300],[390,420],[500,500]],"54":[[0,60],[350,380],[460,460]],"55":[[0,60],[280,310],[370,370]],"56":[[0,60],[230,260],[580,580]],"57":[[0,60],[140,170],[370,370]],"58":[[0,60],[180,210],[400,430],[500,530],[610,640],[720,720]],"59":[[0,60],[150,180],[420,450],[520,550],[620,620]],"60":[[0,60],[210,240],[510,510]],"61":[[0,60],[270,270]],"62":[[0,60],[200,230],[310,340],[410,440],[520,550],[630,630]],"63":[[0,60],[280,310],[380,380]],"64":[[0,60],[290,320],[390,390]],"65":[[0,60],[220,220]],"66":[[0,60],[200,230],[310,340],[430,460],[540,540]]}; SCEN.forEach(sc => { if(FPX[sc.id]) sc.fp = {avg:FPX[sc.id]}; }); }
 
 // ---------------- Straßenbahn Karlsruhe: Linien 1–5 und 8 (Haltestellenfolge nach dem aktuellen Liniennetzplan, Abstände und Gleislage angenommen) ----------------
 // Haltestelle: [Name, Art des folgenden Abschnitts ('rasen' besonderer Bahnkörper 70 km/h, 'strasse' Straßenraum 50 km/h), Optionen]
@@ -1470,6 +1529,13 @@ SCEN.push({id:50, lvl:8, nr:'S 31', line:'S31', clock:'09:12:00', avgOnly:true, 
   stations:[{name:'Karlsruhe-Durlach', from:-240, to:20, stop:0, first:true}, {name:'Karlsruhe Hbf', from:4290, to:4660, stop:4580, hbf:{gleis:8, dir:'W'}}],
   main:[{id:'N2', sys:'ks', pos:80}, {id:'B', sys:'ks', pos:1900, block:true}, {id:'A', sys:'ks', pos:3450, zs3:6}, {id:'P8', sys:'ks', pos:4700}],
   lf:[], terr:{amp:0.25, noRand:true}, end:5300});
+// GT8-Übung nach Bedienhandbuch GT8-100D/2S-M (2.6, 2.16) und Kurzanleitung NBÜ: Strecke wie Szenario 23, Fahrzeug fest GT8,
+// NBÜ vor der Abfahrt abgerüstet (Prüflauf nötig), Fahrgastnotbremse im Stadtbahntunnel und kurz nach der Abfahrt in Marktplatz (U)
+{ const b = JSON.parse(JSON.stringify(SCEN.find(x => x.id === 23)));
+  SCEN.push(Object.assign(b, {id:25, model:'gt8', clock:'07:42:00', title:'GT8: Notbremsüberbrückung im Stadtbahntunnel',
+    goal:'GT8-100D/2S-M nach Bedienhandbuch: vor der Abfahrt NBÜ-Prüflauf (Stillstand, Fahrtrichtung V, Türen zu: Schalter „Test“, Alarm mit „Quitt“ bestätigen, dann „Ein“). An der Systemtrennstelle den Linienschütz aus- und nach El 2 wieder einlegen. Im Stadtbahntunnel zieht ein Fahrgast die Notbremse: innerhalb von 10 s quittieren, über Intercom sprechen, Leitstelle verständigen, nicht im Tunnel anhalten, sondern bis Marktplatz (U) weiterfahren – dort wirkt die Notbremse nach der Türfreigabe, Notbremsgriff zurückstellen. Bis 10 s nach der Anfahrt bremst eine Notbremse sofort.',
+    nbu:{off:true, fgn:[{pos:7820, msg:'Hier im zweiten Wagen ist ein älterer Herr zusammengebrochen – bitte helfen Sie!'}, {dep:'Marktplatz (U)', t:4, msg:'Entschuldigung, mein Kind hat an dem roten Griff gezogen – es ist nichts passiert.', reply:'Verstanden. Ich stelle den Notbremsgriff zurück, danach fahren wir weiter. Bitte passen Sie auf Ihr Kind auf.'}]}}));
+}
 // Fahrzeuge je Szenario: DB-Strecken mit DB-Zügen, S-Linien mit Zweisystemwagen der AVG (GT8-100D/2S-M oder ET 2010), S1/S11 und Straßenbahnlinien nur NET 2012
 const DBT_NAME = {rb:'Talent 2 (BR 442)', re:'BR 146 + Doppelstockwagen', ic:'BR 101 + IC-Wagen', gz:'BR 185 + Güterwagen', sh:'Rangierlok BR 363', ic2:'IC2', ice:'ICE 3'};
 SCEN.forEach(sc => {
@@ -1577,6 +1643,7 @@ let GG = [], GPA = [], HM = [], NE6 = [], NE1 = [], KMSEG = [], INLUPE = false, 
 let FSIG = [], WSIG = [], SYSW = null, BOZ = [];   // Tram-Train: Fahrsignale, Weichensignale, Systemwechsel, BOStrab-Abschnitte
 const G3X = 9.25, G4X = -8.7;   // Gleis 3 rechts hinter dem Inselbahnsteig, Gleis 4 links neben dem Gegengleis
 let SC, MAIN, DIST, STATIONS, LF, MAGNETS, OBJS, LSIG, RA10_POS, END_POS, TRAIN_LEN, VEH_VMAX, ACC_F, BRK_F, TAU, SICHT, LSICHT, NIGHT;
+let IS_GT8 = false, NBU_ON = false, SIFA = {lm:30, hup:32.5, zb:35};   // Sifa: Leuchtmelder, Summer, Zwangsbremsung (s)
 const idx = id => MAIN.findIndex(m => m.id === id);
 function loadScenario(id){
   worldInit();
@@ -1602,10 +1669,13 @@ function loadScenario(id){
   CLOCK0 = clockSec(SC.clock || '06:00:00');
   AVG = !TRAM && (VEHICLE === 'avg' || !!SC.avgOnly) && !SC.dbOnly;
   const om = ownModel(), tr = Object.assign({len:150, acc:1, brk:1, vmax:140, tau:1}, SC.train || {},
-    AVG ? (om === 'n947' ? {len:74, acc:1.25, brk:1.2, vmax:100, tau:0.8} : om === 'net' ? {len:74.9, acc:1.3, brk:1.3, vmax:80, tau:0.8} : {len:76, acc:1.15, brk:1.15, vmax:100, tau:0.9})
-    : TRAM ? (om === 'gt8' ? {len:38, acc:1.15, brk:1.2, vmax:70, tau:0.9} : om === 'n947' ? {len:37, acc:1.35, brk:1.35, vmax:70, tau:0.8} : {len:37.2, acc:1.3, brk:1.35, vmax:80, tau:0.8}) : {});
+    AVG ? (om === 'n947' ? {len:74, acc:1.25, brk:1.2, vmax:100, tau:0.8} : om === 'net' ? {len:74.9, acc:1.3, brk:1.3, vmax:80, tau:0.8} : {len:75.2, acc:1.15, brk:1.15, vmax:100, tau:0.9})
+    : TRAM ? (om === 'gt8' ? {len:37.6, acc:1.15, brk:1.2, vmax:70, tau:0.9} : om === 'n947' ? {len:37, acc:1.35, brk:1.35, vmax:70, tau:0.8} : {len:37.2, acc:1.3, brk:1.35, vmax:80, tau:0.8}) : {});
   TRAIN_LEN = tr.len; VEH_VMAX = tr.vmax; ACC_F = tr.acc; TAU = tr.tau;
   FZ = fzOf(SC, om, TRAIN_LEN); BRK_F = FZ.br.aF/0.9; if(FZ.vmax) VEH_VMAX = Math.min(VEH_VMAX, FZ.vmax);   // Fahrzeugdaten für die Fahrdynamik
+  IS_GT8 = om === 'gt8';   // GT8-100D/2S-M nach Bedienhandbuch: Sifa im Befehlsgeber (24 s / 6 s), v-max-Überwachung, Linienschütz, NBÜ
+  SIFA = IS_GT8 ? {lm:24, hup:24, zb:30} : {lm:30, hup:32.5, zb:35};
+  NBU_ON = IS_GT8 && (SC.tunnels || []).some(t => t.city);   // Notbremsüberbrückung im Stadtbahntunnel
   SICHT = SC.sicht || 3000; LSICHT = SC.lightSicht || 3000; NIGHT = !!SC.night;
   // Hauptsignal mitten im Bahnsteig vor dem Halteplatz: Bahnsteig beginnt erst hinter dem Signal (sonst müsste der Zug zum Halten am Signal vorbei)
   STATIONS.forEach(st => { if(st.first) return; MAIN.forEach(m => {
@@ -1979,13 +2049,13 @@ function newState(){
     st: STATIONS.map(() => ({done:false})), stT: STATIONS.map(() => 0), sbT: MAIN.map(() => 0),
     cross: MAIN.map(m => m.cond && m.cond.crossSt !== undefined ? {state:'wait', front:0, v:0, t:0} : null),
     fpAct: STATIONS.map(st => ({arr: st.first ? 0 : null, dep:null, cand: st.first ? 0 : null})),
-    dweg:null, gg:null, oc:[], ocNext:30 + (SC.id % 7)*9, ocSeed:SC.id*7919 + 17, horn:false, bue:BUE.map(() => ({acc:0, ok:false, done:false})), pzbF:null, pzbFi:0, pzbOff:false, ne1:NE1.map(n => ({perm:!!n.gg})), pax: paxPlan(), onboard: paxStart(), door:{state:'zu', t:0, lockMsg:false, station:-1}, carried:0, announced:{},
+    dweg:null, gg:null, oc:[], ocNext:30 + (SC.id % 7)*9, ocSeed:SC.id*7919 + 17, horn:false, bue:BUE.map(() => ({acc:0, ok:false, done:false})), pzbF:null, pzbFi:0, pzbOff:false, ne1:NE1.map(n => ({perm:!!n.gg})), pax: paxPlan(), onboard: paxStart(), door:{state:'zu', t:0, lockMsg:false, pre:false, station:-1}, carried:0, announced:{},
     ls: LSIG.map(() => ({sh1:false, t:0})),
     sig: MAIN.map(() => ({aspect:'HP0', ersatzOn:false, zs3On:false, zs3v:0})),
     dsig: DIST.map(() => ({aspect:'VR0', zs3v:0})),
     ra10Err:false,
-    pzb:pzbNew(), wt:null, fdlNeed:null, fdlBusy:null, stoer:null, testDone:false, testWarned:false, gpa:GPA.map(() => ({t0:null})), gpaRes:null, haz:hazInit(), drop:MAIN.map(() => ({on:false, done:false, stand:0, need:false, rep:false})), haltfall:null,
-    sifa:{t:0}, sifaN:0, errors:[], zbCount:0, over:{t:0, flag:false},
+    pzb:pzbNew(), pzbHS:true, pzbReadyT:0, hsOffT:0, frs:'V', frs0T:0, hahn:true, wt:null, fdlNeed:null, fdlBusy:null, stoer:null, testDone:false, testWarned:false, gpa:GPA.map(() => ({t0:null})), gpaRes:null, haz:hazInit(), drop:MAIN.map(() => ({on:false, done:false, stand:0, need:false, rep:false})), haltfall:null,
+    sifa:{t:0, lock:false}, sifaN:0, vmx:{t:0, flag:false}, bellT:0, nbu:nbuNew(), errors:[], zbCount:0, over:{t:0, flag:false},
     hs:{st:'aus', t:0, air:6.4, comp:false, bLast:0, msg:false, sys:'ac', arcErr:false, stuckT:0}, trac:0,
     fs: FSIG.map(() => ({asp:'F0', req:false, t:0, wait:0, gT:0}))
   };
@@ -2030,7 +2100,7 @@ function paxPlan(){
     if(FREIGHT || st.first) return {state:'none', on:0, off:0, left:0};
     const h = hn(st.name), last = i === STATIONS.length - 1;
     const big = !st.hp;
-    return {state:'pending', last, keepOpen: last && RANG_AFTER !== i, on: last ? 0 : (big ? 8 : 3) + h % (big ? 22 : 12), off: big ? 6 + (h >> 4) % 18 : 2 + (h >> 4) % 10, left:0, prog:0, dur:0};
+    return {state:'pending', last, keepOpen: last && RANG_AFTER !== i, on: last ? 0 : (big ? 8 : 3) + h % (big ? 22 : 12), off: big ? 6 + (h >>> 4) % 18 : 2 + (h >>> 4) % 10, left:0, prog:0, dur:0};
   });
 }
 function atPlatform(i){
@@ -2042,11 +2112,16 @@ function pressDoor(){
   const D = S.door;
   if(FREIGHT){ log('Güterzug – keine Fahrgasttüren', 'fdl'); return; }
   if(D.state === 'zu'){
-    if(S.v > 0.05){ log('Türfreigabe nur im Stillstand', 'fdl'); return; }
+    if(S.v > 0.05){
+      if(FZ.br.t !== 'stb'){ log('Türfreigabe nur im Stillstand', 'fdl'); return; }
+      D.pre = !D.pre;   // GT8-Handbuch 1.19: während der Fahrt erteilte Türfreigabe wirkt erst unter 7 km/h mit eingelaufener Haltestellenbremse
+      log(D.pre ? 'Türfreigabe vorgewählt – wirkt unter 7 km/h, sobald die Haltestellenbremse einläuft (Fahrstrom dann unterbrochen)' : 'Türfreigabe zurückgenommen', 'fdl'); return;
+    }
+    D.pre = false;
     const i = STATIONS.findIndex((st, k) => !st.first && atPlatform(k));
     D.state = 'auf'; D.t = 0; D.lockMsg = false; if(snd.c) snd.ev('doorOpen'); else audio.beep(520, .25, 'sine', .03);
     if(i < 0){ error('Türen außerhalb eines Bahnsteigs freigegeben'); D.station = -1; return; }
-    D.station = i;
+    D.station = i; nbuDoorRelease(i);
     if(STATIONS[i].short) log('Bahnsteignutzlänge reicht nicht für die Zuglänge – nur Türen am Bahnsteig freigeben', 'fdl');
     if(!S.st[i].done){ S.st[i].done = true; log('Halt in ' + STATIONS[i].name + ': ' + Math.round(STATIONS[i].stop - S.front) + ' m vor der Haltetafel', 'fdl'); }
     const P = S.pax[i];
@@ -2067,6 +2142,7 @@ function pressDoor(){
 }
 function doorUpdate(dt){
   const D = S.door;
+  if(D.pre && D.state === 'zu' && S.v === 0 && S.hsb) pressDoor();   // vorgewählte Türfreigabe wird im Stillstand wirksam
   if(D.state === 'schliessen' && (D.t += dt) >= 3){
     D.state = 'zu';
     log('Türen geschlossen – Traktion frei', 'fdl');
@@ -2099,6 +2175,7 @@ function log(text, cls){
   li.append(tm, document.createTextNode(text));
   logEl.prepend(li);
   while(logEl.children.length > 30) logEl.lastChild.remove();
+  if(window.__logHook) window.__logHook(fmtT(S.t) + ' ' + text);   // Testhilfe
 }
 function error(text){ S.errors.push({t:S.t, text}); log(text, 'err'); audio.beep(220, .35, 'sawtooth', .05); }
 
@@ -2172,8 +2249,26 @@ function vAllowed(){
 function pzbNew(){
   const zug = AVG ? 'O' : SC.zug;
   return {zug, mon:[], hidden:[], m500:null, restr:null, start: AVG || TRAM ? (SC.pzbStart ? {s0:0} : null) : {s0:0}, noData: AVG && !TRAM && !SC.pzbStart ? {s0:0} : null,
-    slowT:0, befehl:false, befLamp:false, lim:ZUGART[zug].vmax, pufT:0, pufFlag:false, test:null, lastW:-9, lastF:-9};
+    slowT:0, befehl:false, befLamp:false, lim:ZUGART[zug].vmax, pufT:0, pufFlag:false, test:null, lastW:-9, lastF:-9, startShown:false, overT:0, ib:null};
 }
+// Ril 483.0111: Prüfgeschwindigkeit bei unbeeinflusster Fahrt = Geschwindigkeitshöchstwert der PZB-Zugart, höchstens vFz + 5 km/h; im PZB-Störbetrieb 100 km/h
+function vPruef(P){ return S.pzbOff ? 100 : Math.min(ZUGART[P.zug].vmax, VEH_VMAX + 5); }
+// 500 Hz: Umschaltgeschwindigkeit (O: 30 → 10 km/h in 153 m, M/U: 10 km/h) und restriktive Überwachung (O: 45 → 25 km/h in 153 m, M/U: 25 km/h)
+function vUm500(P, d){ return P.zug === 'O' ? (d < 153 ? 30 - 20*d/153 : 10) : 10; }
+function v500r(P, d){ return P.zug === 'O' ? (d < 153 ? 45 - 20*d/153 : 25) : 25; }
+// unbeeinflusste Fahrt über der Prüfgeschwindigkeit: nach 7 s Intervallton und intermittierende Zwangsbremsung, bei weiterer Erhöhung kontinuierlich; unter vprüf selbsttätig aufgehoben
+function pzbOver(dt, vk){
+  const P = S.pzb, vp = vPruef(P);
+  if(vk > vp + 0.5){
+    P.overT += dt;
+    if(P.overT >= 7 && !P.ib){ P.ib = {t:0, cont:false}; audio.start('ib', 1150, 'square', .035, true); error('PZB: Prüfgeschwindigkeit ' + vp + ' km/h überschritten – Intervallton und intermittierende Zwangsbremsung'); }
+    if(P.ib){ P.ib.t += dt; if(vk > vp + 8) P.ib.cont = true; }
+  } else {
+    P.overT = 0;
+    if(P.ib){ P.ib = null; audio.stop('ib'); log('Prüfgeschwindigkeit unterschritten – PZB-Zwangsbremsung selbsttätig aufgehoben', 'pzb'); }
+  }
+}
+const pzbIB = () => !!(S.pzb && S.pzb.ib && (S.pzb.ib.cont || (S.pzb.ib.t % 3) < 2));
 function pzbActive(P){ return P.mon.length > 0 || !!P.m500 || !!P.start; }
 function lmLen(P){ return P.restr === 'vu3' ? 800 : 700; }
 function zwang(reason, kind, atMain, noErr){
@@ -2248,8 +2343,14 @@ function pzbCross(m){
   }
 }
 function pzb1000(e){
-  const P = S.pzb;
-  P.mon.push({s0:S.front, t:0, ack:false, ackT:0, wtFail:false});
+  const P = S.pzb, Z = ZUGART[P.zug], vk = S.v*3.6;
+  // Ril 483.0111 Abschn. 4 (7): nach Befreiung läuft die ÜF 1250 m im Hintergrund weiter – eine erneute 1000-Hz-Beeinflussung macht sie wieder wirksam
+  if(P.hidden.length){
+    if(vk > Z.v1000 + 0.5) zwang('1000-Hz-Beeinflussung nach Befreiung mit ' + Math.round(vk) + ' km/h – die Überwachung lief im Hintergrund weiter (höchstens ' + Z.v1000 + ' km/h)', 'pzb', false);
+    P.hidden.forEach(h => P.mon.push({s0:S.front, t:999, ack:true, ackT:0, wtFail:false, restr:h.restr || false, slow:0, revived:true}));
+    P.hidden = [];
+  }
+  P.mon.push({s0:S.front, t:0, ack:false, ackT:0, wtFail:false, restr:false, slow:0});
   log(e.kind === 'gpa' ? '1000 Hz am Geschwindigkeitsprüfabschnitt (über ' + e.v + ' km/h) – Wachsam' : '1000 Hz – Wachsam binnen 4 s', 'pzb');
   audio.start('hupe', 440, 'square', .045);
   if(e.kind === 'vs' && DIST[e.ref].gestoert){
@@ -2262,12 +2363,13 @@ function pzb1000(e){
 }
 function pzb500(e){
   const P = S.pzb, Z = ZUGART[P.zug], vk = S.v*3.6;
-  if(P.hidden.length){ P.hidden = []; zwang('Unberechtigtes Befreien', 'pzb', false); return; }
-  const rStd = P.restr === 'std' || !!P.start;
-  const a = rStd ? 45 : Z.v500a, b = rStd ? 25 : Z.v500e;
-  P.m500 = {s0:S.front, r25:false};
-  log('500 Hz – höchstens ' + a + ' km/h, binnen 153 m unter ' + b + ' km/h', 'pzb');
-  if(vk > a) zwang('Geschwindigkeitsüberschreitung (500 Hz, ' + a + ' km/h)', 'pzb', false);
+  if(P.hidden.length){ P.hidden = []; zwang('500-Hz-Beeinflussung nach Befreiung – die 1000-Hz-Überwachung lief im Hintergrund weiter', 'pzb', false); return; }
+  // läuft eine restriktive 1000-Hz-ÜF (oder das Startprogramm), wirkt die 500-Hz-ÜF über 200 m restriktiv (Ril 483.0111 Abschn. 4 (9), (13))
+  const rNow = !!P.start || P.mon.some(m => m.restr === 'std');
+  P.m500 = {s0:S.front, len:rNow && !AVG ? 200 : 250, restr:rNow, slow:0, slowD:null};   // AVG-Schaublatt: 500-Hz-Überwachung stets 250 m
+  const a = rNow ? v500r(P, 0) : Z.v500a, b = rNow ? 25 : Z.v500e;
+  log('500 Hz' + (rNow ? ' restriktiv (' + P.m500.len + ' m)' : '') + ' – höchstens ' + a + ' km/h' + (a > b ? ', binnen 153 m unter ' + b + ' km/h' : ''), 'pzb');
+  if(vk > a + 0.5) zwang('Geschwindigkeitsüberschreitung (500 Hz, ' + a + ' km/h)', 'pzb', false);
 }
 function pzb2000(e){
   const P = S.pzb, vk = S.v*3.6;
@@ -2284,55 +2386,57 @@ function pzb2000(e){
 }
 function pzbUpdate(dt){
   const P = S.pzb, Z = ZUGART[P.zug], vk = S.v*3.6, fr = S.front;
-  if(pzbDead()){ P.lim = Z.vmax; return; }
-  if(P.test){ P.test.t += dt; if(P.test.t >= 3.2){ P.test = null; endTest(); } P.lim = 0; return; }
+  if(pzbDead()){ P.lim = Z.vmax; if(S.pzbOff && !TRAM) pzbOver(dt, vk); else if(P.ib){ P.ib = null; audio.stop('ib'); } return; }
+  if(P.test){ P.test.t += dt; if(S.lever < 0 && S.lever > -8 && !P.test.fbv){ P.test.fbv = true; if(lern) log('Funktionsprüfung: die PZB-Zwangsbremsung nicht durch das Führerbremsventil unterstützen (Ril 483.0111 Abschn. 3 (3) b)', 'pzb'); }
+    if(P.test.t >= 3.2){ P.test = null; endTest(); } P.lim = 0; return; }
   for(const m of P.mon){
     m.t += dt;
     if(!m.ack){ m.ackT += dt; if(m.ackT > 4){ m.ack = true; m.wtFail = true; audio.stop('hupe'); zwang('WT nicht zeitgerecht betätigt', 'pzb', false); } }
   }
   P.mon = P.mon.filter(m => fr - m.s0 <= 1250);
   P.hidden = P.hidden.filter(m => fr - m.s0 <= 1250);
-  if(P.m500 && fr - P.m500.s0 > 250) P.m500 = null;
-  // Schaublatt PZB 90 (AVG): nach 500 Hz länger als 15 s unter 30 km/h → nur noch 25 km/h (85/70 Wechselblinken + 500 Hz)
-  if(AVG && P.m500 && !P.m500.r25){
-    if(vk < 30){ P.m500.slowT = (P.m500.slowT || 0) + dt; if(P.m500.slowT > 15){ P.m500.r25 = true; log('500 Hz: länger als 15 s unter 30 km/h – nur noch 25 km/h bis 250 m nach dem Magneten (85/70 Wechselblinken)', 'pzb'); } }
-    else P.m500.slowT = 0;
+  // Startprogramm (Ril 483.0111 Abschn. 3 (21)): restriktive 1000-Hz-ÜF, 700 m gelten als abgelaufen, endet nach 550 m; Anzeige erst nach Anfahrt (v ≥ 5 km/h)
+  if(P.start && !P.startShown && vk >= 5) P.startShown = true;
+  if(P.start && fr - P.start.s0 > 550){ P.start = null; P.startShown = false; log('Startprogramm nach 550 m beendet', 'pzb'); }
+  if(P.noData && (AVG ? fr - P.noData.s0 > 40 : vk > 0.5)){ P.noData = null; log(AVG ? 'PZB-Zugdaten übernommen (Zugart O fest) – 85 Dauerlicht' : 'Keine Zugdaten eingegeben – PZB-Ersatzdaten übernommen, Zugart-LM Dauerlicht', 'pzb'); }
+  // 1000 Hz restriktiv: Umschaltgeschwindigkeit 10 km/h für mindestens 15 s unterschritten (jede laufende ÜF für sich)
+  let nowR = null;
+  for(const m of P.mon){
+    if(m.restr) continue;
+    if(vk < 10){ m.slow = (m.slow || 0) + dt; if(m.slow > 15){ m.restr = (AVG && fr - m.s0 < 500) ? 'vu3' : 'std'; nowR = m.restr; } } else m.slow = 0;
   }
-  const startLen = AVG ? 550 : 1250;     // AVG: Startprogramm bis Befreien oder 550 m (Schaublatt)
-  if(P.start && fr - P.start.s0 > startLen){ P.start = null; log('Startprogramm nach ' + startLen + ' m beendet – 85 Dauerlicht', 'pzb'); }
-  if(P.noData && fr - P.noData.s0 > 40){ P.noData = null; log('PZB-Daten vorhanden – 85 Dauerlicht', 'pzb'); }
-  if(!pzbActive(P)){
-    if(P.restr) log('Restriktive Überwachung beendet', 'pzb');
-    P.restr = null; P.slowT = 0; P.pufFlag = false;
-  } else if(vk < 10){
-    P.slowT += dt;
-    if(P.slowT > 15){
-      if(P.m500 && (P.start || P.restr === 'std')) P.m500.r25 = true;
-      if(!P.start){
-        const newest = P.mon[P.mon.length - 1];
-        const want = (AVG && newest && fr - newest.s0 < 500) ? 'vu3' : 'std';
-        if(P.restr !== want && P.restr !== 'std'){
-          P.restr = want;
-          if(P.m500 && want === 'std') P.m500.r25 = true;
-          log(want === 'vu3' ? 'Frühhalt (VÜ 3): 85/70 Gleichblinken – unter 65 km/h' : 'Restriktiv' + (AVG ? ' (Späthalt, VÜ 2)' : '') + ': 85/70 Wechselblinken – unter 45 km/h, bei 500 Hz unter 25 km/h', 'pzb');
-        }
-      }
-    }
-  } else P.slowT = 0;
-  const rStd = P.restr === 'std' || !!P.start;
+  if(nowR) log(nowR === 'vu3' ? 'Frühhalt (VÜ 3): 85/70 Gleichblinken – unter 65 km/h' : 'Restriktiv' + (AVG ? ' (Späthalt, VÜ 2)' : '') + ': 85/70 Wechselblinken – höchstens 45 km/h, bei 500 Hz 25 km/h', 'pzb');
+  // 500 Hz: restriktiv, wenn die Umschaltgeschwindigkeit 15 s unterschritten ist – Beginn in 0–100 m: 200 m (kurz), in 100–250 m: 250 m (lang)
+  if(P.m500 && !P.m500.restr && AVG){   // AVG-Schaublatt: nach 500 Hz länger als 15 s unter 30 km/h → nur noch 25 km/h bis 250 m
+    if(vk < 30){ P.m500.slow += dt; if(P.m500.slow > 15){ P.m500.restr = true; P.m500.r25 = true; log('500 Hz: länger als 15 s unter 30 km/h – nur noch 25 km/h bis 250 m nach dem Magneten (85/70 Wechselblinken)', 'pzb'); } }
+    else P.m500.slow = 0;
+  }
+  if(P.m500 && !P.m500.restr && !AVG){
+    const d = fr - P.m500.s0;
+    if(vk < vUm500(P, d)){ if(P.m500.slowD === null) P.m500.slowD = d; P.m500.slow += dt;
+      if(P.m500.slow > 15){ P.m500.restr = true; P.m500.len = P.m500.slowD < 100 ? 200 : 250; log('500 Hz restriktiv (' + (P.m500.len === 200 ? 'kurz, 200 m' : 'lang, 250 m') + '): 85/70 Wechselblinken – höchstens ' + Math.round(v500r(P, d)) + ' km/h', 'pzb'); } }
+    else { P.m500.slow = 0; P.m500.slowD = null; }
+  }
+  if(P.m500 && fr - P.m500.s0 > P.m500.len){
+    const wasR = P.m500.restr; P.m500 = null;
+    if(wasR && !AVG){ audio.beep(560, .35, 'square', .04); log('Ende der restriktiven 500-Hz-Überwachung (kurzer Hupton)' + (P.mon.length ? ' – die laufende 1000-Hz-Überwachung ist jetzt ebenfalls restriktiv' : ''), 'pzb'); P.mon.forEach(m => { if(!m.restr) m.restr = 'std'; }); }
+  }
+  const wasRestr = P.restr;
+  P.restr = P.mon.some(m => m.restr === 'std') ? 'std' : P.mon.some(m => m.restr === 'vu3') ? 'vu3' : null;
+  if(wasRestr && !P.restr && !P.start && !(P.m500 && P.m500.restr)) log('Restriktive Überwachung beendet', 'pzb');
+  if(!pzbActive(P)){ P.pufFlag = false; P.slowT = 0; }
+  // Überwachungsgeschwindigkeit: stets die ÜF mit dem niedrigsten aktuellen Wert
   let lim = Z.vmax;
   for(const m of P.mon){
-    const l = P.restr === 'vu3' ? 65 : rStd ? 45 : Math.max(Z.v1000, Z.vmax - (Z.vmax - Z.v1000)*m.t/Z.t1000);
+    const l = m.restr === 'vu3' ? 65 : m.restr ? 45 : Math.max(Z.v1000, Z.vmax - (Z.vmax - Z.v1000)*m.t/Z.t1000);
     lim = Math.min(lim, l);
   }
   if(P.start) lim = Math.min(lim, 45);
-  if(P.m500){
-    const d = fr - P.m500.s0;
-    const l = P.m500.r25 ? 25 : rStd ? (d < 153 ? 45 - 20*d/153 : 25) : (d < 153 ? Z.v500a - (Z.v500a - Z.v500e)*d/153 : Z.v500e);
-    lim = Math.min(lim, l);
-  }
+  if(P.m500){ const d = fr - P.m500.s0; lim = Math.min(lim, P.m500.r25 ? 25 : P.m500.restr ? v500r(P, d) : (d < 153 ? Z.v500a - (Z.v500a - Z.v500e)*d/153 : Z.v500e)); }
+  if(P.befehl) lim = Math.min(lim, 40);     // Befehlstaste: Geschwindigkeitsüberwachung 40 km/h bis zur Rücknahme
   P.lim = lim;
-  if(!S.zwang && vk > lim + 0.5) zwang('Geschwindigkeitsüberschreitung (v-Überwachung ' + Math.round(lim) + ' km/h)', 'pzb', false);
+  if(!S.zwang && vk > lim + 0.5) zwang(P.befehl && lim === 40 ? 'Befehlstaste betätigt – Geschwindigkeitsüberwachung 40 km/h überschritten' : 'Geschwindigkeitsüberschreitung (v-Überwachung ' + Math.round(lim) + ' km/h)', 'pzb', false);
+  pzbOver(dt, vk);
   // Ril 483: Überwachungsgeschwindigkeiten um mindestens 5 km/h unterfahren
   if(pzbActive(P) && !S.zwang && lim < Z.vmax - 0.5 && vk > lim - 5 && vk > 3){
     P.pufT += dt;
@@ -2341,13 +2445,15 @@ function pzbUpdate(dt){
 }
 function requireWT(name){ if(pzbDead() || isBo(S.front)) return; S.wt = {t:0, name, ok:false}; }
 // ---- PZB gestört / Störschalter (Schaublatt PZB 90 AVG, Modul 17 Tag 1) ----
-function pzbDead(){ return TRAM || S.pzbOff || !!(S.pzbF && S.pzbF.kind === 'dark'); }
-function pzbClear(){ const P = S.pzb; P.mon = []; P.m500 = null; P.hidden = []; P.restr = null; P.start = null; P.noData = null; P.slowT = 0; P.pufFlag = false; P.befLamp = false; audio.stop('hupe'); S.wt = null; }
+function pzbDead(){ return TRAM || S.pzbOff || !S.pzbHS || S.pzbReadyT > 0 || S.frs !== 'V' || !S.hahn || !!(S.pzbF && S.pzbF.kind === 'dark'); }
+// PZB unwirksam (Fahrt nur mit höchstens 50 km/h): Störschalter, Hauptschalter aus bzw. noch nicht betriebsbereit, Luftabsperrhahn zu, Fahrzeugeinrichtung gestört
+function pzbUnw(){ return !TRAM && (S.pzbOff || !S.pzbHS || S.pzbReadyT > 0 || !S.hahn || !!(S.pzbF && S.pzbF.kind === 'dark')); }
+function pzbClear(){ const P = S.pzb; P.mon = []; P.m500 = null; P.hidden = []; P.restr = null; P.start = null; P.startShown = false; P.noData = null; P.slowT = 0; P.pufFlag = false; P.befLamp = false; P.ib = null; P.overT = 0; audio.stop('hupe'); audio.stop('ib'); S.wt = null; }
 function setPzbRestr(on){ S.restr = S.restr.filter(r => !r.pzbF); if(on) S.restr.push({v:50, src:'PZB gestört', pzbF:true}); }
 function meldeStellen(){ return AVG ? 'BZ (mit Bitte um Vormeldung) und Zü AVG' : 'Fahrzeugdisponent und Betriebszentrale'; }
 function pzbRestart(why){
   pzbClear(); S.pzb.start = {s0:S.front};
-  log(why + ' – Startprogramm: 85/70 Wechselblinken, höchstens 45 km/h. Befreien, wenn der Fahrtbegriff größer als 30 km/h ist (sonst endet es nach ' + (AVG ? 550 : 1250) + ' m).', 'pzb');
+  log(why + ' – Startprogramm: nach dem Anfahren 85/70 Wechselblinken, höchstens 45 km/h (bei 500 Hz 25 km/h). Befreien, wenn der Fahrtbegriff größer als 30 km/h ist und keine 500/1000-Hz-Beeinflussung binnen 550 m zu erwarten ist (sonst endet es nach 550 m).', 'pzb');
 }
 function zwangFault(){
   const F = S.pzbF; F.zbN++;
@@ -2355,8 +2461,8 @@ function zwangFault(){
   S.fdlNeed = {atMain:false, ok:false, err:false};
   audio.stop('hupe'); audio.beep(320, .9, 'square', .06);
   log('PZB-Zwangsbremsung ohne Beeinflussung – passt nicht zur Signalisierung', 'pzb');
-  if(F.zbN >= 2) log('Die PZB erzeugt ständig Zwangsbremsungen: Fahrzeugeinrichtung gestört. Im Stillstand den Störschalter betätigen (Taste X), ' + meldeStellen() + ' melden, dann höchstens 50 km/h.', 'fdl');
-  else if(lern) log('Erst wie nach jeder Zwangsbremsung verfahren: anhalten, Fdl verständigen, Frei.', 'fdl');
+  if(F.zbN >= 2) log('Die PZB erzeugt wiederholt Zwangsbremsungen (Ril 483.0111 A02 Nr. 10 und 1): prüfen (HLL 5 bar, Luftabsperrhahn offen, Fahrtrichtungsschalter „V“, Taster in Grundstellung), dann im Stillstand PZB-Hauptschalter aus- und nach 10 s wieder einschalten (Taste J). Tritt sie weiter auf: Störschalter (Taste X), ' + meldeStellen() + ' melden, höchstens 50 km/h.', 'fdl');
+  else if(lern) log('PZB-Zwangsbremsung aus unbekannter Ursache (A02 Nr. 10): anhalten, sofort den Fdl verständigen, Frei.', 'fdl');
 }
 function pressStoer(){
   if(S.v > 0.05){ log('Störschalter nur im Stillstand betätigen', 'pzb'); return; }
@@ -2369,12 +2475,79 @@ function pressStoer(){
     if(!S.pzbF){ error('Störschalter unzulässig betätigt – nur, wenn die PZB ständig Zwangsbremsungen erzeugt oder es für die Weiterfahrt technisch erforderlich ist'); S.pzbF = {kind:'off', t0:S.t, reported:false, zbN:0, fixT:0}; }
     else if(S.pzbF.kind === 'zb' && S.pzbF.zbN < 2 && lern) log('Hinweis: Der Störschalter ist für ständige Zwangsbremsungen gedacht – nach der ersten Zwangsbremsung zuerst mit dem Fdl abklären.', 'pzb');
     else if(S.pzbF.kind === 'dark' && lern) log('Hinweis: Bei dunkler PZB ist der Störschalter nicht erforderlich.', 'pzb');
+    else if(S.pzbF.kind === 'sam') error('Störschalter bei Störungssammelmeldung nicht erforderlich – Zugleistung ohne Geschwindigkeitseinschränkung zu Ende fahren (Ril 483.0111 A01 Nr. 4 a)');
     S.pzbF.t0 = Math.min(S.pzbF.t0, S.t);
     setPzbRestr(true);
   } else {
     S.pzbOff = false;
     if(S.pzbF && S.pzbF.kind === 'off'){ S.pzbF = null; setPzbRestr(false); pzbRestart('PZB wieder eingeschaltet'); }
     else log('Störschalter zurückgestellt – PZB-Fahrzeugeinrichtung weiterhin gestört', 'pzb');
+  }
+}
+// ---- PZB-Schalttafel: PZB-Hauptschalter, Fahrtrichtungsschalter, PZB-Luftabsperrhahn (Ril 483.0111 Bild 7, Anhänge 01 und 02) ----
+const PZB_NEXT = {
+  nolos:{frs:'Wenn ohne Erfolg: PZB-Hauptschalter für 10 s ausschalten (Taste J).', hs:'Wenn ebenfalls ohne Erfolg: PZB-Hauptschalter aus lassen und den PZB-Luftabsperrhahn schließen (Taste L), betriebsleitende Stellen verständigen, höchstens 50 km/h.'},
+  dark:{frs:'Wenn ohne Erfolg: PZB-Hauptschalter aus- und nach 10 s wieder einschalten (Taste J).', hs:'Wenn ohne Erfolg: die PZB ist gestört – betriebsleitende Stellen verständigen, höchstens 50 km/h.'},
+  zb:{hs:'Tritt die Zwangsbremsung weiter auf: PZB-Störschalter (Taste X), betriebsleitende Stellen verständigen, höchstens 50 km/h.', frs:''},
+  lm500:{frs:'Wenn ohne Erfolg: PZB-Hauptschalter aus- und wieder einschalten (Taste J), Funktionsprüfung wiederholen.', hs:'Wenn ohne Erfolg: Störung den betriebsleitenden Stellen melden – wirksame 500-Hz-Überwachungen werden dann nicht angezeigt.'}
+};
+function pzbFaultAction(a, tOff){
+  const F = S.pzbF; if(!F || !PZB_NEXT[F.kind]) return;
+  if(tOff < 9.5){ log((a === 'hs' ? 'PZB-Hauptschalter war nur ' : 'Fahrtrichtungsschalter stand nur ') + Math.round(tOff) + ' s ' + (a === 'hs' ? 'aus' : 'auf „0“') + ' – mindestens 10 s abwarten', 'pzb'); return; }
+  F.tried = Object.assign(F.tried || {}, {[a]:true});
+  if(F.fix !== a){ log('Ohne Erfolg. ' + (PZB_NEXT[F.kind][a] || ''), 'pzb'); return; }
+  F.fixed = true;
+  if(F.kind === 'nolos'){ if(S.zwang && S.zwang.kind === 'pzb') S.zwang = null; S.pzbF = null; log('PZB-Zwangsbremsung gelöst – PZB-Fahrzeugeinrichtung wieder in Ordnung', 'pzb'); }
+  else if(F.kind === 'dark'){ S.pzbF = null; log('Leuchtmelder wieder in Ordnung – PZB betriebsbereit (LM prüfen)', 'pzb'); }
+  else if(F.kind === 'zb'){ S.pzbF = null; log('PZB-Fahrzeugeinrichtung zurückgesetzt – keine weiteren Zwangsbremsungen', 'pzb'); }
+  else if(F.kind === 'lm500'){ S.pzbF = null; S.testDone = false; log('Störung behoben – Funktionsprüfung wiederholen (Prüftaste bzw. Wachsam + Frei)', 'pzb'); }
+}
+function pressPzbHS(){
+  if(TRAM) return;
+  if(S.v > 0.05){ log('PZB-Hauptschalter nur im Stillstand schalten', 'pzb'); return; }
+  if(S.pzb.test) return;
+  if(S.pzbHS){
+    S.pzbHS = false; S.hsOffT = 0; S.pzbReadyT = 0; pzbClear(); befehlOff();
+    const stuck = S.pzbF && S.pzbF.kind === 'nolos';   // nicht lösbare Zwangsbremsung: löst erst beim Wiedereinschalten nach mindestens 10 s (wenn das hilft)
+    if(S.zwang && S.zwang.kind === 'pzb' && !stuck) S.zwang = null;
+    log('PZB-Hauptschalter AUS – PZB-Fahrzeugeinrichtung ausgeschaltet, alle Leuchtmelder dunkel, Zugdaten gelöscht' + (stuck ? ' – die Zwangsbremsung bleibt bestehen' : ''), 'pzb');
+  } else {
+    S.pzbHS = true; S.pzbReadyT = 8; if(SC.test) S.testDone = false;
+    log('PZB-Hauptschalter EIN – betriebsbereit nach etwa 8 s, dann Zugdaten eingeben und Funktionsprüfung durchführen', 'pzb');
+    pzbFaultAction('hs', S.hsOffT);
+  }
+}
+function pzbReady(){
+  if(!S.hahn || S.pzbOff || (S.pzbF && S.pzbF.kind === 'dark')){ log('PZB-Hauptschalter ein – PZB-Fahrzeugeinrichtung ' + (S.pzbOff ? 'mit Störschalter abgeschaltet' : !S.hahn ? 'ohne Luft (Luftabsperrhahn zu)' : 'weiterhin gestört (alle LM dunkel)'), 'pzb'); return; }
+  pzbRestart('PZB betriebsbereit'); S.pzb.noData = {s0:S.front};
+  if(lern) log(AVG ? 'Blauer LM blinkt: Aufforderung zur Dateneingabe – AVG: Zugart O fest, wird beim Anfahren übernommen' : 'Blauer LM blinkt: Zugdaten eingeben (Zugart wählen), sonst gelten beim Anfahren die PZB-Ersatzdaten', 'pzb');
+}
+function pressFrs(){
+  if(TRAM) return;
+  if(S.v > 0.05){ log('Fahrtrichtungsschalter nur im Stillstand umlegen', 'pzb'); return; }
+  if(S.pzb.test) return;
+  if(S.frs === 'V'){ S.frs = '0'; S.frs0T = 0; pzbClear(); befehlOff(); log('Fahrtrichtungsschalter „0“ – PZB nicht aktiv, keine Zugkraft', 'pzb'); return; }
+  S.frs = 'V'; const t0 = S.frs0T;
+  const stuck = S.pzbF && S.pzbF.kind === 'nolos' && !(S.pzbF.fix === 'frs' && t0 >= 9.5);
+  log('Fahrtrichtungsschalter „V“', 'pzb');
+  pzbFaultAction('frs', t0);
+  if(S.zwang && S.zwang.kind === 'pzb' && !stuck && !(S.pzbF && S.pzbF.kind === 'nolos')) S.zwang = null;
+  if(S.pzbF && S.pzbF.kind === 'lm500') S.testDone = false;
+  if(!pzbDead() && !(S.pzbF && S.pzbF.kind === 'nolos')) pzbRestart('Fahrtrichtungsschalter in „V“ – PZB aktiv');
+}
+function pressHahn(){
+  if(TRAM) return;
+  if(S.v > 0.05){ log('PZB-Luftabsperrhahn nur im Stillstand betätigen', 'pzb'); return; }
+  if(S.hahn){
+    S.hahn = false; pzbClear(); befehlOff();
+    const z = S.zwang && S.zwang.kind === 'pzb'; if(z) S.zwang = null;
+    log('PZB-Luftabsperrhahn geschlossen – pneumatische Baugruppe von der HL getrennt' + (z ? ', Zwangsbremsung gelöst' : '') + '. PZB unwirksam: höchstens 50 km/h, betriebsleitende Stellen verständigen', 'pzb');
+    if(S.pzbF && S.pzbF.kind === 'nolos'){ S.pzbF = {kind:'off', t0:S.pzbF.t0, reported:false, zbN:0, fixT:0, via:'hahn'}; }
+    else if(!S.pzbF){ error('PZB-Luftabsperrhahn ohne Störung an der Pneumatik geschlossen – unzulässig'); S.pzbF = {kind:'off', t0:S.t, reported:false, zbN:0, fixT:0, via:'hahn'}; }
+  } else {
+    S.hahn = true; log('PZB-Luftabsperrhahn geöffnet', 'pzb');
+    if(S.pzbF && S.pzbF.kind === 'off' && S.pzbF.via === 'hahn'){ S.pzbF = null; }
+    if(!pzbDead()) pzbRestart('PZB wieder mit Luft versorgt');
   }
 }
 function pressWachsam(){
@@ -2397,6 +2570,9 @@ function befreienVerbot(){
   if(d > Math.min(LSICHT, 1500)) return 'Signal ' + m.id + ' noch nicht erkennbar – Fahrtbegriff über 30 km/h nötig';
   if(r.aspect === 'HP0') return 'Signal ' + m.id + ' zeigt Halt';
   if(r.zs3On && m.zs3 <= 3) return 'Fahrtbegriff am Signal ' + m.id + ' nicht größer als 30 km/h';
+  // Ril 483.0111 Abschn. 4 (6): keine 500- oder 1000-Hz-Beeinflussung innerhalb von 550 m zu erwarten
+  const mg = MAGNETS.find(q => q.pos > S.front + 1 && q.pos - S.front <= 550 && (q.gg ? onGG(q.pos) : !onGG(q.pos)) && q.fs.some(e => (e.f === 1000 || e.f === 500) && !e.spd && magEntryActive(e)));
+  if(mg){ const f = mg.fs.find(e => (e.f === 1000 || e.f === 500) && !e.spd && magEntryActive(e)).f; return f + '-Hz-Beeinflussung in ' + Math.round(mg.pos - S.front) + ' m zu erwarten (innerhalb von 550 m)'; }
   return null;
 }
 function pressFrei(){
@@ -2407,8 +2583,10 @@ function pressFrei(){
   if(S.v === 0 && !S.zwang && S.t - P.lastW < 1){ startTest(); return; }
   if(S.zwang){
     if(S.v > 0.05){ log('Frei wirkt erst im Stillstand', 'pzb'); return; }
-    if(S.lever > 0){ log('Zum Zurücksetzen Fahrschalter in Bremsstellung bringen', 'pzb'); return; }
-    const k = S.zwang.kind; S.zwang = null; S.sifa.t = 0; P.befLamp = false;
+    if(S.pzbF && S.pzbF.kind === 'nolos' && S.zwang.kind === 'pzb'){ S.pzbF.ft = true; log('FT betätigt – die PZB-Zwangsbremsung lässt sich nicht lösen. Ril 483.0111 A02 Nr. 2: Fahrtrichtungsschalter für 10 s nach „0“, dann wieder „V“ (Taste V)', 'pzb'); return; }
+    if(IS_GT8 && S.zwang.kind !== 'pzb'){ log('GT8: Zwangsbremsung im Stillstand mit dem Befehlsgeber aufheben – über „Bremsen“ nach „0“' + (S.nbu.fgn ? ', vorher Notbremsgriff zurückstellen' : ''), 'pzb'); return; }
+    if(S.lever > 0 || (IS_GT8 && S.lever === 0)){ log(IS_GT8 ? 'Befehlsgeber erst in „Bremsen“ bringen, dann Frei' : 'Zum Zurücksetzen Fahrschalter in Bremsstellung bringen', 'pzb'); return; }
+    const k = S.zwang.kind; S.zwang = null; S.sifa.t = 0; S.sifa.lock = false; P.befLamp = false;
     log(k === 'pzb' ? 'PZB-Zwangsbremsung mit Frei aufgehoben' : 'Zwangsbremsung aufgehoben', 'pzb');
     if(k === 'pzb' && S.fdlNeed && !S.fdlNeed.ok) log('Vor der Weiterfahrt mit dem Fdl abklären (Taste Fdl)', 'fdl');
     return;
@@ -2417,19 +2595,131 @@ function pressFrei(){
   if(P.m500){ log('Befreien nicht möglich: 500-Hz-Überwachung läuft', 'pzb'); return; }
   if(P.mon.some(m => S.front - m.s0 < lmLen(P))){ log('Befreien nicht möglich: 1000-Hz-Leuchtmelder leuchtet noch (' + lmLen(P) + ' m)', 'pzb'); return; }
   const why = befreienVerbot();
-  P.hidden = P.hidden.concat(P.mon.map(m => ({s0:m.s0})));
-  P.mon = []; P.start = null; P.restr = null; P.slowT = 0; P.pufFlag = false;
+  P.hidden = P.hidden.concat(P.mon.map(m => ({s0:m.s0, restr:m.restr})));
+  P.mon = []; P.start = null; P.startShown = false; P.restr = null; P.slowT = 0; P.pufFlag = false;
   log('PZB befreit', 'pzb'); audio.beep(660, .15, 'sine', .035);
   if(why) error('Unzulässiges Befreien: ' + why);
 }
+// ---------------- GT8-100D/2S-M nach Bedienhandbuch (AVG) und Kurzanleitung NBÜ ----------------
+// Zwangsbremsung nur im Stillstand aufheben: Befehlsgeber über „Bremsen“ nach „0“ (2.3.2, gilt auch nach PZB/IMU zusätzlich zu Frei);
+// v-max-Überwachung: Summton über 100 km/h, nach 6 s Zwangsbremsung (1.10.2, 2.3.3, 2.5); Schnellbremsung mit Glocke (1.10.2)
+function gt8Step(dt, vk){
+  const Z = S.zwang;
+  if(Z && Z.kind !== 'pzb' && S.v === 0){
+    if(S.lever < 0) Z.brk = true;
+    else if(S.lever === 0 && Z.brk){
+      if(S.nbu.fgn){ if(!Z.msg){ Z.msg = true; log('Fahrgastnotbremse noch gezogen – erst den Notbremsgriff zurückstellen (NBÜ-Bedienteil: Quitt)', 'fdl'); } }
+      else { S.zwang = null; S.sifa.t = 0; S.sifa.lock = false; log('Zwangsbremsung aufgehoben – Befehlsgeber über „Bremsen“ nach „0“', 'pzb'); }
+    }
+  }
+  const V = S.vmx;
+  if(vk > VEH_VMAX + 1 && !S.zwang){
+    V.t += dt;
+    if(!V.flag){ V.flag = true; audio.start('vmax', 760, 'square', .035, true); log('Summton: Höchstgeschwindigkeit ' + VEH_VMAX + ' km/h überschritten – innerhalb von 6 s darunter abbremsen', 'pzb'); }
+    if(V.t > 6){ V.t = 0; zwang('Höchstgeschwindigkeit ' + VEH_VMAX + ' km/h länger als 6 s überschritten', 'vmax'); }
+  } else if(vk <= VEH_VMAX || S.zwang){ V.t = 0; }
+  if(V.flag && (vk <= VEH_VMAX || S.zwang)){ V.flag = false; audio.stop('vmax'); }
+  if(S.lever === -8 && S.v > 0.3){ if((S.bellT -= dt) <= 0){ S.bellT = 0.45; if(snd.c) snd.ev('ding'); else audio.beep(1250, .12, 'triangle', .03); } }
+  else S.bellT = 0;
+  if(NBU_ON) nbuStep(dt);
+}
+// Notbremsüberbrückung (Handbuch 2.16, Kurzanleitung NBÜ): Schalter Test/Aus/Ein, Prüflauf mit Quittierung, Überbrückung erst 10 s nach der Anfahrt,
+// Fahrgastnotbremse (FGN) im Tunnel: Alarm, 10 s für „Quitt“, sonst Zwangsbremsung; bis zur nächsten Haltestelle weiterfahren, nach Halt mit Türfreigabe
+// wirkt die FGN, Rückstellung des Notbremsgriffs; FGN am Bahnsteig oder bis 10 s nach der Anfahrt: sofortige, nicht überbrückbare Bremsung.
+// Mit der FGN baut die Sprechstelle eine vorrangige Intercom-Verbindung zum Tf auf (Sprechen / Löschen, nach 20 s ohne Sprechen gelöscht).
+function nbuNew(){ const off = !!(SC && SC.nbu && SC.nbu.off); return {sw:off ? 'aus' : 'ein', ok:!off, test:null, alarm:false, depT:null, armed:false, lastSt:-1, fgn:null, ic:null, ev:0, tunErr:false, stopErr:false, rep:false}; }
+const inCityTunnel = p => TUNNELS.some(t => t.city && p > t.from && p < t.to);
+function nbuAlarm(on){ const N = S.nbu; N.alarm = on; if(on) audio.start('nbu', 1180, 'square', .035, true); else audio.stop('nbu'); }
+function nbuStep(dt){
+  const N = S.nbu;
+  if(N.test && !N.test.done && (N.test.t += dt) >= 3){ N.test.done = true; nbuAlarm(true); log('NBÜ-Prüflauf beendet: Leuchtmelder „NBÜ“ und „FGN/Stör“ rot, Alarm – mit „Quitt“ bestätigen (Taste U)', 'fdl'); }
+  if(N.depT === null && S.v > 0.3 && S.door.state === 'zu') N.depT = S.t;
+  N.armed = N.sw === 'ein' && N.ok && N.depT !== null && S.t - N.depT >= 10;
+  const E = (SC.nbu && SC.nbu.fgn) || [];
+  while(N.ev < E.length){
+    const e = E[N.ev], go = e.pos !== undefined ? S.front >= e.pos : (N.depT !== null && N.lastSt >= 0 && STATIONS[N.lastSt].name === e.dep && S.t - N.depT >= e.t);
+    if(!go) break; N.ev++; fgnPull(e);
+  }
+  const F = N.fgn;
+  if(F && !F.direct && !F.quitt && S.t - F.t0 > 10 && !S.zwang){ F.direct = true; F.eff = true; zwang('Fahrgastnotbremse nicht innerhalb von 10 s quittiert (NBÜ)', 'fgn'); }
+  if(F && F.quitt && !F.eff && S.v === 0 && inCityTunnel(S.front) && !STATIONS.some((st, k) => !st.first && atPlatform(k)) && !N.stopErr){ N.stopErr = true; error('Fahrgastnotbremse mit NBÜ: nicht im Tunnel anhalten – bis zur nächsten Haltestelle weiterfahren'); }
+  if(N.ic && !N.ic.talk && S.t - (N.ic.tl || N.ic.t0) > 20 && N.ic.said){ N.ic = null; log('Intercom: Sprechverbindung nach 20 s ohne „Sprechen“ selbsttätig gelöscht', 'fdl'); }
+  if(!N.tunErr && inCityTunnel(S.front) && !(N.sw === 'ein' && N.ok)){ N.tunErr = true; error('Stadtbahntunnel ohne eingeschaltete Notbremsüberbrückung befahren (NBÜ vorgeschrieben, vorher Prüflauf)'); }
+  if(F && F.reset !== undefined && (F.reset -= dt) <= 0){ N.fgn = null; log('Notbremsgriff zurückgestellt – Fahrgastnotbremse wieder in Grundstellung' + (S.zwang && S.zwang.kind === 'fgn' ? '. Zwangsbremsung: Befehlsgeber über „Bremsen“ nach „0“' : ''), 'fdl'); }
+}
+function fgnPull(e){
+  const N = S.nbu, nx = STATIONS.find(st => !st.first && st.stop > S.front + 30);
+  N.ic = {t0:S.t, talk:false, said:false, msg:e.msg || 'Hier ist einem Fahrgast schlecht geworden, bitte helfen Sie!', reply:e.reply, nx:nx ? nx.name : 'nächste Haltestelle'};
+  N.rep = false;
+  if(N.armed && S.v > 0.3){
+    N.fgn = {t0:S.t, quitt:false, eff:false, direct:false};
+    nbuAlarm(true);
+    log('Fahrgastnotbremse gezogen! „FGN/Stör“ rot, Alarm, Intercom-Notruf – die NBÜ hält die Bremsung 10 s zurück: „Quitt“ drücken (Taste U) und bis zur nächsten Haltestelle weiterfahren', 'fdl');
+  } else {
+    N.fgn = {t0:S.t, quitt:true, eff:true, direct:true};
+    nbuAlarm(true);
+    const why = !(N.sw === 'ein' && N.ok) ? 'NBÜ nicht aktiv' : S.v > 0.3 ? 'innerhalb von 10 s nach der Anfahrt – nicht überbrückbar' : 'am Bahnsteig – nicht überbrückbar';
+    zwang('Fahrgastnotbremse gezogen (' + why + ')', 'fgn', false, true);
+  }
+}
+function setNbuSw(p){
+  const N = S.nbu; if(!NBU_ON || N.sw === p) return;
+  const was = N.sw; N.sw = p; snd.ev && snd.c && snd.ev('click');
+  if(was === 'test'){ if(N.test && !N.test.quitt){ log('NBÜ-Prüflauf abgebrochen – kein gültiger Prüflauf', 'fdl'); nbuAlarm(false); } N.test = null; }
+  if(p === 'test'){
+    const why = S.v > 0 ? 'Fahrzeug nicht im Stillstand' : S.hs.st === 'aus' ? 'Führerstand nicht aufgerüstet (Taste M)' : S.frs !== 'V' ? 'Fahrtrichtungsschalter nicht in „V“' : S.door.state !== 'zu' ? 'Türen nicht geschlossen und gesperrt' : S.zwang ? 'Zwangsbremsung steht an' : N.fgn ? 'Fahrgastnotbremse gezogen' : null;
+    if(why){ log('NBÜ-Prüflauf nicht möglich: ' + why, 'fdl'); return; }
+    N.ok = false; N.test = {t:0, done:false, quitt:false}; log('NBÜ-Schalter „Test“ – Prüflauf läuft …', 'fdl'); return;
+  }
+  if(p === 'ein') log(N.ok ? 'NBÜ eingeschaltet – „NBÜ“ Dauerlicht grün. Die Überbrückung wirkt ab 10 s nach der Anfahrt' : 'NBÜ-Schalter „Ein“ ohne gültigen Prüflauf – NBÜ nicht aktiv. Erst im Stillstand Prüflauf (Stellung „Test“)', 'fdl');
+  else log('NBÜ-Schalter „Aus“', 'fdl');
+}
+function pressNbuSw(){ if(!NBU_ON) return; const o = ['aus', 'test', 'ein']; setNbuSw(o[(o.indexOf(S.nbu.sw) + 1) % 3]); }
+function pressNbuQuitt(){
+  if(!NBU_ON) return;
+  const N = S.nbu, F = N.fgn;
+  if(N.test && N.test.done && !N.test.quitt){ N.test.quitt = true; N.ok = true; nbuAlarm(false); log('NBÜ-Prüflauf quittiert – „NBÜ“ blinkt grün, Prüflauf gültig (24 h). Schalter auf „Ein“', 'fdl'); return; }
+  if(F && N.alarm){
+    nbuAlarm(false);
+    if(!F.quitt){ F.quitt = true; log('FGN quittiert nach ' + (S.t - F.t0).toFixed(1).replace('.', ',') + ' s – Bremsung überbrückt. Weiter bis ' + (N.ic ? N.ic.nx : 'zur nächsten Haltestelle') + ', über Intercom mit dem Fahrgast sprechen (Taste I), Leitstelle verständigen (Taste F)', 'fdl'); }
+    else log('Alarm quittiert – Notbremsgriff im Stillstand zurückstellen (nochmals Quitt)', 'fdl');
+    return;
+  }
+  if(F && F.eff && F.reset === undefined){
+    if(S.v > 0.05){ log('Notbremsgriff erst im Stillstand zurückstellen', 'fdl'); return; }
+    F.reset = 8; log('Tf geht zum gezogenen Notbremsgriff und stellt ihn zurück …', 'fdl'); return;
+  }
+  if(F && F.quitt && !F.eff){ log('FGN bleibt überbrückt – nach Halt mit Türfreigabe wirkt sie und wird dann zurückgestellt', 'fdl'); return; }
+  log('NBÜ: nichts zu quittieren', 'fdl');
+}
+function pressIcom(talk){
+  if(!NBU_ON) return;
+  const N = S.nbu, I = N.ic;
+  if(!talk){ if(I){ N.ic = null; log('Intercom gelöscht', 'fdl'); } return; }
+  if(!I){ log('Intercom: keine Sprechanforderung', 'fdl'); return; }
+  I.talk = false; I.tl = S.t;
+  if(!I.said){ I.said = true; log('Intercom – Fahrgast: „' + I.msg + '“', 'fdl');
+    log('Tf über Intercom: „' + (I.reply || (N.fgn && !N.fgn.direct ? 'Ich fahre bis zur Haltestelle ' + I.nx + ', dort wartet Hilfe. Bitte bleiben Sie ruhig.' : 'Verstanden, ich komme und stelle den Notbremsgriff zurück.')) + '“', 'fdl'); }
+  else log('Intercom: Fahrgast bestätigt', 'fdl');
+}
+// Türfreigabe am Halt: Überbrückung aus, die überbrückte FGN wirkt (Wagen gebremst) bis zur Rückstellung
+function nbuDoorRelease(i){
+  if(!NBU_ON) return;
+  const N = S.nbu; N.depT = null; N.lastSt = i;
+  if(N.fgn && !N.fgn.eff){ N.fgn.eff = true; log('Halt mit Türfreigabe – Überbrückung aus, die Fahrgastnotbremse wirkt. Hilfe leisten, Notbremsgriff zurückstellen (Quitt)', 'fdl'); }
+}
 function pressSifa(){
-  if(S.zwang && S.zwang.kind === 'sifa' && S.v < 0.05){ S.zwang = null; log('Sifa-Zwangsbremsung aufgehoben', 'pzb'); }
-  if(S.sifa.t >= 30) S.sifaN++;
+  if(S.zwang && S.zwang.kind === 'sifa' && S.v < 0.05){
+    if(IS_GT8) log('GT8: Zwangsbremsung im Stillstand aufheben – Befehlsgeber über „Bremsen“ nach „0“ bringen', 'pzb');
+    else { S.zwang = null; log('Sifa-Zwangsbremsung aufgehoben', 'pzb'); }
+  }
+  if(S.sifa.t >= SIFA.lm){ S.sifaN++; if(IS_GT8 && !S.zwang) log('Sifa wieder gedrückt – Summton aus. Fahrstrom erst nach Befehlsgeber über „0“ zurück nach „Fahren“', 'pzb'); }
   S.sifa.t = 0; audio.stop('sifa');
 }
 function startTest(){
   const P = S.pzb;
   if(P.test || pzbDead()) return;
+  if(S.hl < 4.7 && lern) log('Hinweis: Funktionsprüfung bei einem HLL-Druck von etwa 5 bar – nur dann ist die Drucksenkung eindeutig erkennbar (Zug mit der Feststell- bzw. Federspeicherbremse sichern)', 'pzb');
   P.test = {t:0}; P.mon = []; P.m500 = null; P.hidden = []; P.restr = null; P.start = null; P.noData = null;
   audio.stop('hupe'); audio.beep(500, .5, 'square', .04);
   log('PZB-Funktionsprüfung läuft – Leuchtmelder und Akustik beobachten', 'pzb');
@@ -2437,6 +2727,7 @@ function startTest(){
 function endTest(){
   const P = S.pzb;
   S.testDone = true;
+  if(S.pzbF && S.pzbF.kind === 'lm500' && !S.pzbF.reported){ S.pzbF.seen = true; log('Funktionsprüfung beendet – Druckabfall und akustisches Signal in Ordnung' + (lern ? '. Achtung: der LM 500 Hz hat nicht aufgeleuchtet (Ril 483.0111 A01 Nr. 8): Fahrtrichtungsschalter auf „0“ und wieder „V“, Funktionsprüfung wiederholen' : ''), 'pzb'); if(!AVG) P.start = {s0:S.front}; return; }
   if(!AVG) P.start = {s0:S.front};
   log('Funktionsprüfung fehlerfrei: Druckabfall am Federspeicher, alle Leuchtmelder, Akustik' + (AVG ? ' – 85 Dauerlicht' : ' – Startprogramm aktiv'), 'pzb');
 }
@@ -2455,11 +2746,29 @@ function pressFdl(){
     }};
     return;
   }
+  const NB = NBU_ON ? S.nbu : null;
+  if(NB && NB.fgn && !NB.rep){
+    NB.rep = true;
+    const nx = NB.ic ? NB.ic.nx : 'nächsten Haltestelle', why = NB.ic && NB.ic.said ? 'Fahrgast meldet über Intercom: ' + NB.ic.msg : 'Grund noch unbekannt (Intercom)';
+    log('An Leitstelle: Fahrgastnotbremse ' + (inCityTunnel(S.front) ? 'im Stadtbahntunnel' : 'bei km ' + km) + ' – ' + why + (NB.fgn.direct ? ' Zug steht.' : ' NBÜ hat überbrückt, Weiterfahrt bis ' + nx + '.'), 'fdl');
+    S.fdlBusy = {t:5, fn: () => log('Leitstelle: Verstanden. ' + (NB.ic && NB.ic.said && /zusammengebrochen|schlecht|verletzt/.test(NB.ic.msg) ? 'Rettungsdienst kommt zur Haltestelle ' + nx + '. ' : '') + 'Notbremsgriff zurückstellen und Weiterfahrt melden.', 'fdl')};
+    return;
+  }
   const F = S.pzbF;
-  if(F && !F.reported && (F.kind === 'dark' || S.pzbOff)){
+  if(F && !F.reported && (F.kind === 'dark' || F.kind === 'sam' || F.kind === 'lm500' || F.kind === 'off' || pzbUnw()) && !(S.fdlNeed && !S.fdlNeed.ok && S.zwang)){
     F.reported = true;
-    log('An ' + meldeStellen().replace(' (mit Bitte um Vormeldung)', '') + ': PZB-Fahrzeugeinrichtung gestört bei km ' + km + (S.pzbOff ? ', Störschalter betätigt' : ', Leuchtmelder 85 dunkel') + (AVG ? ' – Bitte um Vormeldung' : ''), 'fdl');
-    S.fdlBusy = {t:5, fn: () => log((AVG ? 'BZ: Verstanden, Vormeldung erfolgt. Zü AVG: ' : 'BZ: Verstanden. Disponent: ') + 'Weiterfahrt mit höchstens 50 km/h' + (F.kind === 'dark' ? ', beim nächsten Halt Führerstand ab- und aufrüsten.' : ' bis PZB i. O.'), 'fdl')};
+    const an = 'An ' + meldeStellen().replace(' (mit Bitte um Vormeldung)', '') + ': ', who = AVG ? 'BZ: Verstanden. Zü AVG: ' : 'BZ: Verstanden. Disponent: ';
+    if(F.kind === 'sam'){
+      log(an + 'Störungssammelmeldung der PZB bei km ' + km + ' – LM 1000 Hz blinkte 10 s mit akustischem Signal, LM 85 leuchtet, Schalter in Grundstellung', 'fdl');
+      S.fdlBusy = {t:5, fn: () => log(who + 'Zugleistung ohne Geschwindigkeitseinschränkung zu Ende fahren, das Fahrzeug geht danach in die Werkstatt.', 'fdl')};
+    } else if(F.kind === 'lm500'){
+      log(an + 'Funktionsprüfung nicht in Ordnung – LM 500 Hz leuchtet nicht auf, Fahrtrichtungsschalter und PZB-Hauptschalter ohne Erfolg', 'fdl');
+      S.fdlBusy = {t:5, fn: () => log(who + 'Weiterfahrt – wirksame 500-Hz-Überwachungen werden nicht angezeigt, das Fahrzeug geht nach der Zugleistung in die Werkstatt.', 'fdl')};
+    } else {
+      const why = S.pzbOff ? 'Störschalter betätigt' : !S.hahn ? 'Zwangsbremsung nicht lösbar, PZB ausgeschaltet und Luftabsperrhahn geschlossen' : !S.pzbHS ? 'PZB-Hauptschalter ausgeschaltet' : 'alle Leuchtmelder dunkel';
+      log(an + 'PZB-Fahrzeugeinrichtung gestört bei km ' + km + ', ' + why + (AVG ? ' – Bitte um Vormeldung' : ''), 'fdl');
+      S.fdlBusy = {t:5, fn: () => log(who + 'Weiterfahrt mit höchstens 50 km/h bis PZB i. O., das Fahrzeug geht danach in die Werkstatt.', 'fdl')};
+    }
     return;
   }
   if(S.fdlNeed && !S.fdlNeed.ok){
@@ -2467,7 +2776,7 @@ function pressFdl(){
     const atMain = S.fdlNeed.atMain, st2 = S.stoer && S.stoer.kind === '2000' && !S.stoer.reported, hf = S.drop && S.drop.find(D => D.on);
     if(hf) hf.rep = true;
     if(st2){ S.stoer.reported = true; log('An Fdl: PZB-Zwangsbremsung bei km ' + km + ' am ' + S.stoer.name + ' – 2000-Hz-Magnet wirksam, obwohl das Signal Fahrt zeigt. Streckeneinrichtung gestört, Fahrzeug hat gesandet', 'fdl'); }
-    else log('An Fdl: PZB-Zwangsbremsung bei km ' + km + (atMain ? ' am Hauptsignal' : '') + (hf ? ', Signal vor dem Zug auf Halt gefallen' : '') + ', Fahrzeug hat gesandet', 'fdl');
+    else log('An Fdl: PZB-Zwangsbremsung bei km ' + km + (atMain ? ' am Hauptsignal' : '') + (hf ? ', Signal vor dem Zug auf Halt gefallen' : '') + (S.zwang && S.zwang.fault ? ', ohne Beeinflussung (Ursache unbekannt)' : '') + ', Fahrzeug hat gesandet', 'fdl');
     S.fdlBusy = {t: atMain ? 12 : 5, fn: () => {
       S.fdlNeed.ok = true;
       if(st2){ log('Fdl: Verstanden, die Störung wird gemeldet, nachfolgende Züge werden verständigt. Zustimmung zur Weiterfahrt – das Signal zeigt Fahrt.', 'fdl'); return; }
@@ -2503,11 +2812,11 @@ function pressMotor(){
   const H = S.hs;
   if(H.st === 'aus'){ H.st = 'start'; H.t = 0; snd.ev('click'); log('Aufrüsten: Steuerstrom ein, Stromabnehmer heben', 'fdl'); }
   else if(H.st === 'ein'){
-    if(S.v > 0.3 || (SYSW && S.front > SYSW.el1v - 50 && S.front < SYSW.el2 + 30)){ H.st = 'hsaus'; H.t = 0; snd.ev('hsOff'); log('Hauptschalter aus – Stromabnehmer bleibt am Fahrdraht', 'fdl'); return; }
+    if(S.v > 0.3 || (SYSW && S.front > SYSW.el1v - 50 && S.front < SYSW.el2 + 30)){ H.st = 'hsaus'; H.t = 0; snd.ev('hsOff'); log(IS_GT8 ? 'Linienschütz ausgelegt (Taster) – Antriebe vom Netz getrennt, Stromabnehmer bleibt am Fahrdraht' : 'Hauptschalter aus – Stromabnehmer bleibt am Fahrdraht', 'fdl'); return; }
     H.st = 'aus'; H.t = 0; snd.ev('hsAus'); log('Hauptschalter aus, Stromabnehmer gesenkt – Fahrzeug abgerüstet', 'fdl');
   } else if(H.st === 'hsaus'){
-    if(!voltAt(S.front - 10)){ snd.ev('click'); log('Keine Fahrdrahtspannung – Hauptschalter lässt sich nicht einschalten', 'fdl'); return; }
-    if(SYSW && S.front - 10 > SYSW.el1 && S.front - 10 < SYSW.el2) error('Hauptschalter vor El 2 eingeschaltet – erst einschalten, wenn der Stromabnehmer das Signal El 2 passiert hat');
+    if(!voltAt(S.front - 10)){ snd.ev('click'); log('Keine Fahrdrahtspannung – ' + (IS_GT8 ? 'Linienschütz' : 'Hauptschalter') + ' lässt sich nicht einschalten', 'fdl'); return; }
+    if(SYSW && S.front - 10 > SYSW.el1 && S.front - 10 < SYSW.el2) error((IS_GT8 ? 'Linienschütz vor El 2 eingelegt' : 'Hauptschalter vor El 2 eingeschaltet') + ' – erst einschalten, wenn der Stromabnehmer das Signal El 2 passiert hat');
     H.st = 'hsein'; H.t = 0; snd.ev('click');
   }
 }
@@ -2522,12 +2831,12 @@ function hsStep(dt){
   if(H.st === 'hsein' && H.t >= 0.6){
     H.st = 'ein'; snd.ev('hsEin');
     const sy = voltAt(S.front - 10);
-    if(sy && sy !== H.sys){ H.sys = sy; log('Hauptschalter ein – Fahrzeug auf ' + (sy === 'dc' ? '750 V Gleichspannung' : '15 kV 16,7 Hz') + ' umgeschaltet', 'fdl'); }
-    else log('Hauptschalter ein', 'fdl');
+    if(sy && sy !== H.sys){ H.sys = sy; log(IS_GT8 ? 'Linienschütz eingelegt – die Systemwahl hat selbsttätig auf ' + (sy === 'dc' ? '750 V Gleichspannung' : '15 kV 16,7 Hz') + ' umgeschaltet' : 'Hauptschalter ein – Fahrzeug auf ' + (sy === 'dc' ? '750 V Gleichspannung' : '15 kV 16,7 Hz') + ' umgeschaltet', 'fdl'); }
+    else log(IS_GT8 ? 'Linienschütz eingelegt' : 'Hauptschalter ein', 'fdl');
   }
   if(H.st === 'ein' && !voltAt(S.front - 10)){
     H.st = 'hsaus'; H.t = 0; snd.ev('arc');
-    if(!H.arcErr){ H.arcErr = true; error('Mit eingeschaltetem Hauptschalter in die Systemtrennstelle gefahren – Überschlag, Schutzabschaltung'); }
+    if(!H.arcErr){ H.arcErr = true; error(IS_GT8 ? 'Mit eingelegtem Linienschütz in die Systemtrennstelle gefahren – das Fühlsystem erkennt die Spannung nicht sicher, Schutzabschaltung' : 'Mit eingeschaltetem Hauptschalter in die Systemtrennstelle gefahren – Überschlag, Schutzabschaltung'); }
   }
   // Druckluft: Kompressor schaltet bei 8 bar ein und bei 10 bar ab; jede Bremsung verbraucht Luft
   if(H.st === 'ein'){ if(H.air < 8) H.comp = true; if(H.air >= 10) H.comp = false; } else H.comp = false;
@@ -2542,7 +2851,7 @@ function hsStep(dt){
 // w Fahrwiderstand A + B·V/100 + C·(V/100)² in N/kN, tt Zeitkonstante Zugkraftaufbau in s
 // Stadtbahn/Straßenbahn je Wagen: elektrische Bremse mit Federspeicher (aB Betriebsbremse voll), Gefahrbremse mit Magnetschienenbremse (aG)
 const FZ_STB = {
-  gt8:{name:'GT8-100D/2S-M', ul:38.4, m:64, P:560, F0:80, xi:1.1, w:[2.0, 0.6, 2.6], tt:0.9, aB:1.3, aG:2.7, q:'Masse, Leistung und Zugkraft geschätzt'},
+  gt8:{name:'GT8-100D/2S-M', ul:37.6, m:64, P:508, F0:71, xi:1.1, w:[2.0, 0.6, 2.6], tt:0.9, aB:1.6, aG:2.73, q:'Bedienhandbuch GT8-100D/2S-M: 37,6 m, 58,5 t leer, 4 × 127 kW, Anfahrbeschleunigung 1,0 m/s², Betriebsbremse 1,6 m/s², Schnellbremsung 2,73 m/s², 100 km/h; Zuladung (rund 5,5 t) geschätzt'},
   n947:{name:'ET 2010', ul:37, m:68, P:600, F0:86, xi:1.1, w:[2.0, 0.6, 2.6], tt:0.8, aB:1.3, aG:2.7, q:'62,5 t leer, 4 × 150 kW (öffentlich); Zugkraft und Bremswerte geschätzt'},
   vbk:{name:'NET 2012', ul:37.2, m:60, P:500, F0:80, xi:1.1, w:[2.0, 0.6, 2.6], tt:0.8, aB:1.3, aG:2.8, q:'4 × 125 kW, 80 km/h (öffentlich); Masse, Zugkraft und Bremswerte geschätzt'},
   net:{name:'NET 2012 (AVG)', ul:37.2, m:60, P:500, F0:80, xi:1.1, w:[2.0, 0.6, 2.6], tt:0.8, aB:1.3, aG:2.8, q:'4 × 125 kW, 80 km/h (öffentlich); Masse, Zugkraft und Bremswerte geschätzt'}
@@ -2566,18 +2875,31 @@ const gradAt = s => { let g = 0; for(const [p, i] of SC.grad || []){ if(p > s) b
 function hlAt(t){ const H = S.hlH; for(let k = H.length - 1; k >= 0; k--) if(H[k][0] <= t) return H[k][1]; return H.length ? H[0][1] : S.hl; }
 function brakeInit(){
   const B = FZ.br, dem = S.lever < 0 ? Math.min(7, -S.lever)/7 : 0;
-  S.ft = 0; S.bd = B.t === 'stb' ? dem*B.aF : 0;
+  S.ft = 0; S.bd = B.t === 'stb' ? dem*B.aF : 0; S.hsb = B.t === 'stb' && S.v < 7/3.6; S.blp = 0;
   S.hl = dem > 0 ? 5 - (0.4 + (dem*7 - 1)/6*1.1) : 5; S.hlH = [[0, S.hl]];
   const d = 5 - S.hl, c0 = d < 0.25 ? 0 : Math.min(3.8, 0.8 + (d - 0.25)/1.25*3.0);
   S.cyl = Array(B.t === 'stb' ? 1 : 6).fill(B.t === 'stb' ? 0 : c0);
   brakeStep(0);
 }
 function brakeStep(dt){
-  const B = FZ.br, V = S.v*3.6, em = !!(S.zwang || S.lever === -8 || (S.pzb && S.pzb.test)), dem = S.lever < 0 ? Math.min(7, -S.lever)/7 : 0;
+  const B = FZ.br, V = S.v*3.6, em = !!(S.zwang || S.lever === -8 || (S.pzb && S.pzb.test) || pzbIB()), dem = S.lever < 0 ? Math.min(7, -S.lever)/7 : 0;
   if(B.t === 'stb'){   // elektrische Bremse, Federspeicher, Gefahrbremse mit Magnetschienenbremse
-    const tar = em ? B.aE : dem*B.aF;
+    // Haltestellenbremse (GT8-Handbuch 1.10.2 und 2.3.1): setzt beim Bremsen unter 7 km/h ein, bringt den Wagen zum Stehen und hält ihn,
+    // bis der Befehlsgeber in „Fahren“ steht und genug Zugkraft aufgebaut ist (Lösen in fdMove)
+    if(S.lever < 0 && V < 7) S.hsb = true;
+    const nb = IS_GT8 && S.frs !== 'V';   // GT8: Rüstzustand „0“/„1“ entlüftet die Bremsleitung (0 bar)
+    const tar = em || nb ? B.aE : Math.max(dem*B.aF, S.hsb ? HSB_A*Math.min(1, Math.max(0, 7 - V)/3) : 0);
     S.bd += (tar - S.bd)*Math.min(1, dt/(tar > S.bd ? 0.45 : 0.6));
-    S.brake = S.bd; S.cyl[0] = Math.min(3.8, S.bd/B.aF*3.2); S.hl = 5; return;
+    S.brake = S.bd; S.cyl[0] = Math.min(3.8, S.bd/B.aF*3.2); S.hl = 5;
+    // Bremsleitung (roter Zeiger am GT8-Manometer): gelöst 6 bar; Befehlsgeber über 55 % Blending 3–4,2 bar je nach Beladung;
+    // Haltestellenbremse 3 bar; Schnell- und Zwangsbremsung etwa 1 bar (Restdruck für den Gleitschutz); Rüstzustand „0“/„1“ 0 bar
+    const nv = Math.max(1, Math.round(TRAIN_LEN/37.6)), pb = 4.2 - 1.2*Math.min(1, (S.onboard || 0)/(200*nv));
+    let pT = dem > 0.55 ? 6 - (6 - pb)*Math.min(1, (dem - 0.55)/0.3) : 6;
+    if(S.hsb && V < 7) pT = Math.min(pT, 3);
+    if(em) pT = 1;
+    if(nb || S.hs.st === 'aus') pT = 0;
+    S.blp += (pT - S.blp)*Math.min(1, dt/(pT < S.blp ? 0.45 : 1.1));
+    return;
   }
   // Führerbremsventil: Fahrtstellung 5 bar, Bremsstufen 4,6 … 3,5 bar (Vollbremsung), Schnellbremsung entlüftet die Hauptluftleitung
   const hlT = em ? 0 : dem > 0 ? 5 - (0.4 + (dem*7 - 1)/6*1.1) : 5;
@@ -2600,9 +2922,11 @@ function brakeStep(dt){
 }
 // Zugkraft (Anfahrzugkraft, darüber Leistungsgrenze P/v), Fahrwiderstand und Neigung
 function fdMove(dt){
-  const can = S.lever > 0 && S.hs.st === 'ein' && !S.zwang && S.door.state === 'zu' && S.v*3.6 < VEH_VMAX && brakeReleased();
+  const can = S.lever > 0 && S.hs.st === 'ein' && !S.zwang && !(S.pzb && S.pzb.ib) && S.frs === 'V' && S.door.state === 'zu' && S.v*3.6 < VEH_VMAX && brakeReleased()
+    && !S.sifa.lock && !(S.door.pre && S.hsb && S.v*3.6 < 7) && !(S.nbu && S.nbu.fgn && S.nbu.fgn.eff);
   const Ftar = can ? (S.lever/8)*Math.min(FZ.F0, FZ.P/Math.max(S.v, 0.5)) : 0;
   S.ft = can ? S.ft + (Ftar - S.ft)*Math.min(1, dt/FZ.tt) : 0;
+  if(S.hsb && can && S.ft >= Math.max(0.12*FZ.F0, FZ.m*9.81*Math.max(0, gradAt(S.front - TRAIN_LEN/2))/1000*1.1)) S.hsb = false;   // Haltestellenbremse löst
   const me = FZ.m*FZ.xi, Vk = S.v*3.6, wv = FZ.w[0] + FZ.w[1]*Vk/100 + FZ.w[2]*(Vk/100)*(Vk/100);
   const aw = S.v > 0 ? FZ.m*9.81*wv/1000/me : 0, ag = FZ.m*9.81*gradAt(S.front - TRAIN_LEN/2)/1000/me;
   const trac = S.ft/me; S.trac = trac; S.ares = aw + ag;
@@ -2611,11 +2935,12 @@ function fdMove(dt){
   S.v = Math.max(0, S.v + acc*dt);
   if(S.v < 0.02 && trac === 0) S.v = 0;
 }
-const brakeReleased = () => FZ.br.t === 'stb' ? S.bd < 0.05 && S.lever >= 0 : S.hl >= 4.7;
+const brakeReleased = () => FZ.br.t === 'stb' ? (S.bd < 0.05 || S.hsb) && S.lever >= 0 : S.hl >= 4.7;   // Haltestellenbremse löst erst mit aufgebauter Zugkraft
+const HSB_A = 0.8;   // Verzögerung der Haltestellenbremse (Federspeicherbremse mit 3 bar), angenommen
 
 // ---------------- Simulation ----------------
 function brakeTarget(){
-  if(S.zwang || S.lever === -8 || S.pzb.test) return 1.25*BRK_F;
+  if(S.zwang || S.lever === -8 || S.pzb.test || pzbIB()) return 1.25*BRK_F;
   if(S.lever < 0) return (-S.lever)/7*0.9*BRK_F;
   return 0;
 }
@@ -2678,22 +3003,30 @@ function step(dt){
   const crossed = p => prev < p && p <= fr;
   sndJoints(prev, fr);
 
-  // PZB-Störungen laut Szenario
+  // PZB-Störungen laut Szenario (Ril 483.0111 Anhänge 01 und 02)
   const PF = SC.pzbFaults || [];
   if(S.pzbFi < PF.length && fr >= PF[S.pzbFi].pos && !S.pzbF){
     const f = PF[S.pzbFi++];
-    S.pzbF = {kind:f.kind, t0:S.t, reported:false, zbN:0, fixT:0};
-    if(f.kind === 'dark'){ pzbClear(); setPzbRestr(true); log('Leuchtmelder 85 erloschen – PZB-Fahrzeugeinrichtung gestört', 'pzb'); log('Schaublatt: höchstens 50 km/h bis PZB i. O. – ' + meldeStellen() + ' melden (Taste Fdl)', 'fdl'); }
+    S.pzbF = {kind:f.kind, fix:f.fix || null, t0:S.t, reported:false, zbN:0, fixT:0};
+    if(f.kind === 'dark'){ pzbClear(); log('Alle PZB-Leuchtmelder erloschen – PZB-Fahrzeugeinrichtung gestört', 'pzb'); if(lern) log('Ril 483.0111 A02 Nr. 3: Die PZB ist gestört – höchstens 50 km/h, ' + meldeStellen() + ' melden (Taste Fdl). Im Stillstand: PZB-Hauptschalter aus und ein (J), Fahrtrichtungsschalter 10 s „0“, dann „V“ (V), LM prüfen.', 'fdl'); }
+    if(f.kind === 'nolos'){ S.zwang = {reason:'PZB-Zwangsbremsung aus unbekannter Ursache', kind:'pzb', pos:fr, fault:true}; S.zbCount++; S.fdlNeed = {atMain:false, ok:false, err:false}; S.pzbF.stuck = true; audio.stop('hupe'); audio.beep(320, .9, 'square', .06); log('PZB-Zwangsbremsung ohne Beeinflussung – Ursache unbekannt', 'pzb'); if(lern) log('Ril 483.0111 A02 Nr. 10: anhalten, sofort den Fdl verständigen; lässt sich die Zwangsbremsung nicht lösen: Nr. 2.', 'fdl'); }
+    if(f.kind === 'sam'){ audio.start('sam', 880, 'square', .03, true); log('LM 1000 Hz blinkt, akustisches Signal – Störungssammelmeldung (LM 85 leuchtet weiter)', 'pzb'); if(lern) log('Ril 483.0111 A02 Nr. 4 a: PZB arbeitet weiter. ' + meldeStellen() + ' melden (Taste Fdl), Zugleistung ohne Geschwindigkeitseinschränkung zu Ende fahren.', 'fdl'); }
   }
   if(S.pzbF){
     const F = S.pzbF;
-    if(F.kind === 'zb' && !S.pzbOff && !S.zwang && S.v > 0.3) zwangFault();
-    if(!F.reported && !F.errRep && ((F.kind === 'dark' && S.t - F.t0 > 90) || (S.pzbOff && S.v > 1))){ F.errRep = true; error('PZB-Störung nicht gemeldet – ' + meldeStellen() + ' vor der Weiterfahrt verständigen'); }
-    if(F.kind === 'dark' && F.reported && S.v === 0 && STATIONS.some(st => fr >= st.from - 100 && fr <= st.zoneEnd)){
-      F.fixT += dt;
-      if(F.fixT >= 8){ S.pzbF = null; setPzbRestr(false); pzbRestart((AVG ? 'Zü AVG' : 'Disponent') + ': Führerstand ab- und aufgerüstet – PZB wieder betriebsbereit (PZB i. O.)'); }
-    }
+    if(F.kind === 'sam' && S.t - F.t0 >= 10) audio.stop('sam');
+    if(F.kind === 'zb' && !pzbDead() && !S.zwang && S.v > 0.3) zwangFault();
+    const late = F.kind === 'dark' ? S.t - F.t0 > 90 : F.kind === 'sam' ? S.t - F.t0 > 150 : F.kind === 'lm500' ? S.v > 1 && !F.fixed : (F.kind === 'off' || pzbUnw()) && S.v > 1;
+    if(!F.reported && !F.errRep && late){ F.errRep = true;
+      error(F.kind === 'lm500' ? 'Funktionsprüfung nicht in Ordnung (LM 500 Hz leuchtete nicht auf) – weder behoben noch gemeldet (Ril 483.0111 A01 Nr. 8)' : F.kind === 'sam' ? 'Störungssammelmeldung nicht umgehend gemeldet (Ril 483.0111 A01 Nr. 4 a)' : 'PZB-Störung nicht gemeldet – ' + meldeStellen() + ' vor der Weiterfahrt verständigen'); }
+    if(F.kind === 'lm500' && F.reported) F.lmDead = true;
   }
+  // Schalttafel: Zeiten und Betriebsbereitschaft
+  if(!S.pzbHS) S.hsOffT += dt;
+  if(S.frs !== 'V') S.frs0T += dt;
+  if(S.pzbHS && S.pzbReadyT > 0){ S.pzbReadyT -= dt; if(S.pzbReadyT <= 0){ S.pzbReadyT = 0; pzbReady(); } }
+  { const u = pzbUnw(); if(u !== !!S.restr.find(r => r.pzbF)) setPzbRestr(u); }
+  if(S.v > 1 && !S.unwErr && !TRAM && (!S.pzbHS || S.pzbReadyT > 0) && !S.pzbF){ S.unwErr = true; error(S.pzbReadyT > 0 ? 'Angefahren, bevor die PZB betriebsbereit war (nach dem Einschalten etwa 8 s)' : 'Mit ausgeschaltetem PZB-Hauptschalter gefahren – ohne Störung unzulässig'); }
   if(!pzbDead()) for(const m of MAGNETS) if(crossed(m.pos) && (m.gg ? onGG(m.pos) : !onGG(m.pos))) pzbCross(m);   // Regelgleis-Magnete wirken auf dem Gegengleis nicht und umgekehrt
   NE1.forEach((n, k) => {
     if(n.ret && S.gg === n.ret && lern && crossed(n.pos - 300)) log('Trapeztafel km ' + n.kmTxt + ': Zustimmung des Fdl liegt vor – Befehl halten und mit höchstens 40 km/h vorbeifahren', 'pzb');
@@ -2764,13 +3097,13 @@ function step(dt){
   });
   // Tram-Train: Systemwechsel (El 1v, El 1, Systemtrennstelle, El 2) und Ende der Zugsicherung
   if(SYSW){
-    if(crossed(SYSW.el1v)) log('El 1v – Ausschaltsignal erwarten: in ' + (SYSW.el1 - SYSW.el1v) + ' m El 1 – Fahrschalter auf 0, spätestens am El 1 Hauptschalter aus (Taste M)', 'fdl');
+    if(crossed(SYSW.el1v)) log('El 1v – Ausschaltsignal erwarten: in ' + (SYSW.el1 - SYSW.el1v) + ' m El 1 – Fahrschalter auf 0, spätestens am El 1 ' + (IS_GT8 ? 'Linienschütz auslegen (Taste M; GT8-Handbuch 2.6: vor jeder Systemtrennstelle)' : 'Hauptschalter aus (Taste M)'), 'fdl');
     if(crossed(SYSW.el1)){
-      if(S.hs.st === 'ein'){ error('El 1: Hauptschalter nicht ausgeschaltet'); S.hs.st = 'hsaus'; S.hs.t = 0; snd.ev('arc'); }
-      else log('El 1 – Hauptschalter aus, antriebslos durch die Systemtrennstelle', 'fdl');
+      if(S.hs.st === 'ein'){ error(IS_GT8 ? 'El 1: Linienschütz nicht ausgelegt – das Fühlsystem erkennt die Fahrleitungsspannung nicht sicher' : 'El 1: Hauptschalter nicht ausgeschaltet'); S.hs.st = 'hsaus'; S.hs.t = 0; snd.ev('arc'); }
+      else log(IS_GT8 ? 'El 1 – Linienschütz aus, antriebslos durch die Systemtrennstelle; die Systemwahl schaltet selbsttätig um' : 'El 1 – Hauptschalter aus, antriebslos durch die Systemtrennstelle', 'fdl');
     }
     if(crossed(SYSW.el2)) log('El 2 – Einschaltsignal mit Spannungstafel 750 V =: einschalten, sobald der Stromabnehmer das Signal passiert hat', 'fdl');
-    if(crossed(SYSW.el2 + 10)) log('Stromabnehmer hat El 2 passiert – Hauptschalter ein (Taste M), Fahrleitung 750 V Gleichspannung', 'fdl');
+    if(crossed(SYSW.el2 + 10)) log(IS_GT8 ? 'Stromabnehmer hat El 2 passiert – Linienschütz wieder einlegen (Taste M; nach manuellem Auslegen keine selbsttätige Zuschaltung), Fahrleitung 750 V Gleichspannung' : 'Stromabnehmer hat El 2 passiert – Hauptschalter ein (Taste M), Fahrleitung 750 V Gleichspannung', 'fdl');
     if(S.v === 0 && !voltAt(fr - 10) && fr > SYSW.s0){ S.hs.stuckT += dt; if(S.hs.stuckT > 6){ finish('In der Systemtrennstelle liegen geblieben – ohne Fahrdrahtspannung, Hilfsfahrzeug nötig'); return; } }
   }
   if(SC.so2 && crossed(SC.so2)) log('So 2 – Ende der Zugsicherung: ab hier BOStrab, Fahren auf Sicht, keine PZB-Gleismagnete', 'fdl');
@@ -2835,10 +3168,14 @@ function step(dt){
   if(SC.test && !S.testDone && !S.testWarned && S.front > 5){ S.testWarned = true; error('PZB-Funktionsprüfung vor Fahrtantritt nicht durchgeführt'); }
   if(S.v > 0.3 && !S.zwang){
     S.sifa.t += dt;
-    if(S.sifa.t >= 30) once('sifa' + S.sifaN, () => log('Sifa-Leuchtmelder: Sifa betätigen!', 'pzb'));
-    if(S.sifa.t >= 32.5) audio.start('sifa', 900, 'square', .04, true);
-    if(S.sifa.t >= 35){ zwang('Sifa nicht betätigt', 'sifa'); S.sifa.t = 0; S.sifaN++; audio.stop('sifa'); }
+    // GT8 (Handbuch 2.3.2): Sifa im Befehlsgeber, nach 24 s ohne kurzes Loslassen Summton und Fahrstrom aus, nach weiteren 6 s Zwangsbremsung bis zum Stillstand
+    if(S.sifa.t >= SIFA.lm) once('sifa' + S.sifaN, () => log(IS_GT8 ? 'Sifa-Summton (24 s nicht losgelassen) – Fahrstrom abgeschaltet: Sifa-Taste im Befehlsgeber kurz loslassen und wieder drücken (Leertaste), innerhalb von 6 s' : 'Sifa-Leuchtmelder: Sifa betätigen!', 'pzb'));
+    if(S.sifa.t >= SIFA.hup) audio.start('sifa', 900, 'square', .04, true);
+    if(IS_GT8 && S.sifa.t >= SIFA.hup) S.sifa.lock = true;
+    if(S.sifa.t >= SIFA.zb){ zwang('Sifa nicht betätigt', 'sifa'); S.sifa.t = 0; S.sifaN++; audio.stop('sifa'); }
   } else if(S.v <= 0.3){ audio.stop('sifa'); }
+  if(S.sifa.lock && S.lever <= 0 && S.sifa.t < SIFA.hup) S.sifa.lock = false;   // Fahrsperre: Befehlsgeber über „0“ zurück nach „Fahren“
+  if(IS_GT8) gt8Step(dt, vk);
   const va = vAllowed().v, pzbGrace = S.pzbF && S.t - S.pzbF.t0 < 30 && vAllowed().src === 'PZB gestört';
   if(vk > va + 2 && !pzbGrace){
     S.over.t += dt;
@@ -3811,7 +4148,7 @@ function drawCab(ctx, W, H, u){
     ['SA', '#f2c230', H0.st === 'ein' || H0.st === 'hsaus' || H0.st === 'hsein' || (H0.st === 'start' && H0.t > 2.9)],
     ['Kp', '#f4f6ff', H0.comp],
     ['Tür', '#f2c230', S.door.state !== 'zu'],
-    ['Sifa', '#f4f6ff', S.sifa.t >= 30 && (S.t % 0.6) < 0.4]
+    ['Sifa', '#f4f6ff', S.sifa.t >= SIFA.lm && (S.t % 0.6) < 0.4]
   ];
   const lr = Math.max(4*u, Math.min(0.075*hh, 0.011*W)), lx0 = W*0.62, lstep = Math.max(lr*3.8, W*0.05), ly = y0 + hh*0.36;
   ctx.font = '600 ' + Math.round(Math.min(Math.max(7*u, lr*1.15), lstep*0.32)) + 'px "Barlow Condensed","Arial Narrow",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
@@ -3892,8 +4229,8 @@ function objText(o){
   if(o.k === 'lf7') return (o.g ? (o.red ? 'G 2a – ' : 'G 4 – ') : 'Lf 7 – ') + o.v*10 + ' km/h';
   if(o.k === 'fsig'){ const q = S.fs[o.ref]; return ({F0:'F 0 – Halt', F1:'F 1 – Fahrt frei geradeaus', F4:'F 4 – Halt erwarten'})[q.asp] + (q.req ? ' · A: Fahrtanforderung angenommen' : ''); }
   if(o.k === 'wsig') return wsigText(WSIG[o.ref]);
-  if(o.k === 'el1v') return 'El 1v – Ausschaltsignal erwarten: Fahrschalter auf 0, am El 1 Hauptschalter aus';
-  if(o.k === 'el1') return 'El 1 – Ausschaltsignal: Hauptschalter aus (Systemtrennstelle 15 kV ~ / 750 V =)';
+  if(o.k === 'el1v') return 'El 1v – Ausschaltsignal erwarten: Fahrschalter auf 0, am El 1 ' + (IS_GT8 ? 'Linienschütz aus' : 'Hauptschalter aus');
+  if(o.k === 'el1') return 'El 1 – Ausschaltsignal: ' + (IS_GT8 ? 'Linienschütz aus' : 'Hauptschalter aus') + ' (Systemtrennstelle 15 kV ~ / 750 V =)';
   if(o.k === 'el2') return 'El 2 – Einschalten erlaubt, wenn der Stromabnehmer vorbei ist' + (o.sys === 'dc' ? ' · Tafel 750 V = (Gleichstrom)' : o.sys === 'ac' ? ' · Tafel 15 kV ~' : '');
   if(o.k === 'so2') return 'So 2 – Ende der Zugsicherung: Fahren auf Sicht nach BOStrab';
   if(o.k === 'sh4') return 'Sh 4 – Läutetafel: Glocke betätigen (Taste H)';
@@ -3910,11 +4247,15 @@ function pzbZustand(){
   const P = S.pzb;
   if(TRAM) return '';
   if(S.pzbOff) return 'PZB aus (Störschalter)';
+  if(!S.pzbHS) return 'PZB-Hauptschalter aus';
+  if(S.pzbReadyT > 0) return 'PZB schaltet ein …';
+  if(S.frs !== 'V') return 'Fahrtrichtungsschalter 0';
+  if(!S.hahn) return 'PZB-Luftabsperrhahn zu';
   if(S.pzbF && S.pzbF.kind === 'dark') return 'PZB gestört';
   if(P.test || S.zwang) return '';
   const lm = P.mon.some(m => S.front - m.s0 < lmLen(P));
-  if(P.m500) return P.m500.r25 ? '(500 Hz restriktiv)' : '(500 Hz)';
-  if(P.start) return '(Startprogramm)';
+  if(P.m500) return P.m500.restr ? '(500 Hz restriktiv)' : '(500 Hz)';
+  if(P.start) return P.startShown ? '(Startprogramm)' : '(Startprogramm ab Anfahrt)';
   if(P.restr === 'vu3') return lm ? '(VÜ 3 Frühhalt)' : '(VÜ 3 – befreibar)';
   if(P.restr === 'std') return AVG ? (lm ? '(VÜ 2 Späthalt)' : '(VÜ 2 – befreibar)') : (lm ? '(restriktiv)' : '(restriktiv – befreibar)');
   if(P.mon.length) return lm ? (AVG ? '(VÜ 1)' : '(1000 Hz)') : '(befreibar)';
@@ -3960,13 +4301,13 @@ function hud(ctx, W, H, u, noFp){
     ctx.fillStyle = 'rgba(12,16,15,.78)'; rr(ctx, 10*u, y0, tw, 20*u, 5*u); ctx.fill();
     ctx.fillStyle = '#f2c230'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(msg, 18*u, y0 + 10*u);
   }
-  if(!S.zwang && S.sifa.t >= 30 && (S.t % 0.6) < 0.4){
-    const msg = S.sifa.t >= 32.5 ? 'SIFA – SOFORT BETÄTIGEN!' : 'SIFA – BETÄTIGEN';
+  if(!S.zwang && S.sifa.t >= SIFA.lm && (S.t % 0.6) < 0.4){
+    const msg = S.sifa.t >= SIFA.hup + (IS_GT8 ? 2 : 0) ? 'SIFA – SOFORT BETÄTIGEN!' : IS_GT8 ? 'SIFA – KURZ LOSLASSEN UND DRÜCKEN' : 'SIFA – BETÄTIGEN';
     ctx.font = '700 ' + Math.round(17*u) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
     const tw = ctx.measureText(msg).width + 28*u;
-    ctx.fillStyle = S.sifa.t >= 32.5 ? 'rgba(200,40,30,.9)' : 'rgba(242,194,48,.92)';
+    ctx.fillStyle = S.sifa.t >= SIFA.hup + (IS_GT8 ? 2 : 0) ? 'rgba(200,40,30,.9)' : 'rgba(242,194,48,.92)';
     rr(ctx, W/2 - tw/2, H*0.58, tw, 30*u, 6*u); ctx.fill();
-    ctx.fillStyle = S.sifa.t >= 32.5 ? '#fff' : '#2a2000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = S.sifa.t >= SIFA.hup + (IS_GT8 ? 2 : 0) ? '#fff' : '#2a2000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(msg, W/2, H*0.58 + 15*u);
   }
   if(FP && !noFp){
@@ -3993,7 +4334,7 @@ function hud(ctx, W, H, u, noFp){
     ctx.fillStyle = dcol; ctx.fillText(l3, bx + 9*u, by + 34*u);
   }
   if(S.zwang){
-    const zt = 'ZWANGSBREMSUNG – ' + (S.v > 0 ? 'Zug bremst' : (S.zwang.kind === 'pzb' && S.fdlNeed && !S.fdlNeed.ok ? 'Fdl verständigen, dann Frei' : (S.zwang.kind === 'sifa' ? 'Sifa oder Frei drücken' : 'Frei drücken')));
+    const zt = 'ZWANGSBREMSUNG – ' + (S.v > 0 ? 'Zug bremst' : (S.zwang.kind === 'pzb' && S.fdlNeed && !S.fdlNeed.ok ? 'Fdl verständigen, dann Frei' : (IS_GT8 && S.zwang.kind !== 'pzb' ? (S.nbu.fgn ? 'Notbremsgriff zurückstellen (Quitt)' : 'Befehlsgeber über Bremsen nach 0') : S.zwang.kind === 'sifa' ? 'Sifa oder Frei drücken' : 'Frei drücken')));
     ctx.font = '700 ' + Math.round(15*u) + 'px "Barlow Condensed","Arial Narrow",sans-serif';
     const zw = Math.min(W - 20*u, ctx.measureText(zt).width + 20*u);
     ctx.fillStyle = 'rgba(160,20,14,.85)'; rr(ctx, 10*u, H - 52*u, zw, 30*u, 6*u); ctx.fill();
@@ -4062,25 +4403,29 @@ function updateUI(){
   if(TRAM){
     // Straßenbahn: keine PZB – alle Leuchtmelder dunkel
   } else if(P.test){
-    const seq = ['pzb', '85', '70', '55', 'l1000', 'l500', 'bef', 'sand'], k = Math.floor(P.test.t/0.35);
+    // Ril 483.0111 Abschn. 3 (3): 85, 70, 55, Befehl 40, 500 Hz und 1000 Hz leuchten nacheinander auf
+    const seq = ['pzb', '85', '70', '55', 'bef', 'l500', 'l1000', 'sand'].filter(x => !(S.pzbF && S.pzbF.kind === 'lm500' && x === 'l500')), k = Math.floor(P.test.t/0.35);
     if(k < seq.length) L[seq[k]] = true; else seq.forEach(x => { L[x] = true; });
-  } else if(S.pzbOff){
-    L.l1000 = blink;                                            // Störschalter: 85 und PZB dunkel, 1000 Hz blinkt
+  } else if(!S.pzbHS || S.pzbReadyT > 0 || S.frs !== 'V'){
+    // PZB-Hauptschalter aus, noch nicht betriebsbereit oder Fahrtrichtungsschalter nicht in „V“: nicht betriebsbereit, alle LM dunkel
+  } else if(S.pzbOff || !S.hahn){
+    L.l1000 = blink;                                            // Störbetrieb (Störschalter) bzw. Luftabsperrhahn zu: 85 dunkel, 1000 Hz blinkt
   } else if(S.pzbF && S.pzbF.kind === 'dark'){
     // Fahrzeugeinrichtung gestört: alle Leuchtmelder dunkel
   } else if(S.zwang && S.zwang.kind === 'pzb'){
     L.l1000 = blink; L.l500 = blink; L.sand = true; L.pzb = true; // Zugart-LM dunkel, 1000/500 blinken, S leuchtet
   } else {
     L.pzb = true;
-    const r25 = !!(P.m500 && P.m500.r25), lamp = ZUGART[P.zug].lamp;
-    if(P.m500 && !r25 && P.restr !== 'std' && !P.start) L[lamp] = true;          // nach 500 Hz: 85 Dauerlicht + 500 Hz
-    else if(P.restr === 'vu3'){ L['85'] = blink; L['70'] = blink; }              // Gleichblinken (VÜ 3, Frühhalt)
-    else if(P.restr === 'std' || P.start || r25){ L['85'] = blink; L['70'] = !blink; } // Wechselblinken (VÜ 2, Startprogramm, 500 Hz restriktiv)
+    const r500 = !!(P.m500 && P.m500.restr), lamp = ZUGART[P.zug].lamp, stShow = !!(P.start && P.startShown);
+    if(P.m500 && !r500 && P.restr !== 'std' && !stShow) L[lamp] = true;          // nach 500 Hz: Zugart-LM Dauerlicht + 500 Hz
+    else if(P.restr === 'vu3' && !r500){ L['85'] = blink; L['70'] = blink; }     // Gleichblinken (VÜ 3, Frühhalt, AVG)
+    else if(P.restr === 'std' || stShow || r500){ L['85'] = blink; L['70'] = !blink; } // Wechselblinken (restriktiv, Startprogramm nach Anfahrt, 500 Hz restriktiv)
     else if(P.mon.length || P.noData) L[lamp] = blink;
     else L[lamp] = true;
-    L.l1000 = P.mon.some(m => m.ack && !m.wtFail && S.front - m.s0 < lmLen(P)) && !(P.lmBlank > S.t);
-    L.l500 = !!P.m500;
+    L.l500 = !!P.m500 && !(S.pzbF && S.pzbF.kind === 'lm500' && S.pzbF.lmDead);
+    L.l1000 = P.mon.some(m => m.ack && !m.wtFail && S.front - m.s0 < lmLen(P)) && !(P.lmBlank > S.t) && !P.m500;   // LM 1000 Hz bleibt dunkel, solange LM 500 Hz leuchtet
     L.bef = P.befLamp;
+    if(S.pzbF && S.pzbF.kind === 'sam' && S.t - S.pzbF.t0 < 10) L.l1000 = blink;  // Störungssammelmeldung: 1000 Hz blinkt 10 s, Zugart-LM leuchtet
   }
   el.lm55.hidden = AVG;
   el.lm55.classList.toggle('on', L['55']); el.lm70.classList.toggle('on', L['70']); el.lm85.classList.toggle('on', L['85']);
@@ -4088,7 +4433,7 @@ function updateUI(){
   el.lmBef.classList.toggle('on', L.bef); $('lmSand').classList.toggle('on', L.sand);
   {
     const H = S.hs, b = $('bMot'), st = H.st;
-    $('bMotT').textContent = st === 'aus' ? 'Motor starten' : st === 'start' ? (H.t < 2.9 ? 'Stromabnehmer …' : 'Hauptschalter …') : st === 'hsaus' ? 'HS einschalten' : st === 'hsein' ? 'Hauptschalter …' : (S.v > 0.3 || (SYSW && S.front > SYSW.el1v - 50 && S.front < SYSW.el2 + 30)) ? 'HS ausschalten' : 'Motor abstellen';
+    $('bMotT').textContent = st === 'aus' ? 'Motor starten' : st === 'start' ? (H.t < 2.9 ? 'Stromabnehmer …' : 'Hauptschalter …') : st === 'hsaus' ? (IS_GT8 ? 'Linienschütz ein' : 'HS einschalten') : st === 'hsein' ? (IS_GT8 ? 'Linienschütz …' : 'Hauptschalter …') : (S.v > 0.3 || (SYSW && S.front > SYSW.el1v - 50 && S.front < SYSW.el2 + 30)) ? (IS_GT8 ? 'Linienschütz aus' : 'HS ausschalten') : 'Motor abstellen';
     b.className = 'dbtn mot' + (st === 'ein' ? ' on' : st === 'start' || st === 'hsein' ? ' busy' : st === 'hsaus' ? ' busy' + (lern && voltAt(S.front - 10) ? ' need' : '') : (lern ? ' need' : ''));
   }
   {
@@ -4103,23 +4448,40 @@ function updateUI(){
     $('doorTxt').textContent = dtxt; $('iPax').textContent = FREIGHT ? '–' : S.onboard + ' an Bord · ' + S.carried + ' am Ziel';
   }
   $('bFdl').classList.toggle('alert', !!((S.fdlNeed && !S.fdlNeed.ok) || (S.stoer && !S.stoer.reported && lern) || (S.pzbF && !S.pzbF.reported && (S.pzbF.kind === 'dark' || S.pzbOff))));
+  { const bx = $('nbuBox'); if(bx.hidden === NBU_ON) bx.hidden = !NBU_ON;
+    if(NBU_ON){ const N = S.nbu, bl = (S.t % 0.8) < 0.45, tDone = !!(N.test && N.test.done && !N.test.quitt);
+      $('nbuLmN').className = tDone ? 'r' : N.test && N.test.quitt ? (bl ? 'g' : '') : N.sw === 'ein' && N.ok ? 'g' : '';
+      $('nbuLmF').className = tDone || N.fgn ? 'r' : '';
+      $('nbuLmI').className = N.ic ? (N.ic.said || bl ? 'g' : '') : '';
+      document.querySelectorAll('#nbuSw button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.p === N.sw)));
+      $('bNbuQ').classList.toggle('alert', !!(N.alarm || (N.fgn && N.fgn.eff && N.fgn.reset === undefined && S.v === 0)));
+      $('bIcS').classList.toggle('alert', !!(N.ic && !N.ic.said)); } }
+  { $('pzbSw').hidden = TRAM; $('bStoer').hidden = TRAM;
+    const h = $('bPzbHS'); h.textContent = !S.pzbHS ? 'HS aus ' + Math.floor(S.hsOffT) : S.pzbReadyT > 0 ? 'HS ' + Math.ceil(S.pzbReadyT) + ' s' : 'HS'; h.className = 'chip' + (!S.pzbHS ? ' off' : S.pzbReadyT > 0 ? ' wait' : ''); h.setAttribute('aria-pressed', S.pzbHS ? 'true' : 'false');
+    const f = $('bFrs'); f.textContent = S.frs === 'V' ? 'FRS V' : 'FRS 0 · ' + Math.floor(S.frs0T); f.className = 'chip' + (S.frs !== 'V' ? ' off' : '');
+    const k = $('bHahn'); k.textContent = S.hahn ? 'Hahn' : 'Hahn zu'; k.className = 'chip' + (S.hahn ? '' : ' off'); k.setAttribute('aria-pressed', S.hahn ? 'true' : 'false'); }
   { const b = $('bStoer'); b.classList.toggle('on', S.pzbOff); b.classList.toggle('alert', !!(lern && S.pzbF && S.pzbF.kind === 'zb' && S.pzbF.zbN >= 2 && !S.pzbOff)); b.setAttribute('aria-pressed', S.pzbOff ? 'true' : 'false'); }
   if($('i60').dataset.v !== String(AVG)){
-    $('i60').dataset.v = String(AVG); $('i60').classList.toggle('avg', AVG);
+    $('i60').dataset.v = String(AVG); $('i60').classList.toggle('avg', AVG); $('zugart').hidden = AVG; $('zugartL').hidden = AVG;   // AVG: Zugart O fest
     $('bBefT').innerHTML = (AVG ? 'Indusi' : 'PZB') + '<br>Befehl'; $('bFreiT').innerHTML = (AVG ? 'Indusi' : 'PZB') + '<br>Frei';
   }
-  el.sifa.classList.toggle('on', S.sifa.t >= 30 && blink);
-  const sb = $('sifaBar'), sp = Math.min(1, S.sifa.t/30);
+  el.sifa.classList.toggle('on', S.sifa.t >= SIFA.lm && blink);
+  const sb = $('sifaBar'), sp = Math.min(1, S.sifa.t/SIFA.lm);
   sb.firstChild.style.width = (sp*100) + '%';
-  sb.classList.toggle('warn', S.sifa.t >= 20 && S.sifa.t < 30); sb.classList.toggle('crit', S.sifa.t >= 30);
-  sb.hidden = !lern; $('sifaTxt').textContent = lern ? (S.v > 0.3 ? Math.max(0, Math.ceil(30 - S.sifa.t)) + ' s' : 'ruht') : '';
-  $('bSifa').classList.toggle('alert', S.sifa.t >= 30);
+  sb.classList.toggle('warn', S.sifa.t >= SIFA.lm - 10 && S.sifa.t < SIFA.lm); sb.classList.toggle('crit', S.sifa.t >= SIFA.lm);
+  sb.hidden = !lern; $('sifaTxt').textContent = lern ? (S.v > 0.3 ? Math.max(0, Math.ceil(SIFA.lm - S.sifa.t)) + ' s' : 'ruht') : '';
+  $('bSifa').classList.toggle('alert', S.sifa.t >= SIFA.lm);
   const nm = MAGNETS.find(m => m.pos > S.front);
   if(nm){ const ml = magLabel(nm); $('iMag').textContent = nm.type + ' · ' + fmtM(nm.pos - S.front) + ' · ' + (lern ? (ml.sw ? (nm.fs[0].kind === 'gpaEin' ? 'startet die Prüfzeit' : 'setzt den GPA zurück') : ml.spd ? 'wirksam über ' + ml.v + ' km/h' : ml.f ? 'wirksam ' + ml.f + ' Hz' : 'unwirksam') : '?'); }
   else $('iMag').textContent = '–';
   let d;
   if(P.test) d = 'Funktionsprüfung läuft';
-  else if(S.pzbOff) d = 'PZB mit Störschalter abgeschaltet · max. 50 km/h';
+  else if(S.pzbOff) d = 'PZB mit Störschalter abgeschaltet · Überwachung 100 km/h · max. 50 km/h';
+  else if(!S.pzbHS) d = 'PZB-Hauptschalter aus · PZB unwirksam · max. 50 km/h';
+  else if(S.pzbReadyT > 0) d = 'PZB schaltet ein · noch ' + Math.ceil(S.pzbReadyT) + ' s';
+  else if(S.frs !== 'V') d = 'Fahrtrichtungsschalter „0“ · PZB nicht aktiv';
+  else if(!S.hahn) d = 'PZB-Luftabsperrhahn zu · PZB unwirksam · max. 50 km/h';
+  else if(P.ib) d = 'Prüfgeschwindigkeit ' + vPruef(P) + ' km/h überschritten · Zwangsbremsung' + (P.ib.cont ? '' : ' (intermittierend)');
   else if(S.pzbF && S.pzbF.kind === 'dark') d = 'PZB-Fahrzeugeinrichtung gestört · max. 50 km/h';
   else if(S.zwang) d = (S.zwang.kind === 'pzb' ? 'S · ' : 'ZB · ') + S.zwang.reason;
   else if(pzbActive(P)) d = 'v-Überwachung ' + Math.round(P.lim) + ' km/h' + (P.mon.some(m => !m.ack) ? ' · WACHSAM!' : '');
@@ -4158,6 +4520,13 @@ $('bFrei').addEventListener('click', () => { audio.init(); pressFrei(); });
 $('bSifa').addEventListener('click', () => { audio.init(); pressSifa(); });
 $('bFdl').addEventListener('click', () => { audio.init(); pressFdl(); });
 $('bStoer').addEventListener('click', () => { audio.init(); pressStoer(); });
+$('bPzbHS').addEventListener('click', () => { audio.init(); pressPzbHS(); });
+$('bFrs').addEventListener('click', () => { audio.init(); pressFrs(); });
+$('bHahn').addEventListener('click', () => { audio.init(); pressHahn(); });
+document.querySelectorAll('#nbuSw button').forEach(b => b.addEventListener('click', () => { audio.init(); setNbuSw(b.dataset.p); }));
+$('bNbuQ').addEventListener('click', () => { audio.init(); pressNbuQuitt(); });
+$('bIcS').addEventListener('click', () => { audio.init(); pressIcom(true); });
+$('bIcL').addEventListener('click', () => { audio.init(); pressIcom(false); });
 $('bDoor').addEventListener('click', () => { audio.init(); pressDoor(); });
 $('bMot').addEventListener('click', () => { audio.init(); pressMotor(); });
 function hornOn(){ if(S.horn) return; S.horn = true; if(snd.c) snd.horn(true); else { audio.start('horn1', 330, 'sawtooth', .035); audio.start('horn2', 415, 'sawtooth', .028); } }
@@ -4177,8 +4546,9 @@ function holdBtn(b, on, off){
   b.addEventListener('contextmenu', e => e.preventDefault());
 }
 holdBtn($('bPf'), hornOn, hornOff);
-function befehlOn(){ if(!S.pzb.befehl) audio.beep(620, .2, 'sine', .03); S.pzb.befehl = true; }
-function befehlOff(){ S.pzb.befehl = false; S.pzb.befLamp = false; }
+// BT: während der Betätigung ertönt der akustische Signalgeber als Rücknahmeaufforderung, Überwachung auf 40 km/h bis zur Rücknahme (Ril 483.0111 Bild 7)
+function befehlOn(){ if(!S.pzb.befehl){ audio.beep(620, .2, 'sine', .03); if(!pzbDead()) audio.start('bt', 760, 'sine', .012); } S.pzb.befehl = true; }
+function befehlOff(){ S.pzb.befehl = false; S.pzb.befLamp = false; audio.stop('bt'); }
 holdBtn($('bBef'), befehlOn, befehlOff);
 document.querySelectorAll('#zugart button').forEach(b => b.addEventListener('click', () => {
   if(S.v > 0 || AVG) return; S.pzb.zug = b.dataset.z; log('Zugart ' + b.dataset.z + ' eingestellt');
@@ -4375,6 +4745,13 @@ document.addEventListener('keydown', e => {
   else if(k === 'b'){ audio.init(); befehlOn(); $('bBef').classList.add('down'); }
   else if(k === 'f'){ audio.init(); pressFdl(); }
   else if(k === 'x'){ audio.init(); pressStoer(); }
+  else if(k === 'j'){ audio.init(); pressPzbHS(); }
+  else if(k === 'v'){ audio.init(); pressFrs(); }
+  else if(k === 'l'){ audio.init(); pressHahn(); }
+  else if(k === 'n'){ audio.init(); pressNbuSw(); }
+  else if(k === 'u'){ audio.init(); pressNbuQuitt(); }
+  else if(k === 'i'){ audio.init(); pressIcom(true); }
+  else if(k === 'o'){ audio.init(); pressIcom(false); }
   else if(k === 'h'){ audio.init(); hornOn(); $('bPf').classList.add('down'); }
   else if(k === 't'){ audio.init(); pressDoor(); }
   else if(k === 'm'){ audio.init(); pressMotor(); }
@@ -4404,7 +4781,9 @@ function reset(){
   log('Fahrzeug abgerüstet – zuerst Motor starten (Taste M): Stromabnehmer heben, Hauptschalter ein', 'fdl');
   if(S.mode === 'rangier') log('Rangierfahrt, höchstens 25 km/h. Am Lichtsperrsignal auf Sh 1 warten.');
   else if(TRAM) log('Straßenbahn nach BOStrab: keine PZB, Fahren auf Sicht. Fahrsignale (F 0/F 1/F 4, A), Weichensignale, G-Signale und Läutetafeln beachten, im Tunnel H-/V-Signale. Sifa alle 30 s.');
-  else log((AVG ? 'AVG-Stadtbahn, Zugart O fest, höchstens 100 km/h. ' + (SC.pzbStart ? 'Führerstand neu aufgerüstet – Startprogramm aktiv: 85/70 Wechselblinken, höchstens 45 km/h (bei 500 Hz 25 km/h), bis zum Befreien oder 550 m. Befreien, sobald das Signal Fahrt über 30 km/h zeigt. ' : '') : 'Zugart ' + SC.zug + '. Startprogramm aktiv (45 km/h) – befreien, sobald das Signal Fahrt über 30 km/h zeigt. ') + (SC.test ? 'Vorher PZB-Funktionsprüfung: Wachsam und Frei gleichzeitig. ' : '') + 'Sifa während der Fahrt alle 30 s.');
+  else log((AVG ? 'AVG-Stadtbahn, Zugart O fest, höchstens 100 km/h. ' + (SC.pzbStart ? 'Führerstand neu aufgerüstet – Startprogramm aktiv: 85/70 Wechselblinken, höchstens 45 km/h (bei 500 Hz 25 km/h), bis zum Befreien oder 550 m. Befreien, sobald das Signal Fahrt über 30 km/h zeigt. ' : '') : 'Zugart ' + SC.zug + '. Startprogramm aktiv (45 km/h) – befreien, sobald das Signal Fahrt über 30 km/h zeigt. ') + (SC.test ? 'Vorher PZB-Funktionsprüfung: Wachsam und Frei gleichzeitig. ' : '') + (IS_GT8 ? '' : 'Sifa während der Fahrt alle 30 s.'));
+  if(IS_GT8) log('GT8-100D/2S-M: Sifa im Befehlsgeber – spätestens alle 24 s kurz loslassen und wieder drücken (Leertaste), sonst Summton, Fahrstrom aus und nach 6 s Zwangsbremsung. Zwangsbremsung im Stillstand mit dem Befehlsgeber über „Bremsen“ nach „0“ aufheben. Haltestellenbremse unter 7 km/h.', 'fdl');
+  if(NBU_ON && SC.nbu && SC.nbu.off) log('NBÜ abgerüstet: vor dem Stadtbahntunnel im Stillstand Prüflauf – NBÜ-Schalter „Test“ (Taste N), Alarm mit „Quitt“ (Taste U) bestätigen, dann Schalter „Ein“', 'fdl');
   { const nx = STATIONS.findIndex(st => !st.first); if(nx >= 0 && !FREIGHT){ S.announced[nx] = true; log('Ansage: Nächster Halt ' + STATIONS[nx].name + ' · ' + S.onboard + ' Fahrgäste an Bord', 'fdl'); } }
 }
 let lastId = 1;
@@ -7304,14 +7683,14 @@ const R3 = (() => {
       setNeedle(NS, -122 + Math.min(124, S.v*3.6)/120*247);
       setNeedle(NV, -125 + (S.hs.st === 'aus' ? 24.6 : 27.2)/40*250);
       setNeedle(NP1, -135 + Math.max(0, Math.min(12, (S.hs.air || 9)))*22.5);
-      setNeedle(NP2, -135 + Math.max(0, Math.min(12, (S.brake || 0)*3.6))*22.5);
+      setNeedle(NP2, -135 + Math.max(0, Math.min(12, S.blp || 0))*22.5);   // roter Zeiger: Bremsleitung (gelöst 6 bar, Haltestellenbremse 3 bar, Schnellbremse etwa 1 bar)
       // Fahrschalter und Kulisse
       const g = gate(S.lever); lev.position.set(g[0], g[1], g[2]); lev.rotation.y = CR; lev.rotation.x = -S.lever/8*0.36;
       // Leuchtmelder
       const H0 = S.hs, nx = STATIONS.find(st => st.stop > S.front + 5), wsN = WSIG.find(w => w.pos > S.front && w.pos - S.front < 120), wk = wsN ? (+wsN.w.slice(1)) % 10 : 0;
       const sysV = SYSW ? voltAt(S.front - 10) : (SC.alb || isBo(S.front) ? 'dc' : 'ac'), blink = (S.t % 1) < 0.55;
       const st = {lm85:on('lm85'), lm70:on('lm70'), lm1000:on('lm1000'), lm500:on('lm500'), lmBef:on('lmBef'), befKey:!!(S.pzb && S.pzb.befehl), frei:false, fsp:H0.st === 'aus', zb:!!S.zwang, sam:!!(S.pzbF || S.zwang),
-        sifa:S.sifa.t >= 30 && (S.t % 0.6) < 0.4, tuer:S.door.state !== 'zu', halt:!!(nx && nx.stop - S.front < 700 && nx.stop - S.front > 0), wch0:wk === 3, wch1:wk === 1, wch2:wk === 2, blL:false, blR:false,
+        sifa:S.sifa.t >= SIFA.lm && (S.t % 0.6) < 0.4, tuer:S.door.state !== 'zu', halt:!!(nx && nx.stop - S.front < 700 && nx.stop - S.front > 0), wch0:wk === 3, wch1:wk === 1, wch2:wk === 2, blL:false, blR:false,
         or1:H0.st !== 'aus', or2:H0.st !== 'aus', blu:H0.st !== 'aus', grn:H0.st === 'ein', bma:true, rechts:true, beige7:S.door.state !== 'zu', beige8:S.door.state !== 'zu', v750:sysV === 'dc', v15:sysV === 'ac'};
       const key = Object.keys(st).map(k => st[k] ? 1 : 0).join('') + blink;
       if(key !== lastLamp){ lastLamp = key;
@@ -7548,7 +7927,7 @@ const R3 = (() => {
     function update(){
       const vk = S.v*3.6; NS.rotation.z = -(a0 + (a1 - a0)*Math.min(1, vk/VM));
       const H0 = S.hs, nx = STATIONS.find(st => st.stop > S.front + 5), sa = H0.st !== 'aus' && !(H0.st === 'start' && H0.t < 0.3);
-      const st = {lm85:on('lm85'), lm70:on('lm70'), lm1000:on('lm1000'), lm500:on('lm500'), lmBef:on('lmBef'), zb:!!S.zwang, hs:H0.st === 'ein', tuer:S.door.state !== 'zu', fsp:H0.st === 'aus', sifa:S.sifa.t >= 30 && (S.t % 0.6) < 0.4,
+      const st = {lm85:on('lm85'), lm70:on('lm70'), lm1000:on('lm1000'), lm500:on('lm500'), lmBef:on('lmBef'), zb:!!S.zwang, hs:H0.st === 'ein', tuer:S.door.state !== 'zu', fsp:H0.st === 'aus', sifa:S.sifa.t >= SIFA.lm && (S.t % 0.6) < 0.4,
         halt:!!(nx && nx.stop - S.front < 700), brk:S.brake > 0.05, blue:false, grn:H0.st === 'ein', wlit:H0.st !== 'aus', cw0:H0.st !== 'aus', cw1:NIGHT, abf:S.door.state === 'zu' && H0.st === 'ein', lw:H0.st !== 'aus', red1:!!S.zwang, lb0:H0.st !== 'aus', lb1:H0.st !== 'aus', sam:!!(S.pzbF || S.zwang)};
       const key = Object.keys(st).map(k => st[k] ? 1 : 0).join('');
       if(key !== last){ last = key; const set = (im, list) => { list.forEach(([, , , , c, k], i) => { im.setColorAt(i, st[k] && c ? col.setRGB(c[0]*0.9, c[1]*0.9, c[2]*0.9) : col.setRGB(0, 0, 0)); }); if(im.instanceColor) im.instanceColor.needsUpdate = true; }; set(IF, LF); set(IC, LC); set(IL, LL); }
@@ -7812,7 +8191,7 @@ const R3 = (() => {
     lq(678, 50, '1000', '#f2c230', on('lm1000')); lq(718, 50, '500', '#ff4a3a', on('lm500')); lq(758, 50, 'Bef', '#f4f6ff', on('lmBef'));
     const H0 = S.hs, lamp = (x, y, lab, col, lit) => { g.fillStyle = '#0b0e0f'; g.beginPath(); g.arc(x, y, 11, 0, 7); g.fill(); g.save(); if(lit){ g.shadowColor = col; g.shadowBlur = 10; } g.fillStyle = lit ? col : '#30373a'; g.beginPath(); g.arc(x, y, 7.5, 0, 7); g.fill(); g.restore(); g.fillStyle = '#9aa8a3'; font(12); g.textAlign = 'center'; g.textBaseline = 'top'; g.fillText(lab, x, y + 12); };
     lamp(688, 110, 'HS', H0.st === 'ein' ? '#45d37b' : '#e2483d', true); lamp(716, 110, 'SA', '#f2c230', H0.st === 'ein' || H0.st === 'hsaus' || H0.st === 'hsein' || (H0.st === 'start' && H0.t > 2.9));
-    lamp(744, 110, 'Kp', '#f4f6ff', H0.comp); lamp(772, 110, 'Tür', '#f2c230', S.door.state !== 'zu'); lamp(800, 110, 'Sifa', '#f4f6ff', S.sifa.t >= 30 && (S.t % 0.6) < 0.4);
+    lamp(744, 110, 'Kp', '#f4f6ff', H0.comp); lamp(772, 110, 'Tür', '#f2c230', S.door.state !== 'zu'); lamp(800, 110, 'Sifa', '#f4f6ff', S.sifa.t >= SIFA.lm && (S.t % 0.6) < 0.4);
     // Schalterreihe (vorderer Pultteil)
     const sws = [['Licht', true], ['Fernlicht', NIGHT], ['Wischer', false], ['Sanden', false], ['Glocke', false], ['Heizung', true]];
     sws.forEach(([lab, st], i) => { const x = 380 + i*62, y = 214; g.fillStyle = '#121617'; rr(g, x - 20, y - 22, 40, 44, 5); g.fill(); g.fillStyle = '#4b5559'; rr(g, x - 6, st ? y - 18 : y - 2, 12, 20, 3); g.fill(); g.fillStyle = '#9aa8a3'; font(12); g.textAlign = 'center'; g.textBaseline = 'top'; g.fillText(lab, x, y + 26); });
@@ -8361,6 +8740,6 @@ function frame(now){
 }
 requestAnimationFrame(frame);
 window.__audioSwap = c => { audio.ctx = c; }; window.__r3 = R3; window.__set3d = set3d; window.__arcs = () => ARCS; window.__ocz = () => OCZ; window.__areas = () => AREAS; window.__branch = () => BRANCH;
-window.__sim = { get SCEN(){ return SCEN; }, WORLD, netWalk, get GPA(){ return GPA; }, hazLane, get FZ(){ return FZ; }, brakeStep, fdMove, hornOn, hornOff, get BUE(){ return BUE; }, pressStoer, pzbDead, get NE1(){ return NE1; }, get GG(){ return GG; }, get HM(){ return HM; }, get NE6(){ return NE6; }, get OBJS(){ return OBJS; }, kmAt, get BW(){ return BW; }, get DIST(){ return DIST; }, get TUNNELS(){ return TUNNELS; }, get FP(){ return FP; }, fpState, fmtClock, pressDoor, pressFdl, befreienVerbot, pzbActive, lmLen, get MAGNETS(){ return MAGNETS; }, get AVG(){ return AVG; }, setVehicle(v){ VEHICLE = v; }, get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, pressMotor, snd, voltAt, get FSIG(){ return FSIG; }, get WSIG(){ return WSIG; }, get SYSW(){ return SYSW; }, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
+window.__sim = { setNbuSw, pressNbuSw, pressNbuQuitt, pressIcom, get IS_GT8(){ return IS_GT8; }, get NBU_ON(){ return NBU_ON; }, pressPzbHS, pressFrs, pressHahn, vPruef, pzbCross, updateUI, get SCEN(){ return SCEN; }, WORLD, netWalk, get GPA(){ return GPA; }, hazLane, get FZ(){ return FZ; }, brakeStep, fdMove, hornOn, hornOff, get BUE(){ return BUE; }, pressStoer, pzbDead, get NE1(){ return NE1; }, get GG(){ return GG; }, get HM(){ return HM; }, get NE6(){ return NE6; }, get OBJS(){ return OBJS; }, kmAt, get BW(){ return BW; }, get DIST(){ return DIST; }, get TUNNELS(){ return TUNNELS; }, get FP(){ return FP; }, fpState, fmtClock, pressDoor, pressFdl, befreienVerbot, pzbActive, lmLen, get MAGNETS(){ return MAGNETS; }, get AVG(){ return AVG; }, setVehicle(v){ VEHICLE = v; }, get S(){ return S; }, get MAIN(){ return MAIN; }, get STATIONS(){ return STATIONS; }, get SC(){ return SC; }, get LF(){ return LF; }, get LSIG(){ return LSIG; }, get RA10(){ return RA10_POS; }, get BRK(){ return BRK_F; }, pressMotor, snd, voltAt, get FSIG(){ return FSIG; }, get WSIG(){ return WSIG; }, get SYSW(){ return SYSW; }, get VMAXV(){ return VEH_VMAX; }, step, setLever, pressWachsam, pressFrei, pressSifa, startScenario, closeMenu };
 })();
 </script>

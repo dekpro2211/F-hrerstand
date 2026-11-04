@@ -132,6 +132,7 @@ Linien S1 und S11 der AVG mit allen Haltestellen und Kilometern nach der AVG-Fah
 | 19 | S4 | S4 Eppingen – Heilbronn | Km-Sprung 43,4 = 140,0, Zwischensignale Schwaigern/Leingarten |
 | 20 | S4 | S4 Heilbronn – Öhringen | Innenstadt (BOStrab), Weinsberger Tunnel, Kreuzungen Weinsberg/Eschenau |
 | 23 | Tram-Train | Systemwechsel und Innenstadt | El 1v/El 1/El 2, So 2, F-/W-/G-Signale, Sh 4, Stadtbahntunnel (fiktive Strecke) |
+| 25 | Tram-Train | GT8: Notbremsüberbrückung im Stadtbahntunnel | NBÜ-Prüflauf, Linienschütz an der Systemtrennstelle, Fahrgastnotbremse im Tunnel (Quitt, Intercom, Leitstelle) und kurz nach der Abfahrt |
 | 21 | S4 | S4 Gesamtstrecke | Grötzingen Oberausstraße – Öhringen-Cappel, ca. 91 km, 60 Halte |
 | 24 | S4 | S4 Übung: GPA und Bahnübergang | Geschwindigkeitsprüfabschnitt am Lf 6 „8“ (Einschaltmagnet, Messstrecke, 1000-Hz-Wirkmagnet, Ausschaltmagnet), Gefahr am Bahnübergang |
 | 51 | S4 PZB | Halt erwarten (500 Hz) | Ks 2, 1000 Hz, 500 Hz vor dem Esig Bauerbach: 65 → 45 km/h auf 153 m, Halt vor Hp 0 |
@@ -160,6 +161,9 @@ Bestandene Szenarien werden im Browser gespeichert (localStorage).
 | `Leertaste` | Sifa |
 | `F` | Fahrdienstleiter verständigen |
 | `X` | PZB-Störschalter (nur im Stillstand) |
+| `J` / `V` / `L` | PZB-Hauptschalter / Fahrtrichtungsschalter V–0 / PZB-Luftabsperrhahn |
+| `N` / `U` | NBÜ-Schalter Test–Aus–Ein / NBÜ Quitt (GT8 im Stadtbahntunnel) |
+| `I` / `O` | Intercom Sprechen / Löschen |
 | `H` (halten) | Pfeife (im BOStrab-Abschnitt Glocke) |
 | `T` | Türen freigeben / schließen |
 | `M` | Motor starten / abstellen (Aufrüsten) |
@@ -295,3 +299,46 @@ Neu in der Simulation dafür: Haltfall (Signal fällt vor dem Zug auf Halt; Zwan
 - Parallelogrammwischer wie am Wagen 858 A: je zwei parallele Arme mit Drehpunkt an der Scheibenunterkante (hinter der Pultabdeckung), oben ein Kopfstück mit Bügel. Daran ist das lange Wischblatt (etwa 0,9 m, Bügel mit Krallen und Gummilippe) etwa in der Mitte geklemmt: es reicht nach oben deutlich über die Augenhöhe und nach unten bis zur Scheibenunterkante und bleibt beim Wischen senkrecht – der Wischbereich ist ein hoher Bogen über das Sichtfeld. Ruhestellung außen an den Eckholmen (Lage nach den Fotos vom Fahrersitz und von außen).
 - Nach Wetter: Regen – Dauerbetrieb (gut 40 Wischspiele je Minute), Schnee – Intervall (alle 5 s ein Wischspiel), sonst aus. Ein angefangenes Wischspiel läuft bis in die Ruhestellung zu Ende; beide Wischer laufen gegenläufig zur Mitte und zurück.
 - Tropfen und Schneeflocken liegen auf der GT8-Frontscheibe selbst; die Wischblätter räumen genau ihren Wischbereich frei. Ohne Regen trocknen die Tropfen ab, Flocken tauen. Im Tunnel kommen keine neuen Tropfen dazu.
+
+## Abgleich mit Ril 483.0111 (PZB 90, I 60R / I 60 / ER 24) und Anhängen 01/02
+
+Die PZB-Logik wurde mit der Ril 483.0111 (gültig ab 08.06.2014) und den Anhängen 01 „Maßnahmen bei Unregelmäßigkeiten beim Einschalten“ und 02 „… im Betrieb“ verglichen. Für AVG-Fahrzeuge bleiben die Abweichungen aus dem AVG-Schaublatt PZB 90 erhalten (VÜ 3 Frühhalt, 500 Hz: mehr als 15 s unter 30 km/h → 25 km/h, 500-Hz-Überwachung stets 250 m, Zugart O fest, blauer LM nach ca. 40 m Dauerlicht).
+
+Ergänzt bzw. korrigiert:
+- **Startprogramm** endet nach 550 m (vorher beim Regelfahrzeug 1250 m); Wechselblinken 85/70 erst nach dem Anfahren (ab 5 km/h).
+- **Restriktive 1000-Hz-Überwachung je Überwachung**: endet 1250 m nach ihrem Magneten; eine danach folgende 1000-Hz-Beeinflussung läuft nicht restriktiv (vorher blieb alles restriktiv, bis alle Überwachungen abgelaufen waren).
+- **500 Hz restriktiv** (Regelfahrzeug): Umschaltgeschwindigkeit O 30 → 10 km/h in 153 m, M/U 10 km/h; restriktiv O 45 → 25 km/h, M/U konstant 25 km/h; kurz 200 m (Beginn 0–100 m) bzw. lang 250 m; bei laufender restriktiver 1000-Hz-Überwachung sofort 200 m restriktiv; Ende mit kurzem Hupton, danach laufende 1000-Hz-Überwachung restriktiv.
+- **LM 1000 Hz bleibt dunkel, solange LM 500 Hz leuchtet.**
+- **Befreien**: zusätzlich keine 500/1000-Hz-Beeinflussung innerhalb von 550 m; die befreite Überwachung läuft 1250 m weiter – eine neue 1000-Hz-Beeinflussung schneller als 85 (70, 55) km/h führt zur Zwangsbremsung.
+- **Befehlstaste**: Ton und Überwachung auf 40 km/h während der ganzen Betätigung (vorher nur am Magneten geprüft).
+- **Prüfgeschwindigkeit** ohne Beeinflussung (Zugart-Höchstwert, höchstens vFz + 5 km/h, im Störbetrieb 100 km/h): nach 7 s Intervallton und intermittierende, bei weiterer Erhöhung durchgehende Zwangsbremsung, die sich unter der Prüfgeschwindigkeit selbst aufhebt.
+- **Funktionsprüfung**: Reihenfolge 85, 70, 55, Befehl 40, 500 Hz, 1000 Hz; Hinweis auf HLL 5 bar und „nicht mit dem Führerbremsventil unterstützen“.
+- **PZB-Schalttafel**: PZB-Hauptschalter (J, nach dem Einschalten etwa 8 s bis betriebsbereit, Zugdaten neu), Fahrtrichtungsschalter V/0 (V, in „V“ Startprogramm), PZB-Luftabsperrhahn (L), Störschalter (X). PZB unwirksam (Störschalter, Hauptschalter aus, Hahn zu, gestört) → höchstens 50 km/h und Meldepflicht.
+- **Unregelmäßigkeiten** mit den Maßnahmen der Anhänge und neue Übungen:
+  - 62 Leuchtmelder dunkel (A02 Nr. 3): 50 km/h, melden, im Stillstand Hauptschalter aus/ein.
+  - 63 Zwangsbremsung lässt sich nicht lösen (A02 Nr. 10 und 2): FT → Fahrtrichtungsschalter 10 s „0“ → Hauptschalter 10 s aus → (sonst Hauptschalter aus und Luftabsperrhahn zu, 50 km/h).
+  - 64 Störungssammelmeldung (A02 Nr. 4 a): LM 1000 Hz blinkt 10 s mit Ton, 85 leuchtet – melden, ohne Geschwindigkeitseinschränkung weiter.
+  - 65 Funktionsprüfung nicht in Ordnung (A01 Nr. 8): LM 500 Hz leuchtet nicht – Fahrtrichtungsschalter „0“/„V“, Prüfung wiederholen; sonst melden.
+  - 66 Ständige Zwangsbremsungen (A02 Nr. 10 und 1): Fdl, Hauptschalter aus/ein, dann Störschalter, 50 km/h.
+- Nicht nachgebildet: Dateneinsteller (Tf-Nr., Zugnummer, BRA/BRH – beim Regelfahrzeug wird die Zugart direkt gewählt), Datenspeicherkassette und Kurzwegspeicher, Störungsanzeigen nach Anhang 03, Dauerbeeinflussung beim Halt über einem 2000-Hz-Magneten.
+
+## Abgleich mit dem Bedienhandbuch GT8-100D/2S-M und der Kurzanleitung NBÜ (AVG)
+
+Verglichen mit dem Bedienhandbuch GT8-100D/2S-M (AVG Aus- und Fortbildung) und der Kurzanleitung „Notbremsüberbrückung GT8-100D/2S-M“.
+
+Stimmte schon: PZB 90 mit Betriebsprogramm AVG (Zugart O fest), 100 km/h, Systemwechsel 15 kV / 750 V an El 1/El 2, Türen nur zu → Fahrbefehl.
+
+Korrigiert bzw. ergänzt:
+- **Fahrzeugdaten** nach 1.1: 37,6 m über Kupplung (Doppeltraktion 75,2 m), 58,5 t leer (mit Fahrgästen rund 64 t angesetzt), 4 × 127 kW, Anfahrbeschleunigung 1,0 m/s², Betriebsbremse 1,6 m/s², Schnellbremsung 2,73 m/s². Vorher geschätzt 38,4 m, 560 kW, 1,3/2,7 m/s².
+- **Haltestellenbremse** (1.10.2, 2.3.1): setzt beim Bremsen unter 7 km/h ein, hält den Wagen und löst erst, wenn der Befehlsgeber in „Fahren“ steht und genug Zugkraft aufgebaut ist – kein Zurückrollen beim Anfahren am Berg. Für alle Stadtbahn- und Straßenbahnwagen übernommen.
+- **Manometer** (1.11): gelber Zeiger Vorratsluft, roter Zeiger Bremsleitung – gelöst 6 bar, Blending über 55 % Befehlsgeber 3–4,2 bar je nach Beladung, Haltestellenbremse 3 bar, Schnell- und Zwangsbremsung etwa 1 bar, Rüstzustand „0“ 0 bar (vorher zeigte der rote Zeiger die Verzögerung).
+- **Sifa im Befehlsgeber** (2.3.2): nach 24 s ohne kurzes Loslassen Summton und Fahrstrom aus, nach weiteren 6 s Zwangsbremsung bis zum Stillstand; Fahrstrom erst wieder über „0“. Vorher galten die DB-Zeiten (30/32,5/35 s).
+- **Zwangsbremsung aufheben** nur im Stillstand mit dem Befehlsgeber über „Bremsen“ nach „0“ (nach PZB-Zwangsbremsung zusätzlich Frei).
+- **v-max-Überwachung** (1.10.2, 2.3.3): über 100 km/h Summton, nach 6 s Zwangsbremsung; Fahrstrom wird bei 100 km/h begrenzt.
+- **Schnellbremsung** (Befehlsgeber über den Druckpunkt): E-, Federspeicher- und Magnetschienenbremse, Sand und Glocke (die Glocke läutet).
+- **Rüstzustand „0“** (Fahrtrichtungsschalter 0): Bremsleitung entlüftet, der Wagen ist gebremst.
+- **Türfreigabe während der Fahrt** (1.19): wirkt erst unter 7 km/h mit eingelaufener Haltestellenbremse, Fahrstrom dann unterbrochen.
+- **Linienschütz statt Hauptschalter an der Systemtrennstelle** (1.9, 2.6): vor El 1 auslegen (Taste M), die Systemwahl schaltet selbsttätig um, nach El 2 wieder einlegen (keine selbsttätige Zuschaltung nach manuellem Auslegen).
+- **Notbremsüberbrückung (NBÜ)** (2.16, Kurzanleitung) – neues Bedienteil oben links im Bild, nur beim GT8 mit Stadtbahntunnel: Schalter Test/Aus/Ein, Leuchtmelder „NBÜ“ und „FGN/Stör“, Quitt, Intercom Sprechen/Löschen. Prüflauf im Stillstand (FRS V, Türen zu, keine Zwangsbremsung) mit Quittierung; Überbrückung ab 10 s nach der Anfahrt; Fahrgastnotbremse im Tunnel → Alarm, 10 s für Quitt (sonst Zwangsbremsung), Intercom-Notruf, nicht im Tunnel halten; nach Halt mit Türfreigabe wirkt die Notbremse, Notbremsgriff zurückstellen; am Bahnsteig und bis 10 s nach der Anfahrt sofortige, nicht überbrückbare Bremsung. Fehler: Tunnel ohne NBÜ, Quitt zu spät, Halt im Tunnel. Übung: Szenario 25.
+- Nicht nachgebildet: Mehrfachtraktion mit GT8-100C/2S (90 km/h), Türseitenvorwahl (Bahnsteige liegen in der Simulation rechts), Kinderwagen- und Hochbahnsteigtasten, Magnetschienenbremse per Taster und Bremsprobe V1, Störmeldedisplay, IMU, Brandmeldeanlage, Türnotentriegelung.
+- Außerdem behoben: Taste K öffnete zugleich den Freiflug – der PZB-Luftabsperrhahn liegt jetzt auf `L`; negative Fahrgastzahlen an einzelnen Halten.
